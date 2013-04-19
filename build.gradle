@@ -1,0 +1,136 @@
+/*
+cd /Volumes/Media/Software/caelyf/caelyf-template-project-0.1d
+export PATH=/opt/local/bin:/opt/local/sbin:.:/usr/local/bin:/Volumes/Media/Software/gradle-1.4/bin:/Volumes/Media/Software/Play-1.2.4:/bin:/Volumes/Media/Software/groovy-2.0.5/bin:/Volumes/Media/Software/appengine-java-sdk-1.7.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/local/git/bin
+
+// for git 1.8.2
+iMac:groovysamples jim$ echo  $PATH
+/opt/local/bin:/opt/local/sbin:.:/usr/local/git/bin:/usr/local/bin:/Volumes/Media/Software/gradle-1.4/bin:/Volumes/Media/Software/Play-1.2.4:/bin:/Volumes/Media/Software/groovy-2.0.5/bin:/Volumes/Media/Software/appengine-java-sdk-1.7.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
+----------------------
+how to connect to mysql db in gradle: http://stackoverflow.com/questions/6329872/how-to-add-external-jar-files-to-gradle-build-script
+*/
+
+//import org.apache.ivy.core.report.ResolveReport
+apply plugin:'java'
+apply plugin:'groovy'
+apply plugin:'application'
+
+// to add junit to build.gradle:
+repositories {
+    mavenCentral()
+    //mavenRepo("http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.pom")
+}
+
+dependencies {
+    groovy localGroovy()
+    groovy group: 'org.apache.ivy', name:'ivy', version:'2.2.0' 
+    testCompile 'junit:junit:4.11'
+    compile group: 'javax.servlet',        name: 'servlet-api', version: '2.5' 
+    //compile group: 'mysql-connector-java', name:'mysql', version: '5.1.6'
+    //compile 'mysql:mysql-connector-java:5.1.6'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
+}
+
+test.testLogging { exceptionFormat "full" }
+
+test
+{
+	testLogging.showStandardStreams = true
+
+	// does work if you chg the workingDir, so it influences the java file relative path access
+	//workingDir = new File('/Volumes/Media/Software/groovysamples/src/main/groovy')
+	println "workingDir is "+workingDir // = workingDir is /Volumes/Media/Software/menus
+
+        // listen to standard out and standard error of the test JVM(s)
+        onOutput { descriptor, event -> logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message ) }
+}
+
+task(runSimple, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.MenuItem'  // 'test24'  //
+	classpath = sourceSets.main.runtimeClasspath
+	args 'kids'
+	systemProperty 'simple.message', 'Hello '
+}
+
+
+task(runFileMenu, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.MenuFile'  // 'test24'  //
+	classpath = sourceSets.main.runtimeClasspath
+	args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
+
+
+task(runBB, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.BottomBorder' 
+	classpath = sourceSets.main.runtimeClasspath
+	args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
+
+task(runSearch, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.Search' 
+	classpath = sourceSets.main.runtimeClasspath
+	args '/Volumes/Media/Backups/DuracellUSBKey2/Menus/data/'
+	systemProperty 'simple.message', 'Hello '
+}
+
+
+task(runFonts, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.FontSupport' 
+	classpath = sourceSets.main.runtimeClasspath
+	args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
+
+task(runColorManager, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.ColorManager' 
+	classpath = sourceSets.main.runtimeClasspath
+	args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
+
+
+task(runHelpWindow, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.help.HelpWindow'  
+	classpath = sourceSets.main.runtimeClasspath
+	args './resources/help.html'
+	systemProperty 'simple.message', 'Hello '
+}
+
+// following used in 'gradle run'
+defaultTasks 'runSimple'
+
+// this line needed for the 'run' feature of the 'application' plugin
+mainClassName = "org.jnorthr.menus.help.HelpWindow"
+
+
+// declare minimum level of java for both compile and execute phases
+sourceCompatibility = 1.5
+targetCompatibility=1.5
+
+// your version of this app
+version = '1.0'
+
+// customize the jar MANIFEST.MF 
+// add some specific attributes that control how the jar manifest is constructed
+// java -jar   /Volumes/Media/Software/menus/build/libs/menus-1.0.jar
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Mouseless Menus', 'Implementation-Version': version
+        attributes provider: 'jnorthr'
+        attributes("Main-Class": "org.jnorthr.menus.help.HelpWindow")
+	attributes args: './resources/abc.html'
+    }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.1'
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestMenuFile" tests="5" time="4.468" timestamp="2013-04-17T17:12:17">
+  <properties />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test1" time="0.411" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test2" time="0.832" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test3" time="0.052" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test4" time="0.19" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test5" time="0.06" />
+  <system-out><![CDATA[file jim.txt exists
+file jim.txt exists
+file jim.txt exists
+file ./jim.txt exists
+]]></system-out>
+  <system-err><![CDATA[Apr 17, 2013 7:12:20 PM java_util_logging_Logger$info call
+INFO: ... started a test of TestMenuFile
+Apr 17, 2013 7:12:20 PM java_util_logging_Logger$info call
+INFO: ... MenuFile test1 ok
+Apr 17, 2013 7:12:20 PM java_util_logging_Logger$info call
+INFO: ... started a test of TestMenuFile
+Apr 17, 2013 7:12:21 PM java_util_logging_Logger$info call
+INFO: ... MenuFile test2 ok
+Apr 17, 2013 7:12:21 PM java_util_logging_Logger$info call
+INFO: ... started a test of TestMenuFile
+Apr 17, 2013 7:12:21 PM java_util_logging_Logger$info call
+INFO: ... MenuFile test3 ok
+Apr 17, 2013 7:12:21 PM java_util_logging_Logger$info call
+INFO: ... started a test of TestMenuFile
+Apr 17, 2013 7:12:21 PM java_util_logging_Logger$info call
+INFO: ... MenuFile test4 ok
+Apr 17, 2013 7:12:21 PM java_util_logging_Logger$info call
+INFO: ... started a test of TestMenuFile
+Apr 17, 2013 7:12:22 PM java_util_logging_Logger$info call
+INFO: ... MenuFile test5 ok
+]]></system-err>
+</testsuite>

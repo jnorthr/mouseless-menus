@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="MacRoman" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2013-04-17T19:12:22</date>
+  <millis>1366218742904</millis>
+  <sequence>29</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>setUp</method>
+  <thread>10</thread>
+  <message>... started TestColorManager</message>
+</record>
+<record>
+  <date>2013-04-17T19:12:23</date>
+  <millis>1366218743750</millis>
+  <sequence>30</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>test1</method>
+  <thread>10</thread>
+  <message>... test1 ok - not null and opaque=false</message>
+</record>
+<record>
+  <date>2013-04-17T19:12:23</date>
+  <millis>1366218743772</millis>
+  <sequence>31</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>setUp</method>
+  <thread>10</thread>
+  <message>... started TestColorManager</message>
+</record>
+<record>
+  <date>2013-04-17T19:12:23</date>
+  <millis>1366218743816</millis>
+  <sequence>32</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>test2</method>
+  <thread>10</thread>
+  <message>... test2 ok - not null</message>
+</record>
+<record>
+  <date>2013-04-17T19:12:23</date>
+  <millis>1366218743827</millis>
+  <sequence>33</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>setUp</method>
+  <thread>10</thread>
+  <message>... started TestColorManager</message>
+</record>
+<record>
+  <date>2013-04-17T19:12:24</date>
+  <millis>1366218744037</millis>
+  <sequence>34</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>test3</method>
+  <thread>10</thread>
+  <message>... test3 ok - </message>
+</record>
+<record>
+  <date>2013-04-17T19:12:24</date>
+  <millis>1366218744052</millis>
+  <sequence>35</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>setUp</method>
+  <thread>10</thread>
+  <message>... started TestColorManager</message>
+</record>
+<record>
+  <date>2013-04-17T19:12:24</date>
+  <millis>1366218744166</millis>
+  <sequence>36</sequence>
+  <logger>TestColorManager</logger>
+  <level>INFO</level>
+  <class>org.jnorthr.menus.support.TestColorManager</class>
+  <method>test4</method>
+  <thread>10</thread>
+  <message>... test4 ok - </message>
+</record>
+</log>

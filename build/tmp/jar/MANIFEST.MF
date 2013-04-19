@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Implementation-Title: Mouseless Menus
+Implementation-Version: 1.0
+provider: jnorthr
+Main-Class: org.jnorthr.menus.help.HelpWindow
+args: ./resources/abc.html
+

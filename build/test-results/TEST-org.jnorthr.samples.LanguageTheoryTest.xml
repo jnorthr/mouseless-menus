@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.samples.LanguageTheoryTest" tests="3" time="0.339" timestamp="2013-04-17T17:12:35">
+  <properties />
+  <testcase classname="org.jnorthr.samples.LanguageTheoryTest" name="someone_knows_each_jvm_language" time="0.115" />
+  <testcase classname="org.jnorthr.samples.LanguageTheoryTest" name="tom_knows_all_languages_ending_with_y" time="0.103" />
+  <testcase classname="org.jnorthr.samples.LanguageTheoryTest" name="everyone_knows_java" time="0.01" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

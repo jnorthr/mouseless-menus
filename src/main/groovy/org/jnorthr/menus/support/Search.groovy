@@ -12,6 +12,9 @@ public class Search
 	def searchClos
 	private menus =[:]
 
+	// folder to hold newly created list of menus as a .txt file
+	def path
+	
     // =========================================
     // class constructor where tx = path to menu folder
 	// and default is to write map of menu filenames to output text file
@@ -70,7 +73,7 @@ public class Search
 	public searchClos(File folder) 
 	{ 
 	    println "Dir ${folder.getCanonicalPath()}";
-	    def path = folder.getCanonicalPath()
+	    path = folder.getCanonicalPath()
 		def lines
 		
         folder.eachDir( searchClos );
@@ -127,7 +130,7 @@ public static void main(String[] args)
 {	
 	println "--------------------------------------------------"
 	print "... started in folder "
-	def path = "/Volumes/Media/Backups/DuracellUSBKey2/Menus/data/";
+	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
 	
 	if (args.length>0) path = args[0]
 	println path;

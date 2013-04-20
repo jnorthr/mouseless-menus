@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.samples.MathOpTest" tests="2" time="0.022" timestamp="2013-04-17T17:12:35">
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.samples.MathOpTest" tests="2" time="0.016" timestamp="2013-04-20T16:36:14">
   <properties />
   <testcase classname="org.jnorthr.samples.MathOpTest" name="testAdd" time="0.0030" />
-  <testcase classname="org.jnorthr.samples.MathOpTest" name="testSub" time="0.0080" />
+  <testcase classname="org.jnorthr.samples.MathOpTest" name="testSub" time="0.0020" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

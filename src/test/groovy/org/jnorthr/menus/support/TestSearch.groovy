@@ -13,7 +13,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.*;
 import java.awt.Color;
-import org.jnorthr.menus.support.BottomBorder;
+import org.jnorthr.menus.support.Search;
 import java.util.logging.Logger;
 import java.util.logging.*;
 
@@ -30,7 +30,7 @@ public class TestSearch {
 	public void setUp() 
 	{ 
 		LOGGER.info("... started TestSearch"); 
-    	def path = "/Volumes/Media/Backups/DuracellUSBKey2/Menus/data/";
+    	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
 		def tmp = new File(path+"/.menulist.txt")
 		if (tmp.exists()) tmp.delete()
 	} // end of setup
@@ -38,7 +38,7 @@ public class TestSearch {
     @Test
     public void test1()
     {
-    	def path = "/Volumes/Media/Backups/DuracellUSBKey2/Menus/data/";
+    	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
         Search fs = new Search(path);
         assertThat(fs, notNullValue() );
 
@@ -48,7 +48,7 @@ public class TestSearch {
     @Test
     public void test2()
     {
-    	def path = "/Volumes/Media/Backups/DuracellUSBKey2/Menus/data/";
+    	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
         Search fs = new Search(path);
 
 		def tmp = new File(path+"/.menulist.txt")

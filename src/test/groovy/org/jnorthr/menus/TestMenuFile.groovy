@@ -70,7 +70,7 @@ public class TestMenuFile
 	public void test4()
 	{	
 		MenuFile mi = new MenuFile("jim.txt");
-		assertThat(mi.menuFileName, is("/Volumes/Media/Software/menus/jim.txt") );
+		assertThat(mi.menuFileName, is("/Volumes/Media1/Software/menus/jim.txt") );
 		LOGGER.info("... MenuFile test4 ok"); 
 	}
 
@@ -80,7 +80,7 @@ public class TestMenuFile
 	public void test5()
 	{	
 		MenuFile mi = new MenuFile("./jim.txt");
-		assertThat(mi.menuFileName, is("/Volumes/Media/Software/menus/jim.txt") );
+		assertThat(mi.menuFileName, is("/Volumes/Media1/Software/menus/jim.txt") );
 		LOGGER.info("... MenuFile test5 ok"); 
 	}
 

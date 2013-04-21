@@ -13,23 +13,23 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.*;
 import java.awt.Color;
-import org.jnorthr.menus.support.BottomBorder;
+import org.jnorthr.menus.support.FontSupport;
 import java.util.logging.Logger;
 import java.util.logging.*;
 
 public class TestFontSupport {
-	private final static Logger LOGGER = Logger.getLogger("TestFontSupport");
+	//private final static Logger LOGGER = Logger.getLogger("TestFontSupport");
 
 	public TestBottomBorder() throws java.io.IOException
 	{
-		Handler ch = new FileHandler("TestFontSupport.log");
-		LOGGER.getLogger("TestFontSupport").addHandler(ch); 
+		//Handler ch = new FileHandler("TestFontSupport.log");
+		//LOGGER.getLogger("TestFontSupport").addHandler(ch); 
 	}
 	
 	@Before 
 	public void setUp() 
 	{ 
-		LOGGER.info("... started TestFontSupport"); 
+		//LOGGER.info("É started TestFontSupport"); 
 	}
 
     @Test
@@ -37,7 +37,7 @@ public class TestFontSupport {
     {
         FontSupport fs = new FontSupport("usbkey");
         assertThat(fs, notNullValue() );
-		LOGGER.info("... test1 ok - fs not null"); 
+		//LOGGER.info("É test1 ok - fs not null"); 
     } // end of method
 
 
@@ -49,7 +49,7 @@ public class TestFontSupport {
 	    assertThat(fs.getPaths(), is("/usr/share/fonts/truetype/freefont/") );
 	    assertThat(fs.getFontPath(), is("/usr/share/fonts/truetype/freefont/") );
 	    assertThat(fs.getMonoFontFilename(), is("/usr/share/fonts/truetype/freefont/FreeMono.ttf") );
-	    LOGGER.info("... test2 ok - not null, mono font file name is ${fs.getMonoFontFilename()}"); 
+	    //LOGGER.info("É test2 ok - not null, mono font file name is ${fs.getMonoFontFilename()}"); 
 	} // end of method
  
 } // end of class

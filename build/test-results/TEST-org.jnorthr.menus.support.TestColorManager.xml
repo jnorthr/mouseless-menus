@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.support.TestColorManager" tests="4" time="1.536" timestamp="2013-04-21T20:01:35">
+<testsuite errors="0" failures="0" hostname="redapple.home" name="org.jnorthr.menus.support.TestColorManager" tests="4" time="0.205" timestamp="2013-04-21T22:28:12">
   <properties />
-  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test1" time="0.961" />
-  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test2" time="0.201" />
-  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test3" time="0.123" />
-  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test4" time="0.085" />
+  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test1" time="0.159" />
+  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test2" time="0.018" />
+  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test3" time="0.012" />
+  <testcase classname="org.jnorthr.menus.support.TestColorManager" name="test4" time="0.0050" />
   <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[Apr 21, 2013 10:01:35 PM org.jnorthr.menus.support.TestColorManager setUp
-INFO: ... started TestColorManager
-Apr 21, 2013 10:01:36 PM org.jnorthr.menus.support.TestColorManager test1
-INFO: ... test1 ok - not null and opaque=false
-Apr 21, 2013 10:01:36 PM org.jnorthr.menus.support.TestColorManager setUp
-INFO: ... started TestColorManager
-Apr 21, 2013 10:01:36 PM org.jnorthr.menus.support.TestColorManager test2
-INFO: ... test2 ok - not null
-Apr 21, 2013 10:01:36 PM org.jnorthr.menus.support.TestColorManager setUp
-INFO: ... started TestColorManager
-Apr 21, 2013 10:01:36 PM org.jnorthr.menus.support.TestColorManager test3
-INFO: ... test3 ok - 
-Apr 21, 2013 10:01:37 PM org.jnorthr.menus.support.TestColorManager setUp
-INFO: ... started TestColorManager
-Apr 21, 2013 10:01:37 PM org.jnorthr.menus.support.TestColorManager test4
-INFO: ... test4 ok - 
-]]></system-err>
+  <system-err><![CDATA[]]></system-err>
 </testsuite>

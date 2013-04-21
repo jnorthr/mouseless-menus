@@ -17,18 +17,18 @@ import java.util.logging.Logger;
 import java.util.logging.*;
 
 public class TestColorManager {
-	private final static Logger LOGGER = Logger.getLogger("TestColorManager");
+	//private final static Logger LOGGER = Logger.getLogger("TestColorManager");
 
 	public TestColorManager() throws java.io.IOException
 	{
-		Handler ch = new FileHandler("TestColorManager.log");
-		LOGGER.getLogger("TestColorManager").addHandler(ch); 
+		//Handler ch = new FileHandler("TestColorManager.log");
+		//LOGGER.getLogger("TestColorManager").addHandler(ch); 
 	}
 	
 	@Before 
 	public void setUp() 
 	{ 
-		LOGGER.info("... started TestColorManager"); 
+		//LOGGER.info("... started TestColorManager"); 
 	}
 
     @Test
@@ -64,7 +64,7 @@ public class TestColorManager {
 		ok = (boolean)b.getWord("DarkRed;ok");
         assertEquals(ok, true );
 
-		LOGGER.info("... test1 ok - not null and opaque=false"); 
+		//LOGGER.info("... test1 ok - not null and opaque=false"); 
     } // end of method
 
     @Test
@@ -73,7 +73,7 @@ public class TestColorManager {
 		String c = "0x336699;Declare normal color signature 0x336699; with semicolon.";
         ColorManager b = new ColorManager(c);
 	    assertThat(b, notNullValue() );
-	    LOGGER.info("... test2 ok - not null"); 
+	    //LOGGER.info("... test2 ok - not null"); 
 	} // end of method
 
     @Test
@@ -84,7 +84,7 @@ public class TestColorManager {
   	    assertThat(b, notNullValue() );
 	    //assertThat(b.getThickness(), is(3) );
 	    //assertThat(b.getGap(), is(7) );
-	    LOGGER.info("... test3 ok - "); 
+	    //LOGGER.info("... test3 ok - "); 
 	} // end of method
 
     @Test
@@ -93,7 +93,7 @@ public class TestColorManager {
 		String c = "#336699;Declare normal color signature #336699; with semicolon.";
         ColorManager b = new ColorManager(c);
   	    assertThat(b, notNullValue() );
-	    LOGGER.info("... test4 ok - "); 
+	    //LOGGER.info("... test4 ok - "); 
 	} // end of method
 
  

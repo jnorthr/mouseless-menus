@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.support.TestFontSupport" tests="2" time="13.85" timestamp="2013-04-21T20:01:37">
+<testsuite errors="0" failures="0" hostname="redapple.home" name="org.jnorthr.menus.support.TestFontSupport" tests="2" time="5.233" timestamp="2013-04-21T22:28:12">
   <properties />
-  <testcase classname="org.jnorthr.menus.support.TestFontSupport" name="test1" time="11.642" />
-  <testcase classname="org.jnorthr.menus.support.TestFontSupport" name="test2" time="2.043" />
+  <testcase classname="org.jnorthr.menus.support.TestFontSupport" name="test1" time="4.513" />
+  <testcase classname="org.jnorthr.menus.support.TestFontSupport" name="test2" time="0.708" />
   <system-out><![CDATA[os name is usbkey
 ... FontSupport() set to use paths for usbkey
 paths is set to use 'usbkey' paths of '/usr/share/fonts/truetype/freefont/'
@@ -20,13 +20,5 @@ the full font name is '/usr/share/fonts/truetype/freefont/FreeMono.ttf'
 /usr/share/fonts/truetype/freefont/FreeMono.ttf was NOT found !
 ... FontSupport() end of constructor ...
 ]]></system-out>
-  <system-err><![CDATA[Apr 21, 2013 10:01:37 PM java_util_logging_Logger$info call
-INFO: ... started TestFontSupport
-Apr 21, 2013 10:01:49 PM java_util_logging_Logger$info call
-INFO: ... test1 ok - fs not null
-Apr 21, 2013 10:01:49 PM java_util_logging_Logger$info call
-INFO: ... started TestFontSupport
-Apr 21, 2013 10:01:51 PM sun.reflect.NativeMethodAccessorImpl invoke0
-INFO: ... test2 ok - not null, mono font file name is /usr/share/fonts/truetype/freefont/FreeMono.ttf
-]]></system-err>
+  <system-err><![CDATA[]]></system-err>
 </testsuite>

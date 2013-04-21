@@ -17,19 +17,19 @@ import java.util.logging.*;
 public class TestMenuFile
 {
 	private ArrayList<MenuItem> ma; 
-	private final static Logger LOGGER = Logger.getLogger("TestMenuFile");
+	//private final static Logger LOGGER = Logger.getLogger("TestMenuFile");
 	
 	public TestMenuFile()
 	{
-		Handler ch = new FileHandler("TestMenuFile.log");
-		LOGGER.getLogger("TestMenuFile").addHandler(ch); 
+		//Handler ch = new FileHandler("TestMenuFile.log");
+		//LOGGER.getLogger("TestMenuFile").addHandler(ch); 
 	}
 	
 	@Before 
 	public void setUp() 
 	{ 
 		ma = new ArrayList<MenuFile>();
-		LOGGER.info("... started a test of TestMenuFile"); 
+		//LOGGER.info("É started a test of TestMenuFile"); 
 	}
 	
 	// test harness for this class
@@ -39,7 +39,7 @@ public class TestMenuFile
 		MenuFile mi = new MenuFile();
 		assertThat(mi, notNullValue() );
 		assertNotNull("MenuFile constructor failed",mi);
-		LOGGER.info("... MenuFile test1 ok"); 
+		//LOGGER.info("É MenuFile test1 ok"); 
 	}
 
 	
@@ -50,7 +50,7 @@ public class TestMenuFile
 		MenuFile mi = new MenuFile("jim.txt");
 		assertThat(mi, notNullValue() );
 		assertNotNull("MenuFile constructor failed",mi);
-		LOGGER.info("... MenuFile test2 ok"); 
+		//LOGGER.info("É MenuFile test2 ok"); 
 	}
 
 	// test harness for MenuFile with string menu file name
@@ -61,7 +61,7 @@ public class TestMenuFile
 		assertThat(mi, notNullValue() );
 		assertNotNull("MenuFile constructor failed",mi);
 		assertThat(mi.menuFileExists, is(true) );
-		LOGGER.info("... MenuFile test3 ok"); 
+		//LOGGER.info("É MenuFile test3 ok"); 
 	}
 
 	// test harness for MenuFile with string menu file name
@@ -71,7 +71,7 @@ public class TestMenuFile
 	{	
 		MenuFile mi = new MenuFile("jim.txt");
 		assertThat(mi.menuFileName, is("/Volumes/Media1/Software/menus/jim.txt") );
-		LOGGER.info("... MenuFile test4 ok"); 
+		//LOGGER.info("É MenuFile test4 ok"); 
 	}
 
 	// test harness for MenuFile with string menu file name
@@ -81,7 +81,7 @@ public class TestMenuFile
 	{	
 		MenuFile mi = new MenuFile("./jim.txt");
 		assertThat(mi.menuFileName, is("/Volumes/Media1/Software/menus/jim.txt") );
-		LOGGER.info("... MenuFile test5 ok"); 
+		//LOGGER.info("É MenuFile test5 ok"); 
 	}
 
 

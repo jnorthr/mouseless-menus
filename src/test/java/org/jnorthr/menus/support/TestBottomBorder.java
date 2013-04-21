@@ -18,18 +18,18 @@ import java.util.logging.Logger;
 import java.util.logging.*;
 
 public class TestBottomBorder {
-	private final static Logger LOGGER = Logger.getLogger("TestBottomBorder");
+	//private final static Logger LOGGER = Logger.getLogger("TestBottomBorder");
 
 	public TestBottomBorder() throws java.io.IOException
 	{
-		Handler ch = new FileHandler("TestBottomBorder.log");
-		LOGGER.getLogger("TestBottomBorder").addHandler(ch); 
+		//Handler ch = new FileHandler("TestBottomBorder.log");
+		//LOGGER.getLogger("TestBottomBorder").addHandler(ch); 
 	}
 	
 	@Before 
 	public void setUp() 
 	{ 
-		LOGGER.info("... started TestBottomBorder"); 
+		//LOGGER.info("... started TestBottomBorder"); 
 	}
 
     @Test
@@ -39,7 +39,7 @@ public class TestBottomBorder {
         BottomBorder b = new BottomBorder(c);
         assertThat(b, notNullValue() );
         assertThat(b.isBorderOpaque(), is(false) );
-		LOGGER.info("... test1 ok - not null and opaque=false"); 
+		//LOGGER.info("... test1 ok - not null and opaque=false"); 
     } // end of method
 
     @Test
@@ -50,7 +50,7 @@ public class TestBottomBorder {
 	    assertThat(b, notNullValue() );
 	    assertThat(b.getThickness(), is(2) );
 	    assertThat(b.getGap(), is(2) );
-	    LOGGER.info("... test2 ok - not null, thickness=2, gap=2"); 
+	    //LOGGER.info("... test2 ok - not null, thickness=2, gap=2"); 
 	} // end of method
 
     @Test
@@ -61,7 +61,7 @@ public class TestBottomBorder {
   	    assertThat(b, notNullValue() );
 	    assertThat(b.getThickness(), is(3) );
 	    assertThat(b.getGap(), is(7) );
-	    LOGGER.info("... test3 ok - not null, thickness=3, gap=7"); 
+	    //LOGGER.info("... test3 ok - not null, thickness=3, gap=7"); 
 	} // end of method
 
     @Test
@@ -71,7 +71,7 @@ public class TestBottomBorder {
         BottomBorder b = new BottomBorder(c, 4, 9);
 		String d = b.getLineColor().toString();
   	    assertEquals(d,  "java.awt.Color[r=0,g=0,b=255]");
-	    LOGGER.info("... test4 ok - color:java.awt.Color[r=0,g=0,b=255]"); 
+	    //LOGGER.info("... test4 ok - color:java.awt.Color[r=0,g=0,b=255]"); 
 	} // end of method
 
  

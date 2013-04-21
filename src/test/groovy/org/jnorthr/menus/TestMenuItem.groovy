@@ -17,19 +17,19 @@ import java.util.logging.*;
 public class TestMenuItem
 {
 	private ArrayList<MenuItem> ma; 
-	private final static Logger LOGGER = Logger.getLogger("TestMenuItem");
+	//private final static Logger LOGGER = Logger.getLogger("TestMenuItem");
 	
 	public TestMenuItem()
 	{
-		Handler ch = new FileHandler("fred.log");
-		LOGGER.getLogger("TestMenuItem").addHandler(ch); 
+		//Handler ch = new FileHandler("fred.log");
+		//LOGGER.getLogger("TestMenuItem").addHandler(ch); 
 	}
 	
 	@Before 
 	public void setUp() 
 	{ 
 		ma = new ArrayList<MenuItem>();
-		LOGGER.info("... started a test"); 
+		//LOGGER.info("É started a test"); 
 	}
 	
 	// test harness for this class
@@ -39,7 +39,7 @@ public class TestMenuItem
 		MenuItem mi = new MenuItem();
 		//assertThat(mi, nullValue());
 		assertNotNull("MenuItem constructor failed",mi);
-		LOGGER.info("... test1 ok"); 
+		//LOGGER.info("É test1 ok"); 
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class TestMenuItem
 		MenuItem mi = new MenuItem();
 		mi[0] = 7
 		assert mi.menuKey==7
-		LOGGER.info("... test2 ok"); 
+		//LOGGER.info("É test2 ok"); 
 	}
 	
 	@Test
@@ -59,7 +59,7 @@ public class TestMenuItem
 		ma << mi
 		assertThat(ma.size(), is(1)); 
 		assertThat(ma[0].menuKey, is(6))
-		LOGGER.info("... test3 ok"); 
+		//LOGGER.info("É test3 ok"); 
 	}
 
 
@@ -69,7 +69,7 @@ public class TestMenuItem
 		MenuItem mi = new MenuItem();
 		mi[0] = "fred"
 		assert mi.menuCommand.equals("fred")	// fails on == 
-		LOGGER.info("... test4 ok"); 
+		//LOGGER.info("É test4 ok"); 
 	}
 
 
@@ -91,12 +91,12 @@ public class TestMenuItem
 		// name of file where this entry cam from as String
 		mi = new MenuItem(2,0,2,2,'Red',true,"Fred","echo 'fred was here'","this is a title","filename")
 		assert mi.menuCommand.equals("echo 'fred was here'")    
-		LOGGER.info( mi.toString() );
+		//LOGGER.info( mi.toString() );
 
 		ma << mi
 		assertThat(ma.size(), is(1));
 
-		LOGGER.info( "ma size is ${ma.size()} and has these menu items:")
+		//LOGGER.info( "ma size is ${ma.size()} and has these menu items:")
 		ma.each{ m -> println m;}
 		println "== the end =="
 	} // end of main

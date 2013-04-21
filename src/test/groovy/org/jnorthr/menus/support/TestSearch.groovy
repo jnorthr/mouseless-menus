@@ -18,18 +18,18 @@ import java.util.logging.Logger;
 import java.util.logging.*;
 
 public class TestSearch {
-	private final static Logger LOGGER = Logger.getLogger("TestSearch");
+	//private final static Logger LOGGER = Logger.getLogger("TestSearch");
 
 	public TestBottomBorder() throws java.io.IOException
 	{
-		Handler ch = new FileHandler("TestSearch.log");
-		LOGGER.getLogger("TestSearch").addHandler(ch); 
+		//Handler ch = new FileHandler("TestSearch.log");
+		//LOGGER.getLogger("TestSearch").addHandler(ch); 
 	}
 	
 	@Before 
 	public void setUp() 
 	{ 
-		LOGGER.info("... started TestSearch"); 
+		//LOGGER.info("É started TestSearch"); 
     	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
 		def tmp = new File(path+"/.menulist.txt")
 		if (tmp.exists()) tmp.delete()
@@ -42,7 +42,7 @@ public class TestSearch {
         Search fs = new Search(path);
         assertThat(fs, notNullValue() );
 
-		LOGGER.info("... test1 ok - Search not null"); 
+		//LOGGER.info("É test1 ok - Search not null"); 
     } // end of method
 
     @Test
@@ -55,7 +55,7 @@ public class TestSearch {
 		def flag2 = (tmp.exists()) ? true : false;
         assertThat(flag2, is(true) );
 
-		LOGGER.info("... test2 ok - Search created list of menus"); 
+		//LOGGER.info("É test2 ok - Search created list of menus"); 
     } // end of method
  
 } // end of class

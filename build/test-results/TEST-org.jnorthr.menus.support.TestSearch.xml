@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.support.TestSearch" tests="2" time="1.556" timestamp="2013-04-20T16:36:11">
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.support.TestSearch" tests="2" time="2.551" timestamp="2013-04-21T20:01:51">
   <properties />
-  <testcase classname="org.jnorthr.menus.support.TestSearch" name="test1" time="0.935" />
-  <testcase classname="org.jnorthr.menus.support.TestSearch" name="test2" time="0.591" />
+  <testcase classname="org.jnorthr.menus.support.TestSearch" name="test1" time="1.674" />
+  <testcase classname="org.jnorthr.menus.support.TestSearch" name="test2" time="0.825" />
   <system-out><![CDATA[Dir /Volumes/Media1/Backups/DuracellUSBKey2/Menus/data
    File /Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/cherokee.txt  ------------
    File /Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/fred.txt  ------------
@@ -58,13 +58,13 @@ Dir /Volumes/Media1/Backups/DuracellUSBKey2/Menus/data
 ... writing list of menus to /Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/.menulist.txt
 19 menus exist. Press F15 to review.
 ]]></system-out>
-  <system-err><![CDATA[Apr 20, 2013 6:36:11 PM java_util_logging_Logger$info call
+  <system-err><![CDATA[Apr 21, 2013 10:01:51 PM java_util_logging_Logger$info call
 INFO: ... started TestSearch
-Apr 20, 2013 6:36:12 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:52 PM java_util_logging_Logger$info call
 INFO: ... test1 ok - Search not null
-Apr 20, 2013 6:36:12 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:52 PM java_util_logging_Logger$info call
 INFO: ... started TestSearch
-Apr 20, 2013 6:36:13 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:53 PM java_util_logging_Logger$info call
 INFO: ... test2 ok - Search created list of menus
 ]]></system-err>
 </testsuite>

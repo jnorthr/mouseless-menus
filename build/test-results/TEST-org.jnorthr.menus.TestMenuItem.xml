@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestMenuItem" tests="5" time="0.896" timestamp="2013-04-20T16:22:23">
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestMenuItem" tests="5" time="0.942" timestamp="2013-04-21T20:01:34">
   <properties />
-  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test1" time="0.071" />
-  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test2" time="0.027" />
-  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test3" time="0.33" />
-  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test4" time="0.041" />
-  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test5" time="0.275" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test1" time="0.169" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test2" time="0.133" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test3" time="0.152" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test4" time="0.067" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test5" time="0.217" />
   <system-out><![CDATA[menuKey=2  menuBIC=0  menuColumn=2   menuLine=2  menuColor=<Red>  menuShow=<true>  menuText=<Fred>  menuCommand=<echo 'fred was here'>  dialogTitle=<this is a title>  menuFileName=<filename>
 == the end ==
 ]]></system-out>
-  <system-err><![CDATA[Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+  <system-err><![CDATA[Apr 21, 2013 10:01:34 PM java_util_logging_Logger$info call
 INFO: ... started a test
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:34 PM java_util_logging_Logger$info call
 INFO: ... test1 ok
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:34 PM java_util_logging_Logger$info call
 INFO: ... started a test
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: ... test2 ok
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: ... started a test
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: ... test3 ok
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: ... started a test
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: ... test4 ok
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: ... started a test
-Apr 20, 2013 6:22:23 PM java_util_logging_Logger$info call
+Apr 21, 2013 10:01:35 PM java_util_logging_Logger$info call
 INFO: menuKey=2  menuBIC=0  menuColumn=2   menuLine=2  menuColor=<Red>  menuShow=<true>  menuText=<Fred>  menuCommand=<echo 'fred was here'>  dialogTitle=<this is a title>  menuFileName=<filename>
-Apr 20, 2013 6:22:23 PM sun.reflect.NativeMethodAccessorImpl invoke0
+Apr 21, 2013 10:01:35 PM sun.reflect.NativeMethodAccessorImpl invoke0
 INFO: ma size is 1 and has these menu items:
 ]]></system-err>
 </testsuite>

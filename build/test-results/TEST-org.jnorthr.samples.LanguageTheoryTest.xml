@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="redapple.home" name="org.jnorthr.samples.LanguageTheoryTest" tests="3" time="0.299" timestamp="2013-04-21T22:28:17">
-  <properties />
-  <testcase classname="org.jnorthr.samples.LanguageTheoryTest" name="someone_knows_each_jvm_language" time="0.08" />
-  <testcase classname="org.jnorthr.samples.LanguageTheoryTest" name="tom_knows_all_languages_ending_with_y" time="0.039" />
-  <testcase classname="org.jnorthr.samples.LanguageTheoryTest" name="everyone_knows_java" time="0.01" />
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

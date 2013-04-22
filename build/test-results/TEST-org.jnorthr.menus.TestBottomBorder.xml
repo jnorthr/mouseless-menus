@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestBottomBorder" tests="4" time="1.33" timestamp="2013-04-22T18:58:18">
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestBottomBorder" tests="4" time="0.937" timestamp="2013-04-22T20:37:54">
   <properties />
-  <testcase classname="org.jnorthr.menus.TestBottomBorder" name="test1" time="0.519" />
+  <testcase classname="org.jnorthr.menus.TestBottomBorder" name="test1" time="0.418" />
   <testcase classname="org.jnorthr.menus.TestBottomBorder" name="test2" time="0.0030" />
   <testcase classname="org.jnorthr.menus.TestBottomBorder" name="test3" time="0.0030" />
-  <testcase classname="org.jnorthr.menus.TestBottomBorder" name="test4" time="0.0050" />
+  <testcase classname="org.jnorthr.menus.TestBottomBorder" name="test4" time="0.0040" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

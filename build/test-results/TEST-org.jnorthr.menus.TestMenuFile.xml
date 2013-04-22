@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestMenuFile" tests="5" time="4.949" timestamp="2013-04-22T18:58:20">
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestMenuFile" tests="5" time="3.22" timestamp="2013-04-22T20:37:55">
   <properties />
-  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test1" time="1.638" />
-  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test2" time="0.785" />
-  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test3" time="0.052" />
-  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test4" time="0.162" />
-  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test5" time="0.013" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test1" time="1.116" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test2" time="0.524" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test3" time="0.042" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test4" time="0.018" />
+  <testcase classname="org.jnorthr.menus.TestMenuFile" name="test5" time="0.018" />
   <system-out><![CDATA[file jim.txt exists
 file jim.txt exists
 file jim.txt exists

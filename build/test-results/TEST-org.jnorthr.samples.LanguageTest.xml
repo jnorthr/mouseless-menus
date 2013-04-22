@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.samples.LanguageTest" tests="2" time="0.134" timestamp="2013-04-22T18:58:40">
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.samples.LanguageTest" tests="2" time="0.153" timestamp="2013-04-22T20:38:08">
   <properties />
-  <testcase classname="org.jnorthr.samples.LanguageTest" name="tomKnowsJavaAndGroovyNative" time="0.057" />
-  <testcase classname="org.jnorthr.samples.LanguageTest" name="tomKnowsJavaAndGroovyHamcrest" time="0.0060" />
+  <testcase classname="org.jnorthr.samples.LanguageTest" name="tomKnowsJavaAndGroovyNative" time="0.064" />
+  <testcase classname="org.jnorthr.samples.LanguageTest" name="tomKnowsJavaAndGroovyHamcrest" time="0.01" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

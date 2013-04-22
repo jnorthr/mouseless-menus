@@ -89,7 +89,7 @@ public class TestMenuItem
 		// command to execute if this menu item is triggered as String
 		// title of ?? as String
 		// name of file where this entry cam from as String
-		mi = new MenuItem(2,0,2,2,'Red',true,"Fred","echo 'fred was here'","this is a title","filename")
+		mi = new MenuItem(2,0,2,2,'Red', true,true, 128, true,"Fred","echo 'fred was here'","this is a title","filename")
 		assert mi.menuCommand.equals("echo 'fred was here'")    
 		//LOGGER.info( mi.toString() );
 

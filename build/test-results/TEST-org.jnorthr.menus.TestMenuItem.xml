@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="iMac.home" name="org.jnorthr.menus.TestMenuItem" tests="5" time="0.382" timestamp="2013-04-22T18:58:25">
+  <properties />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test1" time="0.098" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test2" time="0.02" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test3" time="0.049" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test4" time="0.013" />
+  <testcase classname="org.jnorthr.menus.TestMenuItem" name="test5" time="0.081" />
+  <system-out><![CDATA[menuKey=2  menuBIC=0  menuColumn=2   menuLine=2  menuColor=<Red>  menuShow=<true>  menuText=<Fred>  menuCommand=<echo 'fred was here'>  dialogTitle=<this is a title>  menuFileName=<filename>
+== the end ==
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -104,6 +104,15 @@ task(runHelpWindow, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
+task(runSplash, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.splasher.Splasher'  
+	classpath = sourceSets.main.runtimeClasspath
+	args 'org/jnorthr/menus/MenuFile.groovy'
+	systemProperty 'simple.message', 'Hello '
+}
+
+
 // following used in 'gradle run'
 defaultTasks 'runSimple'
 

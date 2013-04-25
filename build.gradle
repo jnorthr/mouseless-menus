@@ -61,6 +61,13 @@ task(runFileMenu, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
+task(runMenus, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.Menus'
+	classpath = sourceSets.main.runtimeClasspath
+	args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
 
 task(runBB, dependsOn: 'classes', type: JavaExec) 
 {

@@ -30,6 +30,11 @@ import java.awt.event.WindowEvent;
 import org.jnorthr.menus.help.HelpWindow;
 import org.jnorthr.menus.support.BottomBorder;
 import org.jnorthr.menus.support.MenuColumnSupport;
+import org.jnorthr.menus.support.Support;
+import org.jnorthr.menus.support.PanelSupport;
+import org.jnorthr.menus.CommandSet;
+
+
 /* to do:
 the # character
 1. change title to include date/time/user/system name/pwd - done
@@ -127,7 +132,7 @@ class Menus implements KeyListener
 	def static frame	
 	def frametitle 
 	JTextPane jtp;
-	def helpfilename = "./data/help.html"
+	def helpfilename = "./resources/help.html"
 	Border cyanline = new LineBorder(Color.red,1);
 	def mono = new Font("Monospaced", Font.PLAIN, 10)
 
@@ -599,7 +604,7 @@ class Menus implements KeyListener
 		//println "... started"
 		setAudit()
 		Menus ivs = new Menus()
-		ivs.getPanel("./data/main.txt")
+		ivs.getPanel("./resources/main.txt")
 		ivs.frame.show()
 		//ivs.say("... done ===")
 

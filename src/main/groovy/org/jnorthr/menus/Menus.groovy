@@ -29,7 +29,7 @@ import java.awt.event.WindowEvent;
 // local imports
 import org.jnorthr.menus.help.HelpWindow;
 import org.jnorthr.menus.support.BottomBorder;
-
+import org.jnorthr.menus.support.MenuColumnSupport;
 /* to do:
 the # character
 1. change title to include date/time/user/system name/pwd - done
@@ -62,7 +62,7 @@ the # character
 28. cd .. from command line fails to change pwd, look into building environmental process
 29. some commands like man ifconfig fail to return as the utility is waiting for an additional 'enter' keypress
 30. allow www or http:// to signal an html URL for setPage or use 'open' command on mac but looses focus on textfield cos window switch to safari
-31. remove loadMenus() from this source & use from ColumnSupport.() - done
+31. remove loadMenus() from this source & use from MenuColumnSupport.() - done
 32. allow debug text to go to jtp
 33. allow https: - done
 34. try 'go' menu as external command, does it exist? no=if not dot add .txt=does it exist? 
@@ -119,7 +119,7 @@ class Menus implements KeyListener
 	def static audit = true
 	//String propertyfile = './data/menu.properties'  		// non-OS specific parameters for business issues
 	def support
-	java.util.List<ColumnSupport> cs = []
+	java.util.List<MenuColumnSupport> cs = []
 
 	def ps = new PanelSupport()
 
@@ -166,8 +166,8 @@ class Menus implements KeyListener
 			{
 				//println "F15 key pressed"
 				String menu = "./data/.menulist.txt"; 
-				ColumnSupport.loadMenu(cs,menu)    
-				frame.setTitle(ColumnSupport.getFrameTitle())
+				MenuColumnSupport.loadMenu(cs,menu)    
+				frame.setTitle(MenuColumnSupport.getFrameTitle())
 				support.resetStack()
 				swing.tf.text=""
 				swing.tf.requestFocusInWindow()
@@ -206,19 +206,19 @@ class Menus implements KeyListener
 			// F5 --------------------------------------
 			case KeyEvent.VK_F5: // reload menu commands
 
-			String menu = ColumnSupport.getStorage().getCurrentMenu(); 
+			String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
 
 			// use F17 to toggle show/hide of menu items
 			if (f) 
 			{
-				ColumnSupport.loadMenu(cs,menu,true)    
+				MenuColumnSupport.loadMenu(cs,menu,true)    
 			}	// end of if
 			else
 			{
-				ColumnSupport.loadMenu(cs,menu)    // menuitemsfilename)
+				MenuColumnSupport.loadMenu(cs,menu)    // menuitemsfilename)
 			} // end of else
 
-			frame.setTitle(ColumnSupport.getFrameTitle())
+			frame.setTitle(MenuColumnSupport.getFrameTitle())
 			support.resetStack()
 			swing.tf.text=""
 			swing.tf.requestFocusInWindow()
@@ -246,13 +246,13 @@ class Menus implements KeyListener
 			case KeyEvent.VK_ESCAPE: 
 			case KeyEvent.VK_F12: // mimic F12 for short keyboards
 			case KeyEvent.VK_F10: // mimic F12 for short keyboards
-			String priormenu = ColumnSupport.getStorage().getPriorMenu()
-			String cm = ColumnSupport.getStorage().getCurrentMenu()
+			String priormenu = MenuColumnSupport.getStorage().getPriorMenu()
+			String cm = MenuColumnSupport.getStorage().getCurrentMenu()
 			if (!priormenu.equals(cm))
 			{
-				ColumnSupport.getStorage().pop()
-				ColumnSupport.loadMenu(cs,priormenu)    // menuitemsfilename)
-				frame.setTitle(ColumnSupport.getFrameTitle())
+				MenuColumnSupport.getStorage().pop()
+				MenuColumnSupport.loadMenu(cs,priormenu)    // menuitemsfilename)
+				frame.setTitle(MenuColumnSupport.getFrameTitle())
 			} // end of if
 
 			// reset pointer to command stack, then re-focus
@@ -291,7 +291,7 @@ class Menus implements KeyListener
 	def helpme =  
 	{
 		def help = helpfilename
-		String menu = ColumnSupport.getStorage().getCurrentMenu(); 
+		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
 		int k = menu.lastIndexOf("/")
 		int dot = menu.lastIndexOf(".")
 		def menu2 = menu.substring(0,dot) + ".html"
@@ -361,7 +361,7 @@ class Menus implements KeyListener
 
 			} // end of else
 			
-			if (f && ( num< 1 || num > ColumnSupport.getMenuOptionCount() ) ) 
+			if (f && ( num< 1 || num > MenuColumnSupport.getMenuOptionCount() ) ) 
 			{
 				support.appendText("* No such choice: $num", support.as2);
 				support.resetStack()
@@ -374,7 +374,7 @@ class Menus implements KeyListener
 			// translate a menu number choice to the eqivalent text
 			if ( num > 0 )
 			{
-				xlate = ColumnSupport.getMenuCommand(--num)
+				xlate = MenuColumnSupport.getMenuCommand(--num)
 				cmd = ( cmd.size() > 2 ) ? xlate +  cmd.substring( cmd.indexOf(" ") ) : xlate
 			} // end of if
 
@@ -426,8 +426,8 @@ class Menus implements KeyListener
 			if (cmd.substring(0,1)=='¤')			// only known existing menu filenames come back here with ¤ prefix
 			{
 				def fn = cmd.substring(1)
-				ColumnSupport.loadMenu( cs, fn)    // menuitemsfilename
-				frame.setTitle(ColumnSupport.getFrameTitle())
+				MenuColumnSupport.loadMenu( cs, fn)    // menuitemsfilename
+				frame.setTitle(MenuColumnSupport.getFrameTitle())
 			} // end of if
 			else
 			{
@@ -459,11 +459,11 @@ class Menus implements KeyListener
 	// build a swing panel
 	public void getPanel(String fn)
 	{
-		ColumnSupport.loadMenu( cs, fn)
+		MenuColumnSupport.loadMenu( cs, fn)
 
-   		say("There are ${ColumnSupport.getMenuItemCount()} menu items")
-		support.appendText("O/S=${support.getOSN()} and ${ColumnSupport.getStorage().getCurrentMenu()}");
-		support.appendText(" has ${ColumnSupport.getMenuItemCount()} menu choices");
+   		say("There are ${MenuColumnSupport.getMenuItemCount()} menu items")
+		support.appendText("O/S=${support.getOSN()} and ${MenuColumnSupport.getStorage().getCurrentMenu()}");
+		support.appendText(" has ${MenuColumnSupport.getMenuItemCount()} menu choices");
 
 		c = new GridBagConstraints();	
 		c.insets = new Insets(0, 1, 0, 1);
@@ -583,7 +583,7 @@ class Menus implements KeyListener
 		as3 = new SimpleAttributeSet();
 		StyleConstants.setForeground(as3, Color.green);
 
-		3.times{ cs.leftShift ( new ColumnSupport() ) }
+		3.times{ cs.leftShift ( new MenuColumnSupport() ) }
 
    		// build text pane for joblog text
 		jtp = support.getTextPane()

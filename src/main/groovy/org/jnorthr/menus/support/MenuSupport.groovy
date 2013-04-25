@@ -25,8 +25,8 @@ public class Support
 	def static int top = 0
 	def static int left = 0
 	def frame
-	String propertyfile = './data/menu.properties'  // non-OS specific parameters for business issues
-	String pathfile = './data/path.properties'  // non-OS specific parameters for business issues
+	String propertyfile = './resources/menu.properties'  // non-OS specific parameters for business issues
+	String pathfile = './resources/path.properties'  // non-OS specific parameters for business issues
 	def config
 	def paths
 	def OSN
@@ -99,11 +99,11 @@ public class Support
   		def osid = new StringBuffer();
   		tokens.each{tok -> osid << tok;}
 		say("... Support() set to use $osid in pwd=$pwd" )
-       		paths = new ConfigSlurper(osid.toString()).parse(new File(pathfile).toURL())
+       	paths = new ConfigSlurper(osid.toString()).parse(new File(pathfile).toURL())
 		say("... config is set to use '$osid' paths")
 		commandPrefix = paths.commandPrefix		// something like 'open ' on mac os
-       		config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
-       		env = System.getenv()
+       	config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
+       	env = System.getenv()
 		getWindowSize()
 		mono = new Font("Monospaced", Font.PLAIN, 10)
 		say("... Support() ready...$commandPrefix")

@@ -5,7 +5,7 @@ class Storage
 {
 	List<String> stackMenu = []
 	boolean audit = false
-	def mainmenufilename = "./data/main.txt"
+	def mainmenufilename = "./resources/main.txt"
 
 	// print debug text (maybe)
 	public void say(def text) 

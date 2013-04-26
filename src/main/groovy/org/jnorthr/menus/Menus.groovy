@@ -58,7 +58,7 @@ the # character
 19. report no such option - done
 20. use return  code to color code the text - done
 21. find index of error=2 - done
-22. save as ./data/logfile.txt
+22. save as ./resources/logfile.txt
 23. as general purpose tool, use File>Open, File>New and File>Save to preserve text files, notes, logs 
 24. cannot balance top/bottom panels when expanded to full screen mode - done: used gridbagconstraints or horizontal split screen
 25. finish timer - needs more logic to refresh menu title lines - done : may need placement on screen - done 
@@ -71,7 +71,7 @@ the # character
 32. allow debug text to go to jtp
 33. allow https: - done
 34. try 'go' menu as external command, does it exist? no=if not dot add .txt=does it exist? 
-    no=did it say ./data folder? no=try in ./data folder - done
+    no=did it say ./resources folder? no=try in ./resources folder - done
 35. make frame title come from main.txt file - done
 
 36. command line fails on ls -al *.groovy   - why ? because *.java is a shell expansion feature---> to get a list of files in a dir, try:
@@ -95,7 +95,7 @@ assert list == ['File1.txt', 'File2.txt']
 47. cannot update the time in header panel - tough - must rebuild headersupport each time !
 48. finish menuitem class and integrate it
 49. function key to toggle show of command text - done
-50. show available menus from ./data at boj - done
+50. show available menus from ./resources at boj - done
 51. F12 when already on main does not need refresh
 
 //	lookAndFeel("metal")		
@@ -122,7 +122,7 @@ class Menus implements KeyListener
 {
 
 	def static audit = true
-	//String propertyfile = './data/menu.properties'  		// non-OS specific parameters for business issues
+	//String propertyfile = './resources/menu.properties'  		// non-OS specific parameters for business issues
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
@@ -170,7 +170,7 @@ class Menus implements KeyListener
 			if (f)
 			{
 				//println "F15 key pressed"
-				String menu = "./data/.menulist.txt"; 
+				String menu = "./resources/.menulist.txt"; 
 				MenuColumnSupport.loadMenu(cs,menu)    
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
 				support.resetStack()

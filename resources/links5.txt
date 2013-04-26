@@ -1,0 +1,34 @@
+Find I/P Addresses:=http://javascript.about.com/library/blip.htm
+IBM Play Tutorial:=www.ibm.com/developerworks/java/library/j-javadev2-16/index.html
+Groovyserv User Guide:=http://kobo.github.com/groovyserv/userguide_en.html#ref-userguide
+Glassfish V3 Grails Wiki := http://wiki.glassfish.java.net/Wiki.jsp?page=GrailsGettingStarted
+Start / Stop Glassfish Server :=http://thedata.org/book/start-and-stop-glassfish-server
+Google I/O Sandbox:=www.google.com/events/io/2010/sandbox.html
+IBM Reverse Ajax Tut:=www.ibm.com/developerworks/web/library/wa-reverseajax4/?cmp=dw&cpb=dwwdv&ct=dwnew&cr=dwnen&ccy=zz&csr=090811
+Jetty vs Tomcat:=www.webtide.com/choose/jetty.jsp
+Jetty Ajax Continuations:=http://docs.codehaus.org/display/JETTY/Continuations
+Groovy++ Gretty Rest Websockets:=http://groovy.dzone.com/articles/groovy-action
+Netty Sockets & Servers:=www.jboss.org/netty.html
+Jersey RESTful Web Services:=http://download.oracle.com/docs/cd/E19776-01/820-4867/ggnxe/index.html
+Misc. Links:=*MENUTITLE
+Groovy Console:=/Volumes/Data/dev/groovy/groovy-1.8.0/bin/groovyConsole
+AS400:=open /Users/jim/Desktop/AS400.app
+How To Deploy Web Service WAR:=http://onjava.com/pub/a/onjava/excerpt/AntTDG_chap8/index1.html
+Groovy Process Mgmt:=http://groovy.codehaus.org/groovy-jdk/java/lang/Process.html#consumeProcessOutput()
+Pleac Process Examples:=http://pleac.sourceforge.net/pleac_groovy/processmanagementetc.html
+Groovyserv User Guide:=http://kobo.github.com/groovyserv/userguide_en.html#ref-userguide
+Groovyserv Downloads:=open http://kobo.github.com/groovyserv/download.html#ref-download
+CA-Clipper 5.3 - Guide To CA-Clipper:=http://www.itlnet.net/programming/program/Reference/c53g01c/menu.html
+Google I/O Sandbox:=www.google.com/events/io/2010/sandbox.html
+Google I/O 2010:=open http://www.google.com/events/io/2010/sandbox.html
+Servlet Request JavaDoc:=http://download.oracle.com/javaee/5/api/javax/servlet/ServletRequest.html
+AS400:=open /Users/jim/Desktop/AS400.app
+How To Deploy Web Service WAR:=http://onjava.com/pub/a/onjava/excerpt/AntTDG_chap8/index1.html
+Pleac Process Examples:=http://pleac.sourceforge.net/pleac_groovy/processmanagementetc.htm
+JQuery Tips:=open http://net.tutsplus.com/tutorials/javascript-ajax/quick-tip-jquery-newbs-stop-jumping-in-the-pool/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+nettuts+%28Nettuts%2B%29&utm_content=Google+UK
+Netbeans Tomcat Fluid 960 App:=open http://localhost:8080/GroovyWebApplication/
+Heroku Cloud Services:=open http://www.heroku.com/
+Rest-client to test RESTful Webservices:=open http://code.google.com/p/rest-client/downloads/list
+Ubuntu Environment Variables:=open https://help.ubuntu.com/community/EnvironmentVariables
+Java Beanstalk on GAE & Amazon Cloud:=open http://www.ibm.com/developerworks/java/library/j-javadev2-16/index.html
+

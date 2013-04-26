@@ -1,0 +1,8 @@
+A S / 4 0 0   M e n u:=*MENUTITLE
+#c00080;Test Color #c00080;:=echo $PATH
+IBM Red Books:=open http://www.redbooks.ibm.com/pubs/html/as400/v4r5/ic2924/index.htm?info/RZAATMST08.HTM
+RZKH AS400 Germany Website:=http://pub1.rzkh.de/
+TN5250 Emulator:=java -jar /Volumes/Data/dev/tn5250j-0/tn5250j.jar -e -132 &
+A S / 4 0 0   M e n u 2:=*MENUTITLE
+
+

@@ -340,7 +340,9 @@ public class Support
 							{
 								case '/' : break;
 								case '.' : break;
-								default :  fn = "./data/" + fn; break; // if no path, add our known ./data as prefix
+								default :   
+											fn = getConfig().menuFolder + fn; 
+											break; // if no path, add our known folder as prefix
 							} // end of switch
 						} // end of if
 

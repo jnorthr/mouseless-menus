@@ -294,21 +294,32 @@ class Menus implements KeyListener
 
 	// help
 	def helpme =  
-	{
-		def help = helpfilename
+	{	
+		def help = support.getConfig().helpfilename 
+		
 		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
+		
 		int k = menu.lastIndexOf("/")
 		int dot = menu.lastIndexOf(".")
 		def menu2 = menu.substring(0,dot) + ".html"
+		
 		def name = menu.substring(k+1,k+2).toUpperCase()+menu.substring(k+2,dot).toLowerCase()
-                def fi = new File(menu2);
-                if (fi.exists()) help = menu2;
-		say "helpme menu is <${menu2}> help file will be $help and name is $name"
+
+		say "helpme menu is <$help>  menu=<$menu>  menu2=<$menu2>   name=<$name>"
+
+        def fi = new File(menu2);
+        if (fi.exists()) 
+        {
+        	help = menu2;
+        	say "... $menu2 exists"
+        }
+        
+		say "helpme menu is <${menu2}> help file will be <$help> and name is <$name>"
 		File hf = new File(help)
 		URL url=null;
 		url=hf.toURL();
 
-		HelpWindow hw = new HelpWindow("$name Help Text", url);    
+		HelpWindow hw = new HelpWindow("$name Help Text", help);    
 		swing.tf.requestFocusInWindow()
 		swing.tf.grabFocus();
 

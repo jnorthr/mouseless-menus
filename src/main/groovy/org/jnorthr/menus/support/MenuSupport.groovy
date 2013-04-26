@@ -10,7 +10,7 @@ import java.awt.GridLayout
 
 public class Support
 {
-	def static audit = false
+	def static audit = true
 	def static framefixedtitle = "MENU"
 
 	def ls = System.getProperty('line.separator')
@@ -106,7 +106,7 @@ public class Support
        	env = System.getenv()
 		getWindowSize()
 		mono = new Font("Monospaced", Font.PLAIN, 10)
-		say("... Support() ready...$commandPrefix")
+		say("... Support() ready..\nCommand prefix:<$commandPrefix>\nOSN=<$OSN>\npwd=<$pwd>")
 	} // end of constructor
 
 	// return a handle to the config file

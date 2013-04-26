@@ -1,5 +1,16 @@
 package org.jnorthr.menus.splasher;
+// remember that this approach will NOT work unless the image is on the classpath !
+// added gradle logic to include splash image as follows using += syntax
+/*
+task(runSplash, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.splasher.Splasher'  
+	classpath = sourceSets.main.runtimeClasspath += files('${workingDir}/resources/images/loading.gif')
+	args './resources/sample1.groovy'
+	systemProperty 'simple.message', 'Hello '
+}
 
+*/
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -105,14 +116,18 @@ public class SplashWindow extends Window {
         } // end of if
     } // end of paint
     
+
     /**
      * Open's a splash window using the specified image.
+	 * Have not tried to make this one work
      * @param image The splash image.
      */
     public static void splash(Image image) 
     {
+		System.out.println("... starting splash");
         if (instance == null && image != null) 
 	    {
+			System.out.println("... instance null");
             Frame f = new Frame();
             
             // Create the splash image
@@ -145,10 +160,13 @@ public class SplashWindow extends Window {
 
     /**
      * Open's a splash window using the specified image.
+	 * Used this one and it works if Splasher.java passes a URL object
      * @param imageURL The url of the splash image.
      */
     public static void splash(URL imageURL) 
     {
+		String tx = "... starting splash as URL:"+imageURL.toString();
+		System.out.println(tx);
         if (imageURL != null) 
 	    {
             splash(Toolkit.getDefaultToolkit().createImage(imageURL));
@@ -156,6 +174,7 @@ public class SplashWindow extends Window {
         
     } // end of splash method
     
+
     /**
      * Closes the splash window.
      */

@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import java.io.File;
-import javax.swing.SwingWorker;
+//import javax.swing.SwingWorker;
 import groovy.lang.GroovyShell; // need groovy-all-x.x.x.jar in your CLASPATH env.variable to compile this java source
 import org.jnorthr.menus.splasher.SplashWindow;
 
@@ -25,10 +25,10 @@ public class Splasher
      */
     public static void main(String[] args)  throws Throwable 
     {
-    	System.out.println("... starting");
-    	String fn = "Menus.groovy";
-    	String imagepath = "../../../../resources/images/loading.gif";
-		String[] path = {"/Volumes/Data/dev/groovy/Menus"};		
+    	System.out.println("... Splasher starting");
+    	String fn = "./resources/sample1.groovy";
+    	String imagepath = "./resources/images/loading.gif";
+		String[] path = {"./resources"};		
     	
     	if (args.length>0) fn=args[0];
     	if (args.length>1) imagepath=args[1];
@@ -39,32 +39,54 @@ public class Splasher
     		path[0] = args[2];
     	} // end of if
     	
-        SplashWindow.splash(Splasher.class.getResource(imagepath));
-        
+
+		File f = new File(imagepath);
+		if (f.exists())
+		{
+			System.out.println("..."+imagepath+" exists");
+		}
+
+
+  		URL url=null;
+  		try
+		{
+  			// The file may or may not exist
+  			url=f.toURL(); 
+  			System.out.println("The url is" + url);
+			SplashWindow.splash(url);
+		}
+		catch(Exception x)
+		{
+			System.out.println(x.getMessage());
+		}		
+
 		GroovyShell shell = new GroovyShell();
 		shell.run(new File(fn), path);
   
-	/*	implement worker threads later
-   		SwingWorker worker = new SwingWorker()    
-   		{  
-   			public Object construct() 
-   	   		{   		   	 
- 	   		}; // end of construct
-   		};
+		/*	implement worker threads later- only jdk 1.6 and later !!
+   			SwingWorker worker = new SwingWorker()    
+   			{  
+   				public Object construct() 
+   	   			{   		   	 
+ 	   			}; // end of construct
+   			};
 
-	   	worker.start();
-	*/
+	   		worker.start();
+		*/
 
-
-	//    	shell.run(new File(fn), path);
-
-    //SplashWindow.invokeMain("MyApplication", args);
-	//System.out.println("   dispose");
+    	//SplashWindow.invokeMain("MyApplication", args);
+		//System.out.println("   dispose");
 	
-    System.out.println("    dispose");
-    SplashWindow.disposeSplash();
-    System.out.println("... Splasher ending");
-	//System.exit(0);
+    	System.out.println("    dispose");
+  		try
+		{
+    		SplashWindow.disposeSplash();
+		}
+		catch(Exception x)
+		{
+			System.out.println(x.getMessage());
+		}		
+    	System.out.println("... Splasher ending");
     } // end of main
     
 } // end of splasher class

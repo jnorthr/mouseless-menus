@@ -107,11 +107,13 @@ task(runHelpWindow, dependsOn: 'classes', type: JavaExec)
 task(runSplash, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.splasher.Splasher'  
-	classpath = sourceSets.main.runtimeClasspath
-	args 'org/jnorthr/menus/MenuFile.groovy'
+	classpath = sourceSets.main.runtimeClasspath += files('${workingDir}/resources/images/loading.gif')
+	args './resources/sample1.groovy'
 	systemProperty 'simple.message', 'Hello '
 }
 
+println "project is named :"+project
+println "project.buildDir:"+project.buildDir
 
 // following used in 'gradle run'
 defaultTasks 'runSimple'

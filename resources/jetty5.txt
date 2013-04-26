@@ -1,0 +1,4 @@
+Jetty vs Tomcat:=www.webtide.com/choose/jetty.jsp
+Jetty Ajax Continuations:=http://docs.codehaus.org/display/JETTY/Continuations
+Jersey RESTful Web Services:=http://download.oracle.com/docs/cd/E19776-01/820-4867/ggnxe/index.html
+Jetty Web Server Links 2:=*MENUTITLE

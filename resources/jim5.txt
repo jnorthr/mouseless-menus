@@ -1,4 +1,4 @@
-J i m ' s  M e n u Options - Gradle Resources:=*MENUTITLE
+J i m ' s   M e n u Options:=*MENUTITLE
 Groovy Tools :=*RED
 groovy version :=groovy -v
 $GROOVY_HOME/bin/groovy -v:=$GROOVY_HOME/bin/groovy -v

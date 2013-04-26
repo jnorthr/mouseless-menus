@@ -1,0 +1,16 @@
+G r o o v y   M e n u:=*MENUTITLE
+Groovy DSL's:=http://www.slideshare.net/paulk_asert/groovydsls
+Groovy Truth:=http://blog.kartikshah.info/2010/01/groovy-truth_05.html
+Groovy def Scoping Issues:=http://groovy.codehaus.org/Scoping+and+the+Semantics+of+%22def%22
+Guillame LaForge Discusses DSL's:=http://groovy.dzone.com/news/domain-specific-language-unit-
+Groovy Closures:=http://groovy.codehaus.org/Closures+-+Informal+Guide
+Closure Discussions:=http://eclipsezone.com/forums/thread.jspa?messageID=92099076
+Servlet Request JavaDoc:=http://download.oracle.com/javaee/5/api/javax/servlet/ServletRequest.html
+More DSL Info:=open http://www.springone2gx.com/blog/guillaume_laforge/2010/08/nicer_dsls_in_groovy_1_8_thanks_to_extended_command_expressions
+Java ProcessBuilder Docs:=open http://download.oracle.com/javase/1.5.0/docs/api/java/lang/ProcessBuilder.html
+Groovy Overload Operators:=open http://www.ibm.com/developerworks/java/library/j-pg10255/index.html
+Groovy Samples:=open http://www.ibm.com/developerworks/java/library/j-pg05245/
+Groovy Examples:=open http://www.groovyexamples.org/2010/04/18/create-a-simple-loop/
+Execute Shell Cmds in Groovy:=open http://www.joergm.com/2010/09/executing-shell-commands-in-groovy/
+Groovy Console:=/Volumes/Data/dev/groovy/groovy-1.8.0/bin/groovyConsole
+Groovy Process Mgmt:=http://groovy.codehaus.org/groovy-jdk/java/lang/Process.html#consumeProcessOutput()

@@ -45,7 +45,7 @@ public class MenuItem
 	// color name or hex code as def/object
 	// bold the text on menu ?
 	// italics the text on menu ?
-	// menu hex color is int equivalent of color name
+	// menu hex color is int equivalent of color name decoded from hex
 	// show/hide boolean: tru = show
 	// menu text appearing on screen as String
 	// command to execute if this menu item is triggered as String

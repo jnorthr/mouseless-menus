@@ -81,7 +81,7 @@ task(runSearch, dependsOn: 'classes', type: JavaExec)
 {
 	main = 'org.jnorthr.menus.support.Search' 
 	classpath = sourceSets.main.runtimeClasspath
-	args '/Volumes/Media/Backups/DuracellUSBKey2/Menus/data/'
+	args './resources/'
 	systemProperty 'simple.message', 'Hello '
 }
 

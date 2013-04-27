@@ -332,19 +332,9 @@ public class Support
 						def fn = tokens[1].trim()	// get the menu filename
 						if (!fn.toLowerCase().endsWith(".txt")) fn += ".txt";		// make sure it ends with .txt
 
-						def fi = new File(fn)	
-						if (!fi.exists())		// if menu file does not exists, see if a direct or relative path 
-						{				// was specified
-							def ch = fn.substring(0,1) // take first char. pointed to a diff path
-							switch (ch)
-							{
-								case '/' : break;
-								case '.' : break;
-								default :   
-											fn = getConfig().menuFolder + fn; 
-											break; // if no path, add our known folder as prefix
-							} // end of switch
-						} // end of if
+						int i8 = fn.indexOf('/') + fn.indexOf('\\')
+						if (i8 < 0)
+							fn = getConfig().menuFolder + fn; 
 
 						def f1 = new File(fn)
 						cmd = (f1.exists()) ? "¤${fn}" : null 

@@ -493,9 +493,12 @@ class Menus implements KeyListener
  
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		swing = new SwingBuilder()
-		frame = swing.frame(title:"${frametitle}", background:Color.black, pack:false, show:true, defaultCloseOperation:JFrame.EXIT_ON_CLOSE,size:[800, 500]) 
+		frame = swing.frame(title:"${frametitle}", background:Color.black, pack:false, show:true, defaultCloseOperation:JFrame.EXIT_ON_CLOSE,size:[800, 660]) 
 		{   
-		   panel(layout:new GridBagLayout(), background:Color.BLACK)
+
+		splitPane(orientation:JSplitPane.VERTICAL_SPLIT)  //, dividerLocation:280) 
+		{		
+		   panel(constraints: "top",background:Color.PINK)  // layout:new GridBagLayout(), 
 		   {
 			c.fill = GridBagConstraints.BOTH; // HORIZONTAL
 			c.weighty = 0.0;
@@ -505,63 +508,68 @@ class Menus implements KeyListener
 			c.gridx = 0;
 
 			// layout headings
-			hbox(constraints: c, id:'hd' ) { widget(ps.getPanel()) }
+			hbox(constraints: c, id:'hd',background:Color.BLUE ) { widget(ps.getPanel()) }
 			c.gridy += 1;
 
-			c.weighty = 0.4;
+			c.weighty = 0.1;
 			c.gridx  = 0
 
 			// layout menu item columns
-			hbox(constraints: c)
- 		        {			
- 		          sp1 = scrollPane(id:'sp1',border:null,minimumSize:[160,110],preferredSize:[180,140]) {widget(cs[0].getColumn()) }   
-			   label "    "
- 		          sp2 = scrollPane(id:'sp2',border:null,minimumSize:[160,110],preferredSize:[180,140]) {widget(cs[1].getColumn()) }
-			   label "    "
- 		          sp3 = scrollPane(id:'sp3',border:null,minimumSize:[160,110],preferredSize:[180,140]) {widget(cs[2].getColumn()) }
-		        } 					// end of hbox
-
-
-		        c.fill = GridBagConstraints.NONE; 	// rule to let a component expand both ways when more space is available on resize
-			c.gridwidth = GridBagConstraints.RELATIVE
-			c.gridy += 1;  				// row three and first column
-			c.gridx = 0;  				// row four and first column
-			c.weighty = 0.0;
-			c.weightx = 0.0;
-
-			// command entry field
-			hbox(constraints: c)
-			{
-				def t3 = label(id:'t3','Enter menu # or command : ', font:mono, foreground:Color.GREEN)  
-
-				tf = textField(id:'tf', foreground:Color.GREEN, columns: 100, border:bb,  font:mono, actionPerformed: { event -> saver()}, minimumSize:[550, 12], opaque:true, background:Color.BLACK)
-				tf.addKeyListener(this);
-				tf.setCaretColor(Color.YELLOW)
-				tf.getCaret().setBlinkRate(400);
-				t3.setHorizontalTextPosition(JLabel.LEFT);
-			} // end of hbox
-
-
-			c.gridy += 1;  				// row four and first column
-			c.gridx = 0;  				// first column
-			c.weighty = 0.0;
-			c.gridwidth = GridBagConstraints.REMAINDER; // makes this component span all columns if last in row
-
-			hbox(constraints: c)
-			{
-				label(id:'f1',font:mono,foreground:Color.GREEN, text:"${footer1}",constraints: c)   
+			hbox(constraints: c,background:Color.YELLOW)
+ 		    {			
+ 		    	sp1 = scrollPane(id:'sp1',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[0].getColumn()) }   
 				label "    "
-				label(id:'f2',font:mono,foreground:Color.YELLOW, text:"${footer2}",constraints: c)   
-			} // end of hbox
-		   
-			c.gridx = 0;  				// first column
-			c.weighty = 1.0;
-			c.weightx = 1.0;
-			c.gridy += 1;  				// row five and first column	
-			c.fill = GridBagConstraints.BOTH;
-			sp = scrollPane(id:'sp',border:cyanline,constraints: c) {widget(jtp) }
+ 		    	sp2 = scrollPane(id:'sp2',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[1].getColumn()) }
+				label "    "
+ 		    	sp3 = scrollPane(id:'sp3',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[2].getColumn()) }
+		    } // end of hbox
 
 		   } // end of JPanel
+
+
+
+		   panel(constraints: "bottom",background:Color.BLACK)  // layout:new GridBagLayout(), 
+		   {
+		    	c.fill = GridBagConstraints.BOTH; 	// rule to let a component expand both ways when more space is available on resize
+				c.gridwidth = GridBagConstraints.RELATIVE
+				c.gridy += 1;  				// row three and first column
+				c.gridx = 0;  				// row four and first column
+				c.weighty = 0.0;
+				c.weightx = 0.0;
+
+				// command entry field
+				hbox(constraints: c)
+				{
+					def t3 = label(id:'t3','Enter menu # or command : ', font:mono, foreground:Color.GREEN)  
+
+					tf = textField(id:'tf', foreground:Color.GREEN, columns: 100, border:bb,  font:mono, actionPerformed: { event -> saver()}, minimumSize:[550, 12], opaque:true, background:Color.BLACK)
+					tf.addKeyListener(this);
+					tf.setCaretColor(Color.YELLOW)
+					tf.getCaret().setBlinkRate(400);
+					t3.setHorizontalTextPosition(JLabel.LEFT);
+				} // end of hbox
+
+				c.gridy += 1;  				// row four and first column
+				c.gridx = 0;  				// first column
+				c.weighty = 0.1;
+				c.gridwidth = GridBagConstraints.REMAINDER; // makes this component span all columns if last in row
+
+				hbox(constraints: c,background:Color.WHITE)
+				{
+					label(id:'f1',font:mono,foreground:Color.GREEN, text:"${footer1}",constraints: c)   
+					label "    "
+					label(id:'f2',font:mono,foreground:Color.YELLOW, text:"${footer2}",constraints: c)   
+				} // end of hbox
+		   
+				//c.gridx = 0;  				// first column
+				//c.weighty = 1.0;
+				//c.weightx = 1.0;
+				//c.gridy += 1;  				// row five and first column	
+				//c.fill = GridBagConstraints.BOTH;
+				sp = scrollPane(id:'sp',border:cyanline) {widget(jtp) } // ,constraints: "bottom"
+		   } // end of JPanel
+
+		} // end of splitPane
 
 		} // end of frame
 

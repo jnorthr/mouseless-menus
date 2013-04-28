@@ -144,9 +144,9 @@ public class HeaderSupport
         column1.setBackground(Color.black);
         column1.setFocusable(false)
         column1.setEditable(false);
-        column1.setFont(new Font("Monospaced", Font.PLAIN, 9));
+        column1.setFont(new Font("Monospaced", Font.PLAIN, 10));
         column1.setMinimumSize(new Dimension(155,50));
-        column1.setPreferredSize(new Dimension(180,80));
+        column1.setPreferredSize(new Dimension(255,58));
         column1.setMaximumSize(new Dimension(500,120));
     } // end of setting attributes 
 

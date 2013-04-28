@@ -591,7 +591,7 @@ class Menus implements KeyListener
 	public Menus() 
 	{ 
 		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
+        println "... Menus started"
 		support = new Support()
    		frametitle = support.getFrameTitle()
 /*

@@ -16,12 +16,14 @@ apply plugin:'application'
 
 // to add junit to build.gradle:
 repositories {
+    //mavenLocal()
     mavenCentral()
     //mavenRepo("http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.pom")
 }
 
 dependencies {
-    groovy localGroovy()
+    //groovy localGroovy()
+    compile 'org.codehaus.groovy:groovy-all:2.0.5'
     groovy group: 'org.apache.ivy', name:'ivy', version:'2.2.0' 
     testCompile 'junit:junit:4.11'
     compile group: 'javax.servlet',        name: 'servlet-api', version: '2.5' 
@@ -29,6 +31,27 @@ dependencies {
     //compile 'mysql:mysql-connector-java:5.1.6'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
 }
+
+/*
+sourceSets {
+    main {
+        java { srcDirs = [] }    // no source dirs for the java compiler
+        groovy { srcDir 'src/main' }  // compile everything in src/main with groovy but not src/test code which ignores junit dependency
+   }
+
+   // this is to turn off compiles of test source
+   test {
+        java { srcDirs  = [] }        // 'src'}    // 'src/test/java' }    // source dirs for the java compiler for testing
+        groovy { srcDir = [] }        // 'src/test/' }  // compile somethings in src/ with groovy testing so no inter dependencies allowed in testing :P
+   }
+} // end of sourceSets
+*/
+
+// Iterate over the source sets
+sourceSets.all {
+    println name
+}
+
 
 test.testLogging { exceptionFormat "full" }
 
@@ -40,10 +63,12 @@ test
 	//workingDir = new File('/Volumes/Media/Software/groovysamples/src/main/groovy')
 	println "workingDir is "+workingDir // = workingDir is /Volumes/Media/Software/menus
 
-        // listen to standard out and standard error of the test JVM(s)
-        onOutput { descriptor, event -> logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message ) }
+    // listen to standard out and standard error of the test JVM(s)
+    onOutput { descriptor, event -> logger.lifecycle("Test: " + descriptor + " gave std out/err: " + event.message ) }
 }
 
+
+// simple tasks  to run individual classes
 task(runSimple, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.MenuItem'  // 'test24'  //
@@ -114,7 +139,7 @@ task(runHelpWindow, dependsOn: 'classes', type: JavaExec)
 task(runSplash, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.splasher.Splasher'  
-	classpath = sourceSets.main.runtimeClasspath += files('${workingDir}/resources/images/loading.gif')
+	classpath = sourceSets.main.runtimeClasspath += files('${workingDir}/resources/images/loading.gif') + sourceSets.main.compileClasspath
 	args './resources/sample1.groovy'
 	systemProperty 'simple.message', 'Hello '
 }
@@ -150,5 +175,5 @@ jar {
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.2'
+    gradleVersion = '1.1'
 }

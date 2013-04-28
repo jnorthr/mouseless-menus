@@ -12,6 +12,7 @@ import java.io.File;
 //import javax.swing.SwingWorker;
 import groovy.lang.GroovyShell; // need groovy-all-x.x.x.jar in your CLASPATH env.variable to compile this java source
 import org.jnorthr.menus.splasher.SplashWindow;
+import org.jnorthr.menus.Menus;
 
 public class Splasher 
 {
@@ -60,6 +61,8 @@ public class Splasher
 			System.out.println(x.getMessage());
 		}		
 
+		org.jnorthr.menus.Menus ivs = new org.jnorthr.menus.Menus();
+		
 		GroovyShell shell = new GroovyShell();
 		shell.run(new File(fn), path);
   

@@ -9,7 +9,7 @@ public class Search
 	boolean audit = false;
 
 	// Create a ref for closure
-	def searchClos
+	def searchLogic
 	private menus =[:]
 
 	// folder to hold newly created list of menus as a .txt file
@@ -20,31 +20,56 @@ public class Search
 	// and default is to write map of menu filenames to output text file
 	public Search(String tx)
 	{			
-		def text= tx.trim();
-
-		// Apply closure
-		searchClos( new File( text ) )
-
-		writeResults(path,menus);	
-		
+		this(tx, true);
 	}	// end of method
 
 
+    // =========================================
+	// get menu list from search logic
+	// these will be .txt menu files with at least one menu line := like this
+	public getMenus() 
+	{ 
+		return menus
+	} // end of 
+
+
+
+	// confirm string points to an existing file or path
+	def chkobj(String fn)
+	{
+		File fi = new File(fn.trim());
+		return ( fi.exists() ) ? true : false;
+	} // end of chkobj
+	
+	
+	// get the directory
+	def getCanonical(String fn)
+	{
+		def cp = new File(fn.trim()).getCanonicalPath().toString();
+		say "getCanonical($fn) ="+cp
+		return cp;
+	} // end of def
 
     // =========================================
-    // class constructor where tx = path to menu folder and flag to say if o rnot write results
+    // class constructor where tx = path to menu folder and flag to say if or not write results
 	// and default is to write map of menu filenames to output text file
 	public Search(String tx, boolean flag)
 	{			
-		def text= tx.trim();
+		say "Search($tx) = "
 
-		// Apply closure
-		searchClos( new File( text ) )
-
-		if (flag)
+		if ( chkobj(tx) )
 		{
-			writeResults(path,menus);	
-		}
+			say " ... chkobj ok ...   "
+			def fn = getCanonical(tx)
+			
+			// Apply closure
+			searchLogic( new File( fn ) )
+
+			if (flag)
+			{
+				writeResults(path,menus);	
+			} // end of if		
+		} // end of if
 		
 	}	// end of method
 
@@ -70,17 +95,20 @@ public class Search
 
     // =========================================
 	// Define closure
-	public searchClos(File folder) 
-	{ 
-	    println "Dir ${folder.getCanonicalPath()}";
-	    path = folder.getCanonicalPath()
+	public searchLogic(File fh) 
+	{ 		
+	    print "Dir ${fh.getCanonicalPath()} ";
+	    path = fh.getCanonicalPath()
+	
+		File fh2 = new File(path);
 		def lines
-		
-        folder.eachDir( searchClos );
-        folder.eachFileMatch(~/.*?\.txt/) 
+		println " gave <$path> ";
+        fh2.eachDir{ f -> say "fh2.eachDir= ${ f.toString() }"; searchLogic(f) };
+        fh2.eachFileMatch(~/.*?\.txt/) 
         {
+				say "fh2.eachFileMatch($it)"
                 String fn = it.getCanonicalFile();
-				//println "... folder.eachFileMatch:<"+fn+">"
+				println "\n.. fh2.eachFileMatch:<"+fn+">"
 				
 				def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true; 
                 def fi = new File(fn);
@@ -130,17 +158,19 @@ public static void main(String[] args)
 {	
 	println "--------------------------------------------------"
 	print "... started in folder "
-	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
+	def path = "./resources/";
 	
 	if (args.length>0) path = args[0]
 	println path;
-
-	Search mf = new Search(path);
-
-	mf = new Search(path, false);
-	def menus = mf.getMenuFileNames()
-	
-	menus.each{fn -> println "... "+fn}
+	def fi = new File(path);
+	if (fi.exists())
+	{
+		Search mf = new Search(path);
+		println "\n... doing pass 2 ->"
+		mf = new Search(path, false);
+		def menus = mf.getMenuFileNames()
+		menus.each{fn -> println "... "+fn}
+	} // end of if
 
 	println "... the end "
 	println "--------------------------------------------------\n"

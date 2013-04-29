@@ -35,7 +35,7 @@ public class TestFontSupport {
     @Test
     public void test1()
     {
-        FontSupport fs = new FontSupport("usbkey");
+        FontSupport fs = new FontSupport("mac");
         assertThat(fs, notNullValue() );
 		//LOGGER.info("É test1 ok - fs not null"); 
     } // end of method
@@ -44,11 +44,11 @@ public class TestFontSupport {
     @Test
     public void test2()
     {
-    	FontSupport fs = new FontSupport("usbkey");
+    	FontSupport fs = new FontSupport("mac");
         assertThat(fs, notNullValue() );
-	    assertThat(fs.getPaths(), is("/usr/share/fonts/truetype/freefont/") );
-	    assertThat(fs.getFontPath(), is("/usr/share/fonts/truetype/freefont/") );
-	    assertThat(fs.getMonoFontFilename(), is("/usr/share/fonts/truetype/freefont/FreeMono.ttf") );
+	    assertThat(fs.getPaths(), is("/Library/Fonts/") );
+	    assertThat(fs.getFontPath(), is("/Library/Fonts/") );
+	    assertThat(fs.getMonoFontFilename(), is("/Library/Fonts/Courier New.ttf") );
 	    //LOGGER.info("É test2 ok - not null, mono font file name is ${fs.getMonoFontFilename()}"); 
 	} // end of method
  

@@ -6,7 +6,7 @@ import java.util.Date;
 public class Search
 {
 	// show/hide audit trail msgs
-	boolean audit = false;
+	boolean audit = true;
 
 	// Create a ref for closure
 	def searchLogic
@@ -15,6 +15,7 @@ public class Search
 	// folder to hold newly created list of menus as a .txt file
 	def path
 	
+
     // =========================================
     // class constructor where tx = path to menu folder
 	// and default is to write map of menu filenames to output text file
@@ -26,12 +27,11 @@ public class Search
 
     // =========================================
 	// get menu list from search logic
-	// these will be .txt menu files with at least one menu line := like this
+	// a list of .txt menu files with at least one menu line := like this
 	public getMenus() 
 	{ 
 		return menus
 	} // end of 
-
 
 
 	// confirm string points to an existing file or path
@@ -42,7 +42,7 @@ public class Search
 	} // end of chkobj
 	
 	
-	// get the directory
+	// get the directory name as a string and return it
 	def getCanonical(String fn)
 	{
 		def cp = new File(fn.trim()).getCanonicalPath().toString();
@@ -50,13 +50,15 @@ public class Search
 		return cp;
 	} // end of def
 
+
     // =========================================
     // class constructor where tx = path to menu folder and flag to say if or not write results
-	// and default is to write map of menu filenames to output text file
+	// to write map of menu filenames to output text file
 	public Search(String tx, boolean flag)
 	{			
 		say "Search($tx) = "
 
+		// confirm file/folder exists
 		if ( chkobj(tx) )
 		{
 			say " ... chkobj ok ...   "
@@ -106,11 +108,15 @@ public class Search
         fh2.eachDir{ f -> say "fh2.eachDir= ${ f.toString() }"; searchLogic(f) };
         fh2.eachFileMatch(~/.*?\.txt/) 
         {
+				// give an audit of the file name that matches the .txt spec
 				say "fh2.eachFileMatch($it)"
                 String fn = it.getCanonicalFile();
 				println "\n.. fh2.eachFileMatch:<"+fn+">"
 				
-				def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true; 
+				// ignore our own internal .txt file
+				def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true;
+				
+				// build new file handle and get all text from that file 
                 def fi = new File(fn);
                 if (fi.exists() && ok)
                 {
@@ -120,6 +126,8 @@ public class Search
 		    	    {	
 			 			if (!line.trim()) continue
     					def words = line.split(/\:=/).toList()
+
+						// find a menu title that identifies this .txt file as a menu file for us
         				if (words.size() > 1 && words[1].toLowerCase().equals("*menutitle")) 
 						{ 
 							menus[fn] = words[0]
@@ -133,6 +141,40 @@ public class Search
 
 	} // end of closure
 	
+
+
+    // =========================================
+	// Parse menu list to identify menu lines that match the search criteria
+	public parseResults(String findthis, Map menus) 
+	{ 
+		say "parseResults(${findthis})"
+		//menus.each{println "... ->"+it}
+
+		menus.each{ men ->
+			say "---> ready for menu :"+men.key
+			File me = new File(men.key);
+			def lines = me.readLines()
+			say "   ${men.key} had ${lines.size()} lines"
+			
+			def imports = []
+    		lines.each
+			{
+        			ln -> if ( ln =~ findthis ) 
+						  {
+            				imports << ln;
+							say "... stored "+ln;
+        				  }
+    		} // end of eachLine
+
+
+			say "\nso we now have our target lines for "+findthis
+			imports.each{ say it; }
+		} // end of each
+
+		say "--- the end of parse ---"
+	} // end of method
+
+
 	
     // =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
@@ -170,6 +212,9 @@ public static void main(String[] args)
 		mf = new Search(path, false);
 		def menus = mf.getMenuFileNames()
 		menus.each{fn -> println "... "+fn}
+		
+		println "\n now find a series of menu items that match our search criteria"
+		mf.parseResults("~/Git/",menus);    // "^GitHub*"
 	} // end of if
 
 	println "... the end "

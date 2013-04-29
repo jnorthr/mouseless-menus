@@ -9,6 +9,9 @@ hostname:=hostname
 ipconfig:=ipconfig
 ifconfig:=ifconfig
 dscacheutil -flushcache:=dscacheutil -flushcache
+Godaddy Managing DNS:=open http://community.godaddy.com/help/680?locale=en
+Godaddy:=open https://www.godaddy.com/default.aspx
+
 
 
 

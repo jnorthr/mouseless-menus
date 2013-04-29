@@ -1,6 +1,0 @@
-review how to start windows 7 program:=http://superuser.com/questions/413939/how-to-start-a-program-with-command-line-arguments-on-windows-cmd-with-start
-start firefox:=start firefox www.ibm.com
-echo kids:=cmd /c echo hi kids
-run something debian:=start /b "" "c:\Program Files\Oracle\VirtualBox\VBoxHeadless.exe" -startvm "debian604 64"
-or use -d switch to give a path:=start /b /d "c:\Program Files\Oracle\VirtualBox\" VBoxHeadless.exe -startvm "debian604 64"
-// If you just want to suppress output (stdout), add a >nul to the end. Use >nul 2>nul at the end to suppress both normal output and error (stderr) output. The command prompt window has to be kept open,

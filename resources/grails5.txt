@@ -1,4 +1,0 @@
-G r a i l s   M e n u:=*MENUTITLE
-Grails Blog:=open http://storypodders.com/dasBlog/CategoryView,category,Groovy.aspx
-
-

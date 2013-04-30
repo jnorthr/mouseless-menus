@@ -24,7 +24,8 @@ Test Node Concept in ImageDev:=groovy /Volumes/UBUNTU/Groovy/ImageDev/Node.groov
 Test3 recurse paths:=groovy /Volumes/UBUNTU/Groovy/Test3/recurse.groovy
 BBC 1:=open http://newsvote.bbc.co.uk/2/hi/uk_news/default.stm
 11 Nice Tools:=open http://net.tutsplus.com/articles/general/9-ways-to-instantly-code-faster/
-
+Apple Developer Scripting Tut:=open https://developer.apple.com/library/mac/#documentation/opensource/Conceptual/ShellScripting/AdvancedTechniques/AdvancedTechniques.html#//apple_ref/doc/uid/TP40004268-TP40003521-SW35
+                     
                      
 // user.home /Users/leanne
 // user.name leanne

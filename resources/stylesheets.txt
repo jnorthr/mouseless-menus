@@ -22,3 +22,5 @@ Column Support for Menus:=open /Volumes/Data/dev/groovy/Menus/ColumnSupport.groo
 Menu Entry Trial groovy:=open /Volumes/Data/dev/groovy/Menus/MenuEntry.groovy
 Edit This Menu:=open /Volumes/Data/dev/groovy/Menus/data/stylesheets.txt
 Grep:=grep getMenuCommand /Volumes/Data/dev/groovy/Menus/*.groovy
+Beautiful CSS3 Buttons:=open http://designlovr.com/beautiful-photoshop-like-buttons-with-css3/
+CSS3 Gradient Buttons -Webdesigner Wall:=open http://webdesignerwall.com/tutorials/css3-gradient-buttons

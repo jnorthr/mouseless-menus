@@ -1,4 +1,4 @@
-F r a n k ' s   M e n u:=*MENUTITLE
+T e s t  M e n u  C o l o r s   M e n u:=*MENUTITLE
 hi kids:=javac -v
 0xdarkorange;this should appear as dark orange:  0xdarkorange;
 This is a menu line without color declarations.

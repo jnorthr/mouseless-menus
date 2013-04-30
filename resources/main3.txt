@@ -24,6 +24,33 @@ Main Menu for You:=*MENUTITLE
 grep for groovy scripts:=groovy searchdir.groovy /Volumes/UBUNTU/Groovy/Menus/ groovy
 Test Node Concept in ImageDev:=groovy /Volumes/UBUNTU/Groovy/ImageDev/Node.groovy
 Test3 recurse paths:=groovy /Volumes/UBUNTU/Groovy/Test3/recurse.groovy
+// menu key:=value pairs for each menu item; key is menu item text for menu panel and value is what's executed by using the menu item number
+See Available Menus:=groovy searchdir.groovy data         &
+$GROOVY_HOME/bin/groovy -v:=$GROOVY_HOME/bin/groovy -v
+java -version:=java -version
+javac version:=javac -version
+ls -al:=ls -al
+groovy test51.groovy:=groovy test51.groovy
+fred:=command exit
+Stats:=command set
+Java Properties:=java -cp . ShowProp
+Start Groovy Console:=command groovyConsole
+echo platform endian:=["command" "groovy" "-e" "import java.nio.ByteOrder; print ByteOrder.nativeOrder()"]
+Java 7 - How to make a new environment:=http://java.sun.com/javase/7/docs/api/java/lang/ProcessBuilder.html
+#c00080;Display IBM Menu:=go ibm
+google:=www.google.co.uk
+BBC:=http://newsvote.bbc.co.uk/2/hi/uk_news/default.stm
+echo $GROOVY_HOME:=echo $GROOVY_HOME
+echo $JAVA_HOME:=echo $JAVA_HOME
+how gridbag works:=http://mindprod.com/jgloss/gridbaglayout.html
+Groovy Blog:=http://naleid.com/blog/category/groovy/page/2/
+Main Menu for You:=*MENUTITLE
+grep for groovy scripts:=groovy searchdir.groovy /Volumes/UBUNTU/Groovy/Menus/ groovy
+Test Node Concept in ImageDev:=groovy /Volumes/UBUNTU/Groovy/ImageDev/Node.groovy
+Test3 recurse paths:=groovy /Volumes/UBUNTU/Groovy/Test3/recurse.groovy
+BBC 1:=open http://newsvote.bbc.co.uk/2/hi/uk_news/default.stm
+11 Nice Tools:=open http://net.tutsplus.com/articles/general/9-ways-to-instantly-code-faster/
+
                      
 // user.home /Users/leanne
 // user.name leanne
@@ -41,4 +68,7 @@ Test3 recurse paths:=groovy /Volumes/UBUNTU/Groovy/Test3/recurse.groovy
 PG_DATA=/usr/local/pgsql/data/
 // PWD=/Volumes/UBUNTU/Groovy/Menus
 // JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home
+
+                     
+
 

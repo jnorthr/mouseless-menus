@@ -30,15 +30,15 @@ public class TestSearch {
 	public void setUp() 
 	{ 
 		//LOGGER.info("É started TestSearch"); 
-    	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
-		def tmp = new File(path+"/.menulist.txt")
+    		def path = "./resources";
+		def tmp = new File(path+"/.main.txt")
 		if (tmp.exists()) tmp.delete()
 	} // end of setup
 
     @Test
     public void test1()
     {
-    	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
+    	def path = "./resources/";
         Search fs = new Search(path);
         assertThat(fs, notNullValue() );
 
@@ -48,12 +48,12 @@ public class TestSearch {
     @Test
     public void test2()
     {
-    	def path = "/Volumes/Media1/Backups/DuracellUSBKey2/Menus/data/";
+    	def path = "./resources/";
         Search fs = new Search(path);
 
-		def tmp = new File(path+"/.menulist.txt")
+		def tmp = new File(path+"/main.txt")
 		def flag2 = (tmp.exists()) ? true : false;
-        assertThat(flag2, is(true) );
+        	assertThat(flag2, is(true) );
 
 		//LOGGER.info("É test2 ok - Search created list of menus"); 
     } // end of method

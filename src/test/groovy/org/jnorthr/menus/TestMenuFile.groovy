@@ -13,6 +13,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import java.util.logging.Logger;
 import java.util.logging.*;
+
 // tried to get logging to work but ran out of time - needs more research
 public class TestMenuFile
 {
@@ -57,7 +58,7 @@ public class TestMenuFile
 	@Test
 	public void test3()
 	{	
-		MenuFile mi = new MenuFile("jim.txt");
+		MenuFile mi = new MenuFile("./resources/jim.txt");
 		assertThat(mi, notNullValue() );
 		assertNotNull("MenuFile constructor failed",mi);
 		assertThat(mi.menuFileExists, is(true) );
@@ -70,7 +71,7 @@ public class TestMenuFile
 	public void test4()
 	{	
 		MenuFile mi = new MenuFile("jim.txt");
-		assertThat(mi.menuFileName, is("/Volumes/Media1/Software/menus/jim.txt") );
+		assertThat(mi.menuFileName, is("jim.txt") );
 		//LOGGER.info("É MenuFile test4 ok"); 
 	}
 
@@ -80,7 +81,7 @@ public class TestMenuFile
 	public void test5()
 	{	
 		MenuFile mi = new MenuFile("./jim.txt");
-		assertThat(mi.menuFileName, is("/Volumes/Media1/Software/menus/jim.txt") );
+		assertThat(mi.menuFileName, is("./jim.txt") );
 		//LOGGER.info("É MenuFile test5 ok"); 
 	}
 

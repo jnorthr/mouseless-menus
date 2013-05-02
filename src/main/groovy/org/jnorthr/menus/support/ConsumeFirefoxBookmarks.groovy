@@ -15,7 +15,7 @@ public class ConsumeFirefoxBookmarks
 {
     boolean audit = false;
     def path = "~"
-    def outputpath = "/Volumes/Media1/Software/menus/resources"
+    def outputpath = ".";   //"/Volumes/Media1/Software/menus/resources"
     def pwd=null;
     DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
     List<String> entries = new ArrayList<String>();
@@ -48,6 +48,8 @@ public class ConsumeFirefoxBookmarks
         {
             def op = new JFileChooser(pwd);
             op.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	    outputpath = new File(outputpath).getAbsolutePath();
+println "É op becomes:"+outputpath
             op.setSelectedFile(new File("${outputpath}/firefoxbookmarks.txt"));
             int option2 = op.showSaveDialog(null);
             if (option2 == JFileChooser.APPROVE_OPTION) 

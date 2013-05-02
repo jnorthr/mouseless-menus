@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 // code to read a json formatted text file that came from a firefox backup process ( NOT the export tool !!! )
 public class ConsumeFirefoxBookmarks
 {
-    boolean audit = false
+    boolean audit = false;
     def path = "~"
     def outputpath = "/Volumes/Media1/Software/menus/resources"
     def pwd=null;
@@ -105,18 +105,81 @@ public class ConsumeFirefoxBookmarks
     } // end of def
 
 
-    // parse and write any bookmarks with a url   
-    public void process(String path, String outputname)
+    // confirm parms adhere to correct content and format
+    def checkParms(String path, String outputname)
     {
         if (path==null || outputname==null || (path.trim().size() < 1) ||  (outputname.trim().size() < 1) )
         {
             println "Fatal -> Either input filename of <${path}> or output filename of <${outputname}> can not be used.\n         Pls choose appropriate file names."
-            return;            
-        } // end of if
+            return true;            
+        } // end of if    
+    
+        return false;
+    } // end of check
 
-        println "... reading ${path} and writing ${outputname}"
-        def file2 = new File(outputname).getAbsolutePath();
-        println "... actual output file name :${file2}"
+
+    //find a date like 2013-08-23 in input filename so we can use that in the output file name too
+    def findDateInFilename(String path, String ofn)
+    {
+        int i = path.trim().lastIndexOf('.');
+        if ( i < 0 ) return ofn;
+        int j = path.trim().lastIndexOf('/');
+        int k = path.trim().lastIndexOf('\\');
+
+        String mainname = path.substring(0,i);
+
+        if ( j > -1 ) 
+        {
+            mainname = path.substring(j+1,i);
+        } // end of if
+        
+        if ( k > -1 ) 
+        {
+            mainname = path.substring(k+1,i);
+        } // end of if
+        
+        def np = mainname.split("-");
+        say "\n... from <$path> we have a main name of <${mainname}> and np size="+np.size()
+
+        if (np.size() < 2 ) return ofn;
+        int yr = np[1] as Integer
+        if (yr in 2000..2099)
+        { 
+            say "---> so year is :"+yr
+            i = ofn.lastIndexOf('.');
+
+            mainname = ofn.substring(0,i)
+            np.eachWithIndex{p,ix-> if (ix>0) {mainname += '-'+p} }
+            mainname += ofn.substring(i)
+            say "--->  ended with mainname="+mainname
+        }
+        else
+        {
+            mainname = ofn;
+        }
+        return mainname;
+    } // end of findDateInFilename
+
+
+    // parse and write any bookmarks with a url   
+    public void process(String path, String outputname)
+    {
+        if (checkParms(path, outputname))
+            return;
+            
+        say "... reading ${path} and writing ${outputname}"
+        def file2 
+        boolean flag2 = (outputname.trim().startsWith("/")) ? true : false;
+        if (flag2)
+        { 
+            file2 = outputname
+        }
+        else
+        {
+            file2 = new File(outputname).getAbsoluteFile();
+        } // end of else
+        
+        say "... actual output file name :${file2}"
         if (new File(file2).isDirectory())
         {
             println "Fatal -> ${file2.toString()} is a directory! Pls choose an output file name."
@@ -126,10 +189,13 @@ public class ConsumeFirefoxBookmarks
         if (!(file2.toLowerCase().endsWith(".txt")))
         {
             file2 += ".txt"
-            println "... adding .txt ="+file2
+            say "... adding .txt ="+file2
         } // end of if        
         
-
+        
+        file2 = findDateInFilename(path, file2);
+        say "... so now we have file2="+file2
+    
         def file1;
         try
         {

@@ -18,7 +18,8 @@ public class ConsumeFirefoxBookmarks
     def outputpath = "/Volumes/Media1/Software/menus/resources"
     def pwd=null;
     DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
-    
+    List<String> entries = new ArrayList<String>();
+
     //get current date time with Date()
     Date date = new Date();
     def now = dateFormat.format(date);
@@ -297,7 +298,9 @@ public class ConsumeFirefoxBookmarks
                             if (show)
                             {
                                 say "     --->"+titles[ix]
-                                file1.append "${titles[ix]} :=${e}\n";
+				String entry = "${titles[ix]} :=${e}\n";
+				entries << entry;
+                                //file1.append "${titles[ix]} :=${e}\n";
                             } // end of if
                         } // end of if
                  
@@ -314,6 +317,12 @@ public class ConsumeFirefoxBookmarks
             } // end of if
 
         } // end of each
+
+	entries.sort();
+	entries.each{e ->
+		println e;
+	        file1.append e;   
+	} // end of each
 
 
         say "---- the end ---"        

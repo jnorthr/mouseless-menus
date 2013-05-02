@@ -127,6 +127,14 @@ task(runColorManager, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
+task(runEatFF, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.ConsumeFirefoxBookmarks' 
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
+
 
 task(runHelpWindow, dependsOn: 'classes', type: JavaExec) 
 {

@@ -49,7 +49,6 @@ public class ConsumeFirefoxBookmarks
             def op = new JFileChooser(pwd);
             op.setFileSelectionMode(JFileChooser.FILES_ONLY);
 	    outputpath = new File(outputpath).getAbsolutePath();
-println "É op becomes:"+outputpath
             op.setSelectedFile(new File("${outputpath}/firefoxbookmarks.txt"));
             int option2 = op.showSaveDialog(null);
             if (option2 == JFileChooser.APPROVE_OPTION) 
@@ -302,7 +301,6 @@ println "É op becomes:"+outputpath
                                 say "     --->"+titles[ix]
 				String entry = "${titles[ix]} :=${e}\n";
 				entries << entry;
-                                //file1.append "${titles[ix]} :=${e}\n";
                             } // end of if
                         } // end of if
                  
@@ -322,7 +320,6 @@ println "É op becomes:"+outputpath
 
 	entries.sort();
 	entries.each{e ->
-		println e;
 	        file1.append e;   
 	} // end of each
 

@@ -4,6 +4,8 @@ package org.jnorthr.menus.support;
 // read: http://www.frommknecht.net/2010/02/robust-html-parsing-the-groovy-way/
 // and
 // http://mrhaki.blogspot.fr/2011/11/grassroots-groovy-reading-json-with.html
+// and groovy closure eamples:
+// http://groovy.codehaus.org/Martin+Fowler%27s+closure+examples+in+Groovy
 
 import javax.swing.*;  
 import java.util.List;

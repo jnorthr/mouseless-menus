@@ -13,11 +13,11 @@ import java.text.SimpleDateFormat;
 // code to read a json formatted text file that came from a firefox backup process ( NOT the export tool !!! )
 public class ConsumeFirefoxBookmarks
 {
-    boolean audit = false;
+    boolean audit = true;
     def path = "~"
     def outputpath = ".";   //"/Volumes/Media1/Software/menus/resources"
     def pwd=null;
-    DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+    DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM yyyy HH:mm:ss");
     List<String> entries = new ArrayList<String>();
 
     //get current date time with Date()
@@ -144,7 +144,15 @@ public class ConsumeFirefoxBookmarks
         say "\n... from <$path> we have a main name of <${mainname}> and np size="+np.size()
 
         if (np.size() < 2 ) return ofn;
-        int yr = np[1] as Integer
+		try
+		{
+		        int yr = np[1] as Integer
+		}
+		catch(Exception w) 
+		{
+			return ofn;
+		} // end of catch
+		
         if (yr in 2000..2099)
         { 
             say "---> so year is :"+yr

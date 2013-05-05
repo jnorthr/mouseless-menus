@@ -21,7 +21,7 @@ public class ConsumeSafariBookmarks
     def path = "~"
     def outputpath = "/Volumes/Media1/Software/menus/resources"
     def pwd=null;
-    DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+    DateFormat dateFormat = new SimpleDateFormat("EEE. dd MMM yyyy HH:mm:ss");
     
     //get current date time with Date()
     Date date = new Date();

@@ -10,6 +10,8 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import groovy.json.*  // for prettyPrint json
+
 // code to read a json formatted text file that came from a firefox backup process ( NOT the export tool !!! )
 public class ConsumeFirefoxBookmarks
 {
@@ -34,7 +36,7 @@ public class ConsumeFirefoxBookmarks
         int option = fc.showOpenDialog(null);
         if (option == JFileChooser.APPROVE_OPTION) 
         {
-            path = fc.getSelectedFile().getAbsolutePath()
+            path = fc.getSelectedFile().getCanonicalPath()
             pwd = fc.getCurrentDirectory() 
             say "Chosen ${path}\npwd=${pwd}"
         }
@@ -48,13 +50,18 @@ public class ConsumeFirefoxBookmarks
         {
             def op = new JFileChooser(pwd);
             op.setFileSelectionMode(JFileChooser.FILES_ONLY);
-	    outputpath = new File(outputpath).getAbsolutePath();
+	    	outputpath = new File(outputpath).getCanonicalPath();
             op.setSelectedFile(new File("${outputpath}/firefoxbookmarks.txt"));
             int option2 = op.showSaveDialog(null);
             if (option2 == JFileChooser.APPROVE_OPTION) 
             {
-                outputpath = op.getSelectedFile().getAbsolutePath()
+                outputpath = op.getSelectedFile().getCanonicalPath()
                 say "outputpath will be ${outputpath} \n"
+				if (outputpath.indexOf(" ")>-1)
+				{
+					JOptionPane.showMessageDialog(null, "Your chosen output filename was improperly formatted.");
+                	stopTask = true;				
+				}
             }
             else
             {
@@ -68,21 +75,32 @@ public class ConsumeFirefoxBookmarks
             println "--> cancelled by user request."
             return;
         } // end of if
+
         else
         {
-            process(path, outputpath);
-            //process(path, outputpath);
+			if (path.trim().toLowerCase().endsWith(".json"))
+			{
+            	process(path, outputpath);			
+			}
+			else
+			{			
+				if (queryChoice(path)==0)
+				{
+            		process(path, outputpath);
+				} // end of if
+			} // end of else
+
         } // end of if
 
     } // end of constructor
 
 
-    // 2 arg constructor: 1) input json file name and 2) output .txt filename for menus
-    public ConsumeFirefoxBookmarks(String path, String outputpath)
-    {
-            process(path, outputpath);
-    } // end of constructor
 
+    // 2 arg constructor: 1) input json file name and 2) output .txt filename for menus and 3) name of browser
+    public ConsumeFirefoxBookmarks(String path, String outputpath, String browser)
+    {
+            process(path, outputpath, browser);
+    } // end of constructor
 
 
 
@@ -97,11 +115,30 @@ public class ConsumeFirefoxBookmarks
 
 
 
+    // query if chosen input file does not end with .json suffix
+    public int queryChoice(String nm)
+    {
+		def title = "Is Input File a JSON choice ?"
+		def message = "Typically firefox backup filenames end with a .json suffix. Your choice of \n$nm does not.\nConfirm this is the correct file."
+		int reply = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) 
+		{
+			JOptionPane.showMessageDialog(null, "Ok, let's try !");
+			return 0;
+        }
+        else 
+		{
+           JOptionPane.showMessageDialog(null, "Good-Bye !");
+           return -1;
+        } // end of else
+    } // end of say
+
+
     // convert firefox bookmark epoc date to a nice string
     def convertDate(def epoch)
     {
         long dv = epoch / 1000;
-        String dt = new java.text.SimpleDateFormat("dd MMM.yyyy HH:mm:ss").format(new java.util.Date (dv)).replace('/',' ');
+        String dt = new java.text.SimpleDateFormat("EEE. dd MMM.yyyy HH:mm:ss").format(new java.util.Date (dv)).replace('/',' ');
         //long epoch = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse("01/01/1970 01:00:00").getTime() / 1000;
         return dt;
     } // end of def
@@ -112,7 +149,9 @@ public class ConsumeFirefoxBookmarks
     {
         if (path==null || outputname==null || (path.trim().size() < 1) ||  (outputname.trim().size() < 1) )
         {
-            println "Fatal -> Either input filename of <${path}> or output filename of <${outputname}> can not be used.\n         Pls choose appropriate file names."
+			def msg = "Fatal -> Either input filename of <${path}> or output filename of <${outputname}> can not be used.\n         Pls choose appropriate file names."
+            println msg;
+			JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
             return true;            
         } // end of if    
     
@@ -144,9 +183,10 @@ public class ConsumeFirefoxBookmarks
         say "\n... from <$path> we have a main name of <${mainname}> and np size="+np.size()
 
         if (np.size() < 2 ) return ofn;
+		int yr = 0;
 		try
 		{
-		        int yr = np[1] as Integer
+			yr = np[1] as Integer
 		}
 		catch(Exception w) 
 		{
@@ -171,14 +211,21 @@ public class ConsumeFirefoxBookmarks
     } // end of findDateInFilename
 
 
-    // parse and write any bookmarks with a url   
+    // parse and write any bookmarks with a url - assume Firefox was origin browser  
     public void process(String path, String outputname)
+    {
+		process(path,outputname,"Firefox");
+    } // end of 2 arg process
+
+
+    // parse and write any bookmarks with a url   
+    public void process(String path, String outputname, String browser)
     {
         if (checkParms(path, outputname))
             return;
             
         say "... reading ${path} and writing ${outputname}"
-        def file2 
+        String file2 
         boolean flag2 = (outputname.trim().startsWith("/")) ? true : false;
         if (flag2)
         { 
@@ -186,13 +233,15 @@ public class ConsumeFirefoxBookmarks
         }
         else
         {
-            file2 = new File(outputname).getAbsoluteFile();
+            file2 = new File(outputname).getCanonicalFile().toString();
         } // end of else
         
         say "... actual output file name :${file2}"
         if (new File(file2).isDirectory())
         {
-            println "Fatal -> ${file2.toString()} is a directory! Pls choose an output file name."
+			def msg = "Fatal -> ${file2} is a directory! Pls choose an output file name."
+            println msg;
+			JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
             return;            
         } // end of if
 
@@ -210,14 +259,14 @@ public class ConsumeFirefoxBookmarks
         try
         {
             file1 = new File(file2);
-            file1.write "Firefox Bookmark Menus:=*MENUTITLE\n";
-            file1.append "// Bookmarks File :=${path}\n"
+            file1.write  "// Bookmark Input File      : ${path}\n"
             file1.append "// This menu was created on : ${now}\n"
         }
         catch (IOException x)
         {
-            println "Fatal -> IOException working with '${outputname}' (${file2}) : \n" + x.getMessage()
-            //x.printStackTrace();
+			def msg = "Fatal -> IOException working with '${outputname}' (${file2}) : \n" + x.getMessage()
+            println msg;
+			JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
             return;
         } // end of catch
         
@@ -226,14 +275,17 @@ public class ConsumeFirefoxBookmarks
         try
         {
             String json2 = "file:///${path}".toURL().getText("UTF-8")
+			println JsonOutput.prettyPrint(json2);
+
             //String json2 = "file:////Volumes/Media/Users/jim/Desktop/ff_bookmarks-2013-04-30.json".toURL().text  
             // bookmarks-2013-04-29.json
             json = new JsonSlurper().parseText(json2)
         }
         catch (Exception x)
         {
-            println "Fatal -> Exception parsing json '${path}': \nIs this really a json formatted file ? \n" + x.getMessage()
-            //x.printStackTrace();
+			def msg = "Fatal -> Exception parsing json '${path}': \nIs this really a json formatted file ? \n" + x.getMessage()
+            println msg;
+			JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
             return;
         } // end of catch
 
@@ -245,6 +297,8 @@ public class ConsumeFirefoxBookmarks
         say "bookmarks were extracted  :"+convertDate(json.lastModified)
         now = convertDate(json.lastModified)
         file1.append "// Bookmarks Last Updated   : ${now}\n\n"    
+        file1.append "${browser} Bookmarks As Of ${now}:=*MENUTITLE\n\n";
+
 
         json.children.each{child-> 
             say "child:"+child+" -> "
@@ -331,6 +385,7 @@ public class ConsumeFirefoxBookmarks
 	        file1.append e;   
 	} // end of each
 
+	file1.append "// Bookmark Count           : ${entries.size()}\n"
 
         say "---- the end ---"        
     } // end of process       
@@ -343,12 +398,14 @@ public class ConsumeFirefoxBookmarks
         println "--------------------------------------------------"
         print "... started "
         def fou = "./resources/firefoxbookmarks.txt";
-        def fin = "/Volumes/Media1/Software/menus/src/main/resources/"    
-        
-        if (args.length>1) 
+        def fin = ""    
+        def browser = "Unknown Browser"
+
+        if (args.length>0) 
         {
             fin = args[0];
-            fou = args[1];
+            if (args.length == 2 ) { fou = args[1]; }
+            if (args.length == 3 ) { browser = args[2]; }
                 
             println "... reading "+fin+"\n... writing "+fou;
 
@@ -356,7 +413,7 @@ public class ConsumeFirefoxBookmarks
             if (fi.exists())
             {
                 println "\n... next, try constructor with 2 parms "
-                org.jnorthr.menus.support.ConsumeFirefoxBookmarks mf = new org.jnorthr.menus.support.ConsumeFirefoxBookmarks(fin, fou);
+                org.jnorthr.menus.support.ConsumeFirefoxBookmarks mf = new org.jnorthr.menus.support.ConsumeFirefoxBookmarks(fin, fou, browser);
             } // end of if
         } // end of if
 

@@ -57,21 +57,31 @@ test.testLogging { exceptionFormat "full" }
 
 test
 {
+
+	// show standard out and standard error of the test JVM(s) on the console
 	testLogging.showStandardStreams = true
 
+	// set heap size for the test JVM(s)
+	minHeapSize = "128m"
+	maxHeapSize = "512m"
+
+        // set JVM arguments for the test JVM(s)
+	jvmArgs '-XX:MaxPermSize=192m'
+
+	maxParallelForks = 3;
 	// does work if you chg the workingDir, so it influences the java file relative path access
 	//workingDir = new File('/Volumes/Media/Software/groovysamples/src/main/groovy')
 	println "workingDir is "+workingDir // = workingDir is /Volumes/Media/Software/menus
 
-    // listen to standard out and standard error of the test JVM(s)
-    onOutput { descriptor, event -> logger.lifecycle("Test: " + descriptor + " gave std out/err: " + event.message ) }
+	// listen to standard out and standard error of the test JVM(s)
+	onOutput { descriptor, event -> logger.lifecycle("Test: " + descriptor + " gave std out/err: " + event.message ) }
 }
 
 
 // simple tasks  to run individual classes
 task(runSimple, dependsOn: 'classes', type: JavaExec) 
 {
-	main = 'org.jnorthr.menus.MenuItem'  // 'test24'  //
+	main = 'org.jnorthr.menus.support.MenuItem'  // 'test24'  //
 	classpath = sourceSets.main.runtimeClasspath
 	args 'kids'
 	systemProperty 'simple.message', 'Hello '
@@ -110,6 +120,14 @@ task(runSearch, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
+task(runPanelSupport, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.PanelSupport' 
+	classpath = sourceSets.main.runtimeClasspath
+	//args './resources/'
+	//systemProperty 'simple.message', 'Hello '
+}
+
 
 task(runFonts, dependsOn: 'classes', type: JavaExec) 
 {
@@ -126,6 +144,24 @@ task(runColorManager, dependsOn: 'classes', type: JavaExec)
 	args 'jim.txt'
 	systemProperty 'simple.message', 'Hello '
 }
+
+task(runMenuLine, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.MenuLine' 
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'jim.txt'
+	//systemProperty 'simple.message', 'Hello '
+}
+
+task(runMenuItemObject, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.MenuItemObject' 
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'jim.txt'
+	//systemProperty 'simple.message', 'Hello '
+}
+
+
 
 task(runEatFF, dependsOn: 'classes', type: JavaExec) 
 {

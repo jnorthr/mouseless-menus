@@ -92,7 +92,7 @@ public class MenuLine
         if (useme)
         {
             def wds = aline.trim().split(/\:=/)
-            if (wds.size() < 2 )   
+            //if (wds.size() < 2 )   
         } //end of if
         
         return useme;         

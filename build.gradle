@@ -54,7 +54,7 @@ sourceSets.all {
 
 
 test.testLogging { exceptionFormat "full" }
-
+test.maxParallelForks = 4
 test
 {
 

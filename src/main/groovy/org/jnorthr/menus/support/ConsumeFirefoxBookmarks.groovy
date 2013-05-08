@@ -15,12 +15,15 @@ import groovy.json.*  // for prettyPrint json
 // code to read a json formatted text file that came from a firefox backup process ( NOT the export tool !!! )
 public class ConsumeFirefoxBookmarks
 {
-    boolean audit = true;
+    boolean audit = false;
     def path = "~"
     def outputpath = ".";   //"/Volumes/Media1/Software/menus/resources"
     def pwd=null;
     DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM yyyy HH:mm:ss");
     List<String> entries = new ArrayList<String>();
+    boolean isList = false
+    boolean isSet = false
+    boolean isMap = false
 
     //get current date time with Date()
     Date date = new Date();
@@ -104,6 +107,15 @@ public class ConsumeFirefoxBookmarks
 
 
 
+    // what kind of object is it ?
+    def getInstanceOf(def o)
+    {
+        isList = o instanceof List
+        isSet = o instanceof Set
+        isMap = o instanceof Map
+    } // end of get
+
+
     // print audit trail if flag is set
     public void say(tx)
     {
@@ -184,6 +196,7 @@ public class ConsumeFirefoxBookmarks
 
         if (np.size() < 2 ) return ofn;
 		int yr = 0;
+		
 		try
 		{
 			yr = np[1] as Integer
@@ -264,9 +277,9 @@ public class ConsumeFirefoxBookmarks
         }
         catch (IOException x)
         {
-			def msg = "Fatal -> IOException working with '${outputname}' (${file2}) : \n" + x.getMessage()
+	    	def msg = "Fatal -> IOException working with '${outputname}' (${file2}) : \n" + x.getMessage()
             println msg;
-			JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
+	    	JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
             return;
         } // end of catch
         
@@ -275,7 +288,7 @@ public class ConsumeFirefoxBookmarks
         try
         {
             String json2 = "file:///${path}".toURL().getText("UTF-8")
-			println JsonOutput.prettyPrint(json2);
+	    	println JsonOutput.prettyPrint(json2);
 
             //String json2 = "file:////Volumes/Media/Users/jim/Desktop/ff_bookmarks-2013-04-30.json".toURL().text  
             // bookmarks-2013-04-29.json
@@ -283,9 +296,9 @@ public class ConsumeFirefoxBookmarks
         }
         catch (Exception x)
         {
-			def msg = "Fatal -> Exception parsing json '${path}': \nIs this really a json formatted file ? \n" + x.getMessage()
+	    	def msg = "Fatal -> Exception parsing json '${path}': \nIs this really a json formatted file ? \n" + x.getMessage()
             println msg;
-			JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
+	    	JOptionPane.showMessageDialog(null, msg, "Fatal Condition", JOptionPane.ERROR_MESSAGE); 
             return;
         } // end of catch
 
@@ -299,96 +312,121 @@ public class ConsumeFirefoxBookmarks
         file1.append "// Bookmarks Last Updated   : ${now}\n\n"    
         file1.append "${browser} Bookmarks As Of ${now}:=*MENUTITLE\n\n";
 
-
-        json.children.each{child-> 
-            say "child:"+child+" -> "
-            say "child.dateAdded:"+child.dateAdded
-            say "child.title:"+child.title
-            say "child.type:"+child.type
-
-            def flag = (child.index) ? true : false;
-            if (flag)
-            {
-                say "child.index:"+child.index
-            } // end of if
-
-            flag = (child.lastModified) ? true : false;
-            if (flag)
-            {
-                say "child.lastModified:"+child.lastModified
-            } // end of if
-
-            flag = (child.root) ? true : false;
-            if (flag)
-            {
-                say "child.root:"+child.root
-            } // end of if
-
-            if (child.annos)
-            {
-                say "child.annos:"+child.annos
-                if (child.annos.value)
-                {
-                    say "child.annos.value :"+child.annos.value
-                }
-            } // end of if
-
-            flag = (child.children) ? true : false;
-            if (flag)
-            {
-                def titles=[]
-                say "\nchild.children:"+child.children
-                if (child.children.title)
-                {
-                    say "child.children.title.size() :"+child.children.title.size()        
-                    say "child.children.title        :"+child.children.title        
-                    child.children.title.eachWithIndex{e, ix ->
-                         say "child.children.title     ${ix+1}  :"+e
-                         titles << e;
-                    } // end of each            
-                } // end of if
+        try
+        {
+            json.children.children.children.each
+			{ h ->
+               say ".. h    ->"+h
+               h.each{ j -> 
+					say "... j       ->"+j;
+                    j.each{ k -> 
+                           	if (k!=null)
+                           	{     
+                               say "...  k         ->"+k;
+                               getInstanceOf(k);
+                         
+                               if (isList) say "...  k isList->"+isList
+                               if (isSet)  say "...  k isSet ->"+isSet
+                               if (isMap)  say "...  k isMap ->"+isMap
 
 
-                if (child.children.uri)
-                {
-                    say "child.children.uri.size() :"+child.children.uri.size()        
-                    say "child.children.uri        :"+child.children.uri        
-                    child.children.uri.eachWithIndex{e, ix ->
-                        def show = false
-                        if (e)
-                        {
-                            show = (e.toLowerCase().startsWith("place")) ? false : true ;
-                            if (show)
-                            {
-                                say "     --->"+titles[ix]
-				String entry = "${titles[ix]} :=${e}\n";
-				entries << entry;
-                            } // end of if
-                        } // end of if
-                 
-                        say "child.children.uri     ${ix+1} show=${show} :"+e                 
-                    } // end of each
-            
-                } // end of if
+                               if (k instanceof Map)
+                               {                                   
+                                   def flag = false
+                                   def tl=""
+                                   def u=""
 
-                if (child.children.type)
-                {
-                    say "child.children.type:"+child.children.type        
-                } // end of if
+                                   k.each{ky,v ->
+                                       say "...  k         -> ky=<${ky}> v=<${v}>";
 
-            } // end of if
+                                       if (ky.trim().toLowerCase().equals("children")) processChild(v);
+                                     
+                                       if (ky.trim().toLowerCase().equals("title")) 
+                                       {
+                                           tl = v;
+                                       } // end of if
 
-        } // end of each
+                                       if (ky.trim().toLowerCase().equals("uri")) 
+                                       {
+                                           flag = true;
+                                           u = v;
+                                       } // end of if
 
-	entries.sort();
-	entries.each{e ->
+                                       if (flag) 
+                                       {
+                                           if (!tl) {tl = "Unknown";}
+					   					   String entry = "${tl}:=${u}\n";
+				           				   entries << entry;
+                                           flag=false;
+                                       } // end of if 
+
+                                                                            
+                                   } // end of k each
+                                   
+                               } // end of if
+                               else
+                               {
+                                  k.each{ l -> say "...   l        ->"+l;
+                                    
+                                    l.each{ m -> say "...    m       ->"+m;
+                                        
+                                        m.each{ n -> 
+                                            say "...     n      ->"+n;
+                                        } // end of m.each
+                                        
+                                    } // end of l.each 
+                                                                  
+                                  } // end of k.each
+
+                                } // end of else 
+                               
+                            } // end of if k!=null
+                            
+                        } // end of j each
+
+                    } // end of h each
+
+            } // end of children each
+
+        }
+        catch (Exception x2)
+        {
+            def msg = "Fatal -> Exception parsing json.children.children.children.children.fred: \n" + x2.getMessage()
+            println msg;
+            return;
+        } // end of catch
+
+
+		entries.sort();
+		entries.each{e ->
 	        file1.append e;   
-	} // end of each
+		} // end of each
 
-	file1.append "// Bookmark Count           : ${entries.size()}\n"
+		file1.append "// Bookmark Count           : ${entries.size()}\n"
 
         say "---- the end ---"        
     } // end of process       
+
+
+	// parse a Map object
+	def processChild(def v)
+	{
+    	v.each{ ve -> 
+        	if (ve instanceof Map)
+        	{
+            	ve.each{ vek, vev ->
+            } // ve.each Map
+        
+            if ( ve.title != null && ve.uri != null)  
+            { 
+				String entry = "${ve.title}:=${ve.uri}\n";
+				entries << entry;
+            } // end of if
+                
+        } // end of each
+    } // end of method
+
+} // end of processChild
 
 
     // -----------------------------------------------------
@@ -404,7 +442,7 @@ public class ConsumeFirefoxBookmarks
         if (args.length>0) 
         {
             fin = args[0];
-            if (args.length == 2 ) { fou = args[1]; }
+            if (args.length > 1  ) { fou = args[1]; }
             if (args.length == 3 ) { browser = args[2]; }
                 
             println "... reading "+fin+"\n... writing "+fou;

@@ -1,11 +1,12 @@
 // a module to confirm a text file exists with given name
-// if exists, parse out menu title, see getTitle()
+// if exists, parse out menu title with :=*MENUTITLE and if found set boolean menuFileExists as true
+// if true, can then use accessor methods to gain values
 package org.jnorthr.menus;
 public class MenuFile
 {
 	private String dialogTitle	// shows in title of dialog from getTitle()
 	private String menuFileName	// when a BIC of 'go' says load and display another menu, this is the file name to load; typically like ../menudata/menu.txt
-    private boolean menuFileExists // true if go menufile confirmed to exist         
+    	private boolean menuFileExists // true if go menufile confirmed to exist         
 
  
 	// accessor for dialog title
@@ -20,11 +21,19 @@ public class MenuFile
 		return (menuFileExists) ? menuFileName : ""		
 	} // end of method
 
-	// accessor to confirm file exists
-	public getMenuTitle()
+	// accessor to confirm file exists - true or false
+	public isMenuFile()
 	{
 		return menuFileExists;	
 	} // end of method
+
+ 
+	// make a valid menu item text string like:  abc:=./resources/fred.txt
+	public crtMenuEntry()
+	{
+		return (menuFileExists) ? dialogTitle + ":=" + menuFileName : ""	
+	} // end of method
+
 
 
 	// no args constructor
@@ -58,7 +67,7 @@ public class MenuFile
 		say tx;
 		if (flag2)
 		{
-			menuFileName = fi.getCanonicalFile();
+			menuFileName = fi.getCanonicalFile().toString().trim();
 		}
         return flag2
     } // end of method
@@ -86,7 +95,7 @@ public class MenuFile
 					def w1 = words[1].toLowerCase() 
 					if (w1.equals("*menutitle"))
 					{
-						dialogTitle = words[0];
+						dialogTitle = words[0].trim();
 						menuFileExists = true; 	
 					}	// end of if
 				} // end of if
@@ -121,26 +130,59 @@ public class MenuFile
 		
 		MenuFile mf = new MenuFile(mfn);
 		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
+
 		println " "
 
 		println "... test using file located at gradle project root "
 		mf = new MenuFile("./resources/jim.txt");
 		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
+
 		println " "
 
 		println "... test using file located at gradle project root - relative ./ "
 		mf = new MenuFile("./src/main/resources/jim.txt");
 		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
+
 		println " "
 		
 		println "... test using file located at gradle project root - not relative - just folder name"
 		mf = new MenuFile("src/test/resources/jim.txt");
 		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
+
 		println " "
 		
 		println "... test using file located at actual full directory location "
 		mf = new MenuFile("/Volumes/Media/Software/menus/resources/jim.txt");
 		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
+		println " "
+		
+		println "... test with no file name at all"
+		mf = new MenuFile();
+		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
 		println " "
 		
 		println "... the end "

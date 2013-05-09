@@ -1,27 +1,52 @@
+// a module to confirm a text file exists with given name
+// if exists, parse out menu title, see getTitle()
 package org.jnorthr.menus;
 public class MenuFile
 {
-	private String dialogTitle	// shows in title of dialog if BIC number says so
+	private String dialogTitle	// shows in title of dialog from getTitle()
 	private String menuFileName	// when a BIC of 'go' says load and display another menu, this is the file name to load; typically like ../menudata/menu.txt
     private boolean menuFileExists // true if go menufile confirmed to exist         
 
  
+	// accessor for dialog title
+	public getTitle()
+	{
+		return (menuFileExists) ? dialogTitle : ""	
+	} // end of method
+
+	// accessor for full canonical file name
+	public getFullFileName()
+	{
+		return (menuFileExists) ? menuFileName : ""		
+	} // end of method
+
+	// accessor to confirm file exists
+	public getMenuTitle()
+	{
+		return menuFileExists;	
+	} // end of method
+
+
 	// no args constructor
 	public MenuFile()
 	{
 		dialogTitle="";
-		menuFileName = "";
+		menuFileName = "";  // filled with canonical name in chkobj if menuFileExists
 		menuFileExists = false;
 	}	// end of method
+
 
 	// one args constructor
 	public MenuFile(def fn)
 	{
 		this();
 		menuFileName = fn;
-		menuFileExists = chkobj(fn);
-		if (menuFileExists)	{ getTitle(fn); }
+		if ( chkobj(fn) )
+		{ 
+			getTitle(fn); 
+			}
 	}	// end of method
+
 
     // ==================================================================
     // look up filename if it exists; print message showing results, if audit flag is set 
@@ -46,9 +71,10 @@ public class MenuFile
 		println "$text" 
 	} // end of say
 
+
 	// ==================================================================
 	// logic to find a line in this menu text file like abc:=*MENUTITLE
-	public getTitle(def fn)
+	private getTitle(def fn)
 	{
         def fi = new File(fn);
 		def lines = fi.readLines();
@@ -60,7 +86,8 @@ public class MenuFile
 					def w1 = words[1].toLowerCase() 
 					if (w1.equals("*menutitle"))
 					{
-						dialogTitle = words[0] 	
+						dialogTitle = words[0];
+						menuFileExists = true; 	
 					}	// end of if
 				} // end of if
 			}	// end of each
@@ -97,7 +124,7 @@ public class MenuFile
 		println " "
 
 		println "... test using file located at gradle project root "
-		mf = new MenuFile("./jim.txt");
+		mf = new MenuFile("./resources/jim.txt");
 		println mf
 		println " "
 
@@ -112,7 +139,7 @@ public class MenuFile
 		println " "
 		
 		println "... test using file located at actual full directory location "
-		mf = new MenuFile("/Volumes/Media/Software/groovysamples/src/main/groovy/jim.txt");
+		mf = new MenuFile("/Volumes/Media/Software/menus/resources/jim.txt");
 		println mf
 		println " "
 		

@@ -23,7 +23,7 @@ public class Search
 
 
 	// keep all matching menu lines in a collection - loaded from parseResults
-	def imports = []
+	def matchingMenuLines = []
 
 	// folder to hold newly created list of menus as a .txt file
 	def path
@@ -33,12 +33,12 @@ public class Search
 	DateFormat dateFormat = new SimpleDateFormat("EEE. dd MMM yyyy HH:mm:ss");
     
 	//get current date time with Date()
-    	Date date = new Date();
-    	def now = dateFormat.format(date);
+    Date date = new Date();
+    def now = dateFormat.format(date);
 
 
-    	// =========================================
-    	// class constructor where tx = path to menu folder
+    // =========================================
+    // class constructor where tx = path to menu folder
 	// and default is to write map of menu filenames to output text file
 	public Search(String tx)
 	{			
@@ -102,7 +102,7 @@ public class Search
     	// pull out map of all text files that were idenified as menu files
     	public getMenuFileNames()
     	{
-	    return menus;
+	    	return menus;
     	} // end of method
 
 
@@ -110,7 +110,7 @@ public class Search
     	// show audit trail if allowed
     	public say(tx)
     	{
-    		if (audit) 
+    	if (audit) 
 		{
 			println tx;
 		} // end of if
@@ -121,62 +121,62 @@ public class Search
 	// Define closure
 	public searchLogic(File fh) 
 	{ 		
-	    print "Dir ${fh.getCanonicalPath()} ";
+	    say "\nDir ${fh.getCanonicalPath()} ";
 
 	    pwd = fh.getCanonicalPath();
 
 	    if (!hasbeenset)
 	    {
-		hasbeenset = true;
-		path = pwd;
+			hasbeenset = true;
+			path = pwd;
 	    } // end of if
 
 	    File fh2 = new File(pwd);
 	    def lines
 	    say " gave <$pwd> ";
-            fh2.eachDir
+        fh2.eachDir
 	    { 
-		f -> 	say "fh2.eachDir= ${ f.toString() }"; 
-			searchLogic(f) 
+			f -> 	say "fh2.eachDir= ${ f.toString() }"; 
+					searchLogic(f) 
 	    };
 
-            fh2.eachFileMatch(~/.*?\.txt/) 
+        fh2.eachFileMatch(~/.*?\.txt/) 
+        {
+			// give an audit of the file name that matches the .txt spec
+			//say "fh2.eachFileMatch($it)"
+            String fn = it.getCanonicalFile();
+			//say "\n.. fh2.eachFileMatch:<"+fn+">"
+				
+			// ignore our own internal .txt file
+			def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true;
+				
+			// build new file handle and get all text from that file 
+            def fi = new File(fn);
+            if (fi.exists() && ok)
             {
-		// give an audit of the file name that matches the .txt spec
-		say "fh2.eachFileMatch($it)"
-                String fn = it.getCanonicalFile();
-		say "\n.. fh2.eachFileMatch:<"+fn+">"
-				
-		// ignore our own internal .txt file
-		def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true;
-				
-		// build new file handle and get all text from that file 
-                def fi = new File(fn);
-                if (fi.exists() && ok)
-                {
-	            println "   File ${fn}  ------------";
-		    lines = fi.readLines()
-		    outer: for (line in lines) 
-		    {	
-			if (!line.trim()) continue
-    			def words = line.split(/\:=/).toList()
+	            say "   File ${fn}  ------------";
+		    	lines = fi.readLines()
+		    	outer: for (line in lines) 
+		    	{	
+					if (!line.trim()) continue
+    				def words = line.split(/\:=/).toList()
 
-			// find a menu title that identifies this .txt file as a menu file for us
-        		if (words.size() > 1 && words[1].toLowerCase().equals("*menutitle")) 
-			{ 
-				menus[fn] = words[0]
-				break outer;
-			} // end of if
+					// find a menu title that identifies this .txt file as a menu file for us
+        			if (words.size() > 1 && words[1].toLowerCase().equals("*menutitle")) 
+					{ 
+						menus[fn] = words[0]
+						break outer;
+					} // end of if
 	    	    } // end of for
 
-                } // end of if
+              } // end of if
 
             }  // end of eachFile
 
 	} // end of closure
 	
 
-    	// =========================================
+    // =========================================
 	// Parse menu map to identify menu lines within each text file that match the search criteria
 	public parseResults(String findthis) 
 	{ 
@@ -184,39 +184,82 @@ public class Search
 	} // end of method
 
 
-    	// =========================================
-	// Parse menu map to identify menu lines within each text file that match the search criteria
+
+	// split search string into one or more words
+	def getParseTokens(String findthis)
+	{
+		def tokens = findthis.trim().toLowerCase().split(' ').toList()
+		def finder =[]
+		tokens.each{e->
+			String ee = e.trim() 
+			if (ee.size()>0) 
+			{
+				finder += ee.toLowerCase()
+			} // end of if			
+		} // end of each
+			
+		say "... ok, split <$findthis> into ${finder.size()} tokens"
+		return finder;
+	} // end of splitting
+
+
+	// compare search string in one or more words to chosen line
+	def compareTokens(def words, String line)
+	{
+		int matched = 0;
+		
+		// words were trimmed() and lowercased above
+		words.each{ e->  
+			if ( line =~ e ) matched += 1;
+		} // end of each
+		
+		def ok = ( words.size()==matched ) ? true : false;
+		return ok;
+	} // end of splitting
+
+
+
+    // =========================================
+	// Parse map of menu files to identify menu lines within each text file that match the search criteria
 	// returns a list of each and every menu item line having the target text string regardless of case
 	public parseResults(String findthis, Map menus) 
 	{ 
 		say "parseResults(${findthis})"
-		menus.each{say "... ->"+it}
+		//menus.each{say "... ->"+it}
 
+		// split search term into several words
+		def words = getParseTokens(findthis);
+		say "parseResults(${findthis}) found ${words.size()} words"
+		
 		// keep all matching menu lines in a collection
-		imports = []
+		 matchingMenuLines = []
 
+		//walk thru each menu file
 		menus.each
 		{ men ->
-			say "---> ready for menu :"+men.key
+			//say "---> ready for menu :"+men.key
 			File me = new File(men.key);
 			def lines = me.readLines()
-			say "   ${men.key} had ${lines.size()} lines"
-			
-    			lines.each
+			//say "   ${men.key} had ${lines.size()} lines"
+						
+    		lines.each
 			{
-        		    ln -> if ( ln =~ findthis || convertCase(ln) =~ findthis  ) 
-				  {
-            				imports << ln;
-					say "... stored "+ln;
-        			  } // end of if
-    			} // end of eachLine
+				ln -> 
+					//if ( ln =~ findthis || convertCase(ln) =~ findthis  ) 
+					if (compareTokens( words, ln ) || convertCase(ln) =~ findthis)
+					{
+						matchingMenuLines << ln;
+						say "... stored "+ln;
+        			} // end of if
+    		} // end of eachLine
+			
 
 			//say "\nso we now have our target lines for "+findthis
-			//imports.each{ say it; }
+			//matchingMenuLines.each{ say it; }
 		} // end of each
 
 		say "--- the end of parse ---"
-		return imports;
+		return matchingMenuLines;
 
 	} // end of method
 
@@ -232,9 +275,20 @@ public class Search
 		return word;
 	} // end of convert
 	
-    	// =========================================
+
+
+    // =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
 	public writeResults(String path,Map menus) 
+	{ 
+		writeResults(path, menus, "Available Menus");
+	} // end of method
+	
+	
+    // =========================================
+	// Write menu list to a permanent file whose path identifies the folder location
+	// with menu title as specified
+	public writeResults(String path,Map menus, String tl) 
 	{ 
 		def tmp = new File(path+"/.menulist.txt")
 		println "\n... writing list of menus to "+tmp.getCanonicalFile();
@@ -248,7 +302,7 @@ public class Search
 
 		reorder.sort();
 
-		tmp.write("Available Menus:=*MENUTITLE\n");
+		tmp.write("${tl}:=*MENUTITLE\n");
 		tmp.append "// This menu was created on : ${now}\n"
 
 		int count = 0
@@ -288,14 +342,18 @@ public class Search
 			//menus.each{fn -> println "... "+fn}
 		
 			println "\n now find a series of menu items that match our search criteria"
-			def git = mf.parseResults("as/400",menus);    // "^GitHub*"
-			println "\n\n-------------------------\n  Searched for git and found:"
-			git.each{key ->println "---> key:"+key;}
+			def as400 = mf.parseResults("as/400",menus);    // "^GitHub*"
+			println "\n\n-------------------------\n  Searched for as400 and found:"
+			as400.each{key ->println "---> key:"+key;}
 
-			def re = mf.parseResults("cherokee");
-			println "\n ---> search for 'cherokee' found :"
+			println "-------------------------\nfind items with two terms in search sequence"
+			println "\n ---> search for '  groovy  grep' found :"
+
+			def re = mf.parseResults("  groovy  grep");
 			re.each{println "--->"+it;}
-			println "-------------------------"
+			mf.writeResults(path,re, """Your Search for '  groovy  grep'""")
+
+			println "-------------------------\nok\n"
 		} // end of if
 
 		println "... the end "

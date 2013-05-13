@@ -288,22 +288,36 @@ public class Search
     // =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
 	// with menu title as specified
-	public writeResults(String path,Map menus, String tl) 
+	public writeResults(String path, def menus, String tl) 
 	{ 
 		def tmp = new File(path+"/.menulist.txt")
 		println "\n... writing list of menus to "+tmp.getCanonicalFile();
 
 		def reorder=[]
+		//reorder << "hi kids:=go jim\n"
+	
 		menus.each
-		{ 	
-			String entry = it.value.trim() + "|"+ "${it.value.trim()} :=go ${it.key.trim()}\n"
-			reorder << entry;
+		{ entry ->
+			if (menus instanceof Map)
+			{
+				String xx = entry.value.trim() + "|"+ "${entry.value.trim()} :=go ${entry.key.trim()}\n"			
+				reorder << xx;
+			} // end of
+			else
+			{
+				int ii = entry.indexOf(":=");
+				if (ii > -1)
+				{
+					String k = entry.substring(0,ii) + "|" + entry + "\n";
+					reorder << k;
+				} // end of if
+			}
 		} // end of each
 
 		reorder.sort();
 
-		tmp.write("${tl}:=*MENUTITLE\n");
-		tmp.append "// This menu was created on : ${now}\n"
+		tmp.write("${tl} As Of ${now}:=*MENUTITLE\n");
+		tmp.append "// This menu was created on : ${now} with ${reorder.size()} menu items\n"
 
 		int count = 0
 		reorder.each
@@ -361,3 +375,31 @@ public class Search
 	} // end of main
 
 } // end of class
+
+/*
+* logic for menus keyboard access
+			case KeyEvent.VK_F4:  // move x coordinate left
+			if (f)
+			{
+				println "F16 key pressed"
+				def path = "./resources"
+				org.jnorthr.menus.support.Search mf = new org.jnorthr.menus.support.Search(path);
+				def re = mf.parseResults(swing.tf.text);
+				re.each{println "--->"+it;}
+				mf.writeResults(path,re, """Your Search for '${swing.tf.text.trim()}'""")				
+				String menu = "./resources/.menulist.txt"; 
+				MenuColumnSupport.loadMenu(cs,menu)    
+				frame.setTitle(MenuColumnSupport.getFrameTitle())
+				support.resetStack()
+				swing.tf.text=""
+				swing.tf.requestFocusInWindow()
+				swing.tf.grabFocus();
+			} // end of shift
+
+			else
+			{
+				println "F4 key pressed"
+				//ender()
+			} // end of 
+			break;
+*/

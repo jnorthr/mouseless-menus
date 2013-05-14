@@ -210,6 +210,9 @@ version = '1.0'
 // add some specific attributes that control how the jar manifest is constructed
 // java -jar   /Volumes/Media/Software/menus/build/libs/menus-1.0.jar
 jar {
+    dependsOn configurations.runtime
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+
     manifest {
         attributes 'Implementation-Title': 'Mouseless Menus', 'Implementation-Version': version
         attributes provider: 'jnorthr'

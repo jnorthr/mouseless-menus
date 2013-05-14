@@ -81,9 +81,9 @@ test
 // simple tasks  to run individual classes
 task(runSimple, dependsOn: 'classes', type: JavaExec) 
 {
-	main = 'org.jnorthr.menus.support.MenuItem'  // 'test24'  //
+	main = 'org.jnorthr.menus.Menus'  // 'test24'  //
 	classpath = sourceSets.main.runtimeClasspath
-	args 'kids'
+	//args 'kids'
 	systemProperty 'simple.message', 'Hello '
 }
 
@@ -196,7 +196,7 @@ println "project.buildDir:"+project.buildDir
 defaultTasks 'runSimple'
 
 // this line needed for the 'run' feature of the 'application' plugin
-mainClassName = "org.jnorthr.menus.help.HelpWindow"
+mainClassName = "org.jnorthr.menus.Menus"
 
 
 // declare minimum level of java for both compile and execute phases
@@ -213,8 +213,8 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'Mouseless Menus', 'Implementation-Version': version
         attributes provider: 'jnorthr'
-        attributes("Main-Class": "org.jnorthr.menus.help.HelpWindow")
-	attributes args: './resources/abc.html'
+        attributes("Main-Class": "org.jnorthr.menus.Menus")
+	    attributes args: './resources'
     }
 }
 

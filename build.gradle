@@ -196,6 +196,8 @@ println "project.buildDir:"+project.buildDir
 defaultTasks 'runSimple'
 
 // this line needed for the 'run' feature of the 'application' plugin
+// when you try: gradlew run
+// then the class shown here is the one that is executed
 mainClassName = "org.jnorthr.menus.Menus"
 
 
@@ -203,12 +205,13 @@ mainClassName = "org.jnorthr.menus.Menus"
 sourceCompatibility = 1.5
 targetCompatibility=1.5
 
-// your version of this app
+// your version of this app - nice for the name of your jar
 version = '1.0'
 
 // customize the jar MANIFEST.MF 
 // add some specific attributes that control how the jar manifest is constructed
-// java -jar   /Volumes/Media/Software/menus/build/libs/menus-1.0.jar
+// cd jnorthr-mouseless-menus-8f4a148 
+// java -jar ./build/libs/menus-1.0.jar 
 jar {
     dependsOn configurations.runtime
     from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
@@ -220,6 +223,34 @@ jar {
 	    attributes args: './resources'
     }
 }
+
+
+task zip(type: Zip) {
+    baseName = 'MouselessMenus'
+    appendix = 'core'
+	version = 0.1
+    from projectDir
+    include 'resources/**/*'	
+    //from 'resources'
+    into(zip.destinationDir) {
+        from configurations.runtime
+    }
+} // end of zip task
+
+println zip.archiveName
+println relativePath(zip.destinationDir)
+println relativePath(zip.archivePath)
+//project.ext.prop1 = zip.destinationDir + "/resources"
+
+
+//fred+="/resources"
+//println "resources now points to :"+ project.ext.prop1
+
+/*
+	MouselessMenus-core-0.1.zip
+	build/distributions
+	build/distributions/MouselessMenus-core-0.1.zip
+*/
 
 
 task wrapper(type: Wrapper) {

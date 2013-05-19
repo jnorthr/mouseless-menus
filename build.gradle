@@ -10,7 +10,7 @@ how to connect to mysql db in gradle: http://stackoverflow.com/questions/6329872
 */
 
 //import org.apache.ivy.core.report.ResolveReport
-apply plugin:'java'
+//apply plugin:'java'
 apply plugin:'groovy'
 apply plugin:'application'
 
@@ -53,9 +53,20 @@ sourceSets.all {
     println name
 }
 
+// this code may sort out the issue of class dependencies between groovy and java
+// compiled classes
+//compileJava.enabled = false
+//sourceSets.main.groovy.srcDirs = ["src/main/java", "src/main/groovy"]
+ 
+// for a java -> groovy only dependency, use this instead:
+//compileJava.dependsOn("compileGroovy")
+
+
+
+
 
 test.testLogging { exceptionFormat "full" }
-test.maxParallelForks = 4
+test.maxParallelForks = Runtime.runtime.availableProcessors()
 test
 {
 
@@ -69,7 +80,7 @@ test
         // set JVM arguments for the test JVM(s)
 	jvmArgs '-XX:MaxPermSize=192m'
 
-	maxParallelForks = 3;
+	maxParallelForks = Runtime.runtime.availableProcessors()
 	// does work if you chg the workingDir, so it influences the java file relative path access
 	//workingDir = new File('/Volumes/Media/Software/groovysamples/src/main/groovy')
 	println "workingDir is "+workingDir // = workingDir is /Volumes/Media/Software/menus
@@ -238,9 +249,41 @@ task zip(type: Zip) {
     }
 } // end of zip task
 
+task zip2(type: Zip) {
+    baseName = 'MouselessMenus'
+    appendix = 'core'
+    version = 0.12
+    from jar.outputs.files
+    from('resources/') {
+        into('resources')
+    }
+    include 'README.md','gradlew*'
+}
+task srcZip(type: Zip) {
+    baseName = 'MouselessMenus'
+    appendix = 'core'
+    version = 0.13
+    classifier = 'src'
+    from jar.outputs.files
+    include 'LICENCE', 'README*', 'NOTICE', 'gradlew*', '*.jar'
+}
+/*
+from projectDir
+    from('libs') {
+        include '*.jar'
+        into('lib')
+    }
+*/
+    //include sourceSets*.allSource.srcDirs*.collect { relativePath(it) }.flatten()
+
 println zip.archiveName
+println zip2.archiveName
+println srcZip.archiveName
+
 println relativePath(zip.destinationDir)
 println relativePath(zip.archivePath)
+println relativePath(zip2.destinationDir)
+println relativePath(zip2.archivePath)
 //project.ext.prop1 = zip.destinationDir + "/resources"
 
 

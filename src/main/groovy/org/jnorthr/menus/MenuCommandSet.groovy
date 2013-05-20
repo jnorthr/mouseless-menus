@@ -11,7 +11,7 @@ public class CommandSet
     def cmd = "command set" // iMac PPC version      // "cmd /c  "  RedApple  mac os command to see environmental variables
     def txt
     def map =[:]
-    String propertyfile = './resources/menu.properties'  		// non-OS specific parameters for business issues
+    String propertyfile = './resources/properties/menu.properties'  		// non-OS specific parameters for business issues
     def config
 
     public CommandSet()

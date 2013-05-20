@@ -123,7 +123,7 @@ class Menus implements KeyListener
 {
 
 	def static audit = true
-	//String propertyfile = './resources/menu.properties'  		// non-OS specific parameters for business issues
+	//String propertyfile = 'resources/properties/menu.properties'  		// non-OS specific parameters for business issues
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
@@ -133,7 +133,7 @@ class Menus implements KeyListener
 	def static frame	
 	def frametitle 
 	JTextPane jtp;
-	def helpfilename = "./resources/help.html"
+	def helpfilename = "resources/documents/help.html"
 	Border cyanline = new LineBorder(Color.red,1);
 	def mono = new Font("Monospaced", Font.PLAIN, 10)
 
@@ -171,7 +171,7 @@ class Menus implements KeyListener
 			if (f)
 			{
 				//println "F15 key pressed"
-				String menu = "./resources/.menulist.txt"; 
+				String menu = "resources/.menulist.txt"; 
 				MenuColumnSupport.loadMenu(cs,menu)    
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
 				support.resetStack()
@@ -191,12 +191,12 @@ class Menus implements KeyListener
 			if (f)
 			{
 				println "F16 key pressed"
-				def path = "./resources"
+				def path = "resources"
 				org.jnorthr.menus.support.Search mf = new org.jnorthr.menus.support.Search(path);
 				def re = mf.parseResults(swing.tf.text);
 				re.each{println "--->"+it;}
 				mf.writeResults(path,re, """Your Search for '${swing.tf.text.trim()}'""")				
-				String menu = "./resources/.menulist.txt"; 
+				String menu = "resources/.menulist.txt"; 
 				MenuColumnSupport.loadMenu(cs,menu)    
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
 				support.resetStack()
@@ -652,7 +652,7 @@ class Menus implements KeyListener
 		//println "... started"
 		setAudit()
 		Menus ivs = new Menus()
-		ivs.getPanel("./resources/main.txt")
+		ivs.getPanel("resources/main.txt")
 		ivs.frame.show()
 		//ivs.say("... done ===")
 

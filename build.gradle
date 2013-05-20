@@ -27,7 +27,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.0.5'
     groovy group: 'org.apache.ivy', name:'ivy', version:'2.2.0' 
     testCompile 'junit:junit:4.11'
-    compile group: 'javax.servlet',        name: 'servlet-api', version: '2.5' 
+    //compile group: 'javax.servlet',        name: 'servlet-api', version: '2.5' 
     //compile group: 'mysql-connector-java', name:'mysql', version: '5.1.6'
     //compile 'mysql:mysql-connector-java:5.1.6'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
@@ -35,6 +35,7 @@ dependencies {
     //runtime group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.1-SNAPSHOT'
     //classpath group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.0'
     'org.gradle.api.plugins:gradle-cf-plugin:0.2.0'
+    //compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
 }
 
 /*
@@ -65,12 +66,9 @@ sourceSets.all {
 // for a java -> groovy only dependency, use this instead:
 //compileJava.dependsOn("compileGroovy")
 
-
-
-
-
 test.testLogging { exceptionFormat "full" }
 test.maxParallelForks = Runtime.runtime.availableProcessors()
+
 test
 {
 
@@ -247,11 +245,26 @@ task zip(type: Zip) {
 	version = 0.1
     from projectDir
     include 'resources/**/*'	
-    //from 'resources'
     into(zip.destinationDir) {
         from configurations.runtime
     }
 } // end of zip task
+
+
+task srcZip2(type: Zip) {
+    baseName = 'MouselessMenus'
+    appendix = 'source'
+	version = 0.1
+    classifier = 'src'
+    from projectDir
+    //include sourceSets.allSource.srcDirs*.collect { relativePath(it) }.flatten()
+    include 'LICENCE', 'README', 'NOTICE', 'gradlew*'
+    into(zip.destinationDir) {
+        from configurations.runtime
+    }
+}
+//assemble.dependsOn(srcZip)
+
 
 task zip2(type: Zip) {
     baseName = 'MouselessMenus'
@@ -280,6 +293,7 @@ from projectDir
 */
     //include sourceSets*.allSource.srcDirs*.collect { relativePath(it) }.flatten()
 
+
 println zip.archiveName
 println zip2.archiveName
 println srcZip.archiveName
@@ -289,6 +303,65 @@ println relativePath(zip.archivePath)
 println relativePath(zip2.destinationDir)
 println relativePath(zip2.archivePath)
 //project.ext.prop1 = zip.destinationDir + "/resources"
+
+
+// following methods used in copyTask below
+def getDestinationDir = {
+    file("${project.buildDir}/distributions")
+}
+
+def getLibDir = {
+    file("${project.buildDir}/libs")
+}
+
+task copyTask(type: Zip) {
+    baseName = 'Deployment'
+
+    // Copy from directory
+    into("${getDestinationDir}/resources") 
+		{
+			from 'resources'
+    		include '**/*.txt', '**/*.txt'
+		}
+
+    // Copy from directory
+    into("${getDestinationDir}/resources/properties") 
+		{
+			from 'resources/properties'
+    		include '**/*.properties', '**/*.properties'
+			exclude '**/images/**'
+		}
+
+    // Copy from directory
+    into("${getDestinationDir}/resources/documents") 
+		{
+			from 'resources/documents'
+    		include '**/*.html', '**/*.htm'
+			include '**/images/**'
+			include '**/*.png'
+		}
+
+    // Copy single file
+    from 'README.md'
+
+	from getLibDir
+    include '**/*.jar'	
+
+    // Use closure to resolve files.
+    //include getTextFiles
+
+    exclude 'INSTALL.txt'
+
+    // Copy into directory dist
+    // resolved via closure.
+    //into getDestinationDir
+    into("${getDestinationDir}") {
+        from configurations.runtime
+    }
+}
+
+
+
 
 
 //fred+="/resources"

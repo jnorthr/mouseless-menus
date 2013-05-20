@@ -169,7 +169,7 @@ public class Search
 					{ 
 						// plug a map with menu filename as key and value= menu title declared in :=*menufile  line
 						menus[fn] = words[0]
-						def temp = words[0].trim()+":="+fn.trim()+"\n"		
+						def temp = words[0].trim()+":=go "+fn.trim()+"\n"		
 						matchingMenuLines << temp;					
 						break outer;
 					} // end of if
@@ -296,7 +296,7 @@ public class Search
 	} // end of method
 	
 	
-    	// =========================================
+    // =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
 	// with menu title as specified
 
@@ -349,7 +349,7 @@ public class Search
 	{	
 		println "--------------------------------------------------"
 		print "... started in folder "
-		def path = "./resources";
+		def path = "resources";
 	
 		if (args.length>0) 
 		{
@@ -364,17 +364,18 @@ public class Search
 			Search mf = new Search(path);
 			mf.audit=false;
 			println "\n... doing pass 2 -> from path="+path
-			mf = new Search(path, false);
+			mf = new Search(path, false); // false means dont write results file
 			def menus = mf.getMenuFileNames()
-			//menus.each{fn -> println "... "+fn}
+			menus.each{fn -> println "... "+fn}
 			mf.audit=true;
+/*		
 			println "\n now find a series of menu items that match our search criteria"
 			def as400 = mf.parseResults("as/400 ",menus);    // "^GitHub*"
 			println "\n\n-------------------------\n  Searched for as400 and found:"
 			as400.each{key ->println "---> key:"+key;}
 			mf.writeResults(path,as400, """Your Search for 'as/400 400' As Of ${mf.now}""")
 
-/*		
+
 
 			println "-------------------------\nfind items with two terms in search sequence"
 			println "\n ---> search for '  groovy  grep' found :"

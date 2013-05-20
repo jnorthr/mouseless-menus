@@ -1,0 +1,181 @@
+
+apply plugin:'groovy'
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    groovy localGroovy()
+    groovy group: 'org.apache.ivy', name:'ivy', version:'2.2.0' 
+}
+
+// Iterate over the source sets
+sourceSets.all {
+    println "sourceSets.all:"+name
+}
+
+// see: http://my.safaribooksonline.com/book/software-engineering-and-development/9781849518109/gradle-effective-implementation-guide/id286755943
+def sources = fileTree {
+    from 'src'
+}
+
+def groovySource = sources.matching {
+    include '**/*.groovy'
+}
+
+groovySource.each{e-> println "groovySource:"+e; }
+
+
+def resources = fileTree {
+    from 'resources'
+}
+
+def propertyFiles = resources.matching {
+    include '**/*.properties'
+}
+def htmlFiles = resources.matching {
+    include '**/*.html'
+}
+
+propertyFiles.each{e-> println "propertyFiles:"+e; }
+htmlFiles.each{e-> println "htmlFiles:"+e; }
+
+
+def root =  project.fileTree(projectDir)
+def rootSource = root.matching {
+    include '**/*.groovy'
+    include '**/*.java'
+    include '**/*.txt'
+    include '**/*.html'
+    include '**/*.jar'
+    include '**/*.zip'
+    include '**/*.properties'
+    include 'gradle*'
+}
+rootSource.each{e-> println "... root file:"+e; }
+ 
+FileTree mainFiles = fileTree(dir: 'src/main/groovy/org/jnorthr/menus')
+project.ext["modifiedLastWeek"] = mainFiles.matching {
+    def lastWeek = new Date() - 7
+	println "   lastWeek was "+lastWeek
+    include { FileTreeElement file ->
+		println "    mod:"+file.lastModified+" : "+file
+        file.lastModified > lastWeek.time
+    }
+	
+}
+
+println "// ------------------------\n Recently Modified files are :"
+project.ext["modifiedLastWeek"].each{m-> println "--> modified in the Last Week:"+m; }
+println " "
+
+// simple tasks to run individual classes
+task(runSimple, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.Menus'  
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'kids'
+	systemProperty 'simple.message', 'Hello '
+}
+
+
+println "project is named :"+project
+println "project.buildDir:"+project.buildDir
+println "project.projectDir:"+project.projectDir
+
+// following used in 'gradle run'
+defaultTasks 'runSimple'
+
+project.ext["mainClassName"] = "org.jnorthr.menus.Menus"
+
+
+// declare minimum level of java for both compile and execute phases
+sourceCompatibility = 1.5
+targetCompatibility=1.5
+
+// your version of this app - nice for the name of your jar
+version = '1.0'
+
+
+task zip(type: Zip) {
+    baseName = 'MouselessMenus'
+    appendix = 'core'
+	version = 0.1
+    from projectDir
+    include 'resources/**/*'	
+    include 'build/libs/*.jar'	
+    into(zip.destinationDir) {
+        from configurations.runtime
+    }
+} // end of zip task
+
+task srcZip(type: Zip) {
+    baseName = 'MouselessMenus'
+    appendix = 'source'
+	version = 0.15
+    classifier = 'src'
+    from projectDir
+    //include sourceSets.allSource.srcDirs*.collect { relativePath(it) }.flatten()
+    include 'LICENCE', 'README*', 'NOTICE', 'gradlew*'
+    into(zip.destinationDir) {
+        from configurations.runtime
+    }
+}
+
+println "zip.archiveName:"+zip.archiveName
+println "zip.destinationDir:"+relativePath(zip.destinationDir)
+println "zip.archivePath:"+relativePath(zip.archivePath)
+
+
+// following methods used in copyTask below
+def getDestinationDir = {
+    file("${project.buildDir}/distributions")
+}
+
+def getLibDir = {
+    file("${project.buildDir}/libs")
+}
+
+task copyTask(type: Zip) {
+    baseName = 'Deployment'
+
+    // Copy from directory
+    into("${getDestinationDir}/resources") 
+		{
+			from 'resources'
+			
+    		include '**/*.txt', '**/*.txt', '**/*.png'
+    		// Include files with html extension.
+    		include '**/*.html', '**/*.htm'
+		}
+
+    // Copy from directory
+    into("${getDestinationDir}/properties") 
+		{
+			from 'resources'
+    		include '**/*.properties', '**/*.properties'
+			exclude '**/images/**'
+		}
+
+    // Copy single file
+    from 'README.md'
+
+	from getLibDir
+    include '**/*.jar'	
+
+    // Use closure to resolve files.
+    //include getTextFiles
+
+    exclude 'INSTALL.txt'
+
+    // Copy into directory dist
+    // resolved via closure.
+    //into getDestinationDir
+    into("${getDestinationDir}") {
+        from configurations.runtime
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.1'
+}

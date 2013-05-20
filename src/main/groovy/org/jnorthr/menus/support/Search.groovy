@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 public class Search
 {
 	// show/hide audit trail msgs
-	boolean audit = false;
+	boolean audit = true;
 
 	// Create a ref for closure
 	def searchLogic
@@ -73,7 +73,7 @@ public class Search
 
 
 	// =========================================
-    	// class constructor where tx = path to menu folder and flag to say if or not write results
+	// class constructor where tx = path to menu folder and flag to say if or not write results
 	// to write map of menu filenames to output text file
 	public Search(String tx, boolean flag)
 	{			
@@ -86,11 +86,12 @@ public class Search
 			def fn = getCanonical(tx)
 			
 			// Apply closure
-			searchLogic( new File( fn ) )
+			matchingMenuLines = searchLogic( new File( fn ) )
 
+			// ok, discovered all menu files available in this folder, so create and write an 'all' menus file
 			if (flag)
 			{
-			    writeResults(path,menus);	
+			    writeResults(path,matchingMenuLines);	
 			} // end of if		
 		} // end of if
 		
@@ -99,26 +100,26 @@ public class Search
 
 
 	// =========================================
-    	// pull out map of all text files that were idenified as menu files
-    	public getMenuFileNames()
-    	{
-	    	return menus;
-    	} // end of method
+    // pull out map of all text files that were idenified as menu files
+    public getMenuFileNames()
+	{
+    	return menus;
+    } // end of method
 
 
-    	// =========================================
-    	// show audit trail if allowed
-    	public say(tx)
-    	{
+    // =========================================
+	// show audit trail if allowed
+    public say(tx)
+    {
     	if (audit) 
 		{
 			println tx;
 		} // end of if
-   	 } // end of method
+   	} // end of method
 
 
 	// =========================================
-	// Define closure
+	// Logic to find all menu files in one directory
 	public searchLogic(File fh) 
 	{ 		
 	    say "\nDir ${fh.getCanonicalPath()} ";
@@ -129,6 +130,8 @@ public class Search
 	    {
 			hasbeenset = true;
 			path = pwd;
+			menus =[:];
+			matchingMenuLines = [];
 	    } // end of if
 
 	    File fh2 = new File(pwd);
@@ -154,7 +157,7 @@ public class Search
             def fi = new File(fn);
             if (fi.exists() && ok)
             {
-	            say "   File ${fn}  ------------";
+	            //say "   File ${fn}  ------------";
 		    	lines = fi.readLines()
 		    	outer: for (line in lines) 
 		    	{	
@@ -164,7 +167,10 @@ public class Search
 					// find a menu title that identifies this .txt file as a menu file for us
         			if (words.size() > 1 && words[1].toLowerCase().equals("*menutitle")) 
 					{ 
+						// plug a map with menu filename as key and value= menu title declared in :=*menufile  line
 						menus[fn] = words[0]
+						def temp = words[0].trim()+":="+fn.trim()+"\n"		
+						matchingMenuLines << temp;					
 						break outer;
 					} // end of if
 	    	    } // end of for
@@ -172,7 +178,8 @@ public class Search
               } // end of if
 
             }  // end of eachFile
-
+		
+			return matchingMenuLines;
 	} // end of closure
 	
 
@@ -210,7 +217,7 @@ public class Search
 		
 		// words were trimmed() and lowercased above
 		words.each{ e->  
-			if ( line =~ e ) matched += 1;
+			if ( line =~ e ) {matched += 1; say "... e of <${e}> matched <${line}>"  }
 		} // end of each
 		
 		def ok = ( words.size()==matched ) ? true : false;
@@ -241,7 +248,6 @@ public class Search
 			File me = new File(men.key);
 			def lines = me.readLines()
 			//say "   ${men.key} had ${lines.size()} lines"
-						
     		lines.each
 			{
 				ln -> 
@@ -251,9 +257,14 @@ public class Search
 						matchingMenuLines << ln;
 						say "... stored "+ln;
         			} // end of if
+        			else
+        			{
+        				say "===> compareTokens( <${words}>, <${ln}> )"
+        			
+        			} // end of else
+        			
     		} // end of eachLine
 			
-
 			//say "\nso we now have our target lines for "+findthis
 			//matchingMenuLines.each{ say it; }
 		} // end of each
@@ -277,25 +288,25 @@ public class Search
 	
 
 
-    // =========================================
+    	// =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
-	public writeResults(String path,Map menus) 
+	public writeResults(String path, def matchingMenuLines ) 
 	{ 
-		writeResults(path, menus, "Available Menus");
+		writeResults(path, matchingMenuLines, "Available Menus");
 	} // end of method
 	
 	
-    // =========================================
+    	// =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
 	// with menu title as specified
+
 	public writeResults(String path, def menus, String tl) 
 	{ 
 		def tmp = new File(path+"/.menulist.txt")
 		println "\n... writing list of menus to "+tmp.getCanonicalFile();
 
 		def reorder=[]
-		//reorder << "hi kids:=go jim\n"
-	
+
 		menus.each
 		{ entry ->
 			if (menus instanceof Map)
@@ -315,6 +326,7 @@ public class Search
 		} // end of each
 
 		reorder.sort();
+
 
 		tmp.write("${tl} As Of ${now}:=*MENUTITLE\n");
 		tmp.append "// This menu was created on : ${now} with ${reorder.size()} menu items\n"
@@ -350,23 +362,27 @@ public class Search
 		if (fi.exists())
 		{
 			Search mf = new Search(path);
+			mf.audit=false;
 			println "\n... doing pass 2 -> from path="+path
 			mf = new Search(path, false);
 			def menus = mf.getMenuFileNames()
 			//menus.each{fn -> println "... "+fn}
-		
+			mf.audit=true;
 			println "\n now find a series of menu items that match our search criteria"
-			def as400 = mf.parseResults("as/400",menus);    // "^GitHub*"
+			def as400 = mf.parseResults("as/400 ",menus);    // "^GitHub*"
 			println "\n\n-------------------------\n  Searched for as400 and found:"
 			as400.each{key ->println "---> key:"+key;}
+			mf.writeResults(path,as400, """Your Search for 'as/400 400' As Of ${mf.now}""")
+
+/*		
 
 			println "-------------------------\nfind items with two terms in search sequence"
 			println "\n ---> search for '  groovy  grep' found :"
 
 			def re = mf.parseResults("  groovy  grep");
 			re.each{println "--->"+it;}
-			mf.writeResults(path,re, """Your Search for '  groovy  grep'""")
-
+			mf.writeResults(path,re, """Your Search for '  groovy  grep' As Of ${mf.now}""")
+*/
 			println "-------------------------\nok\n"
 		} // end of if
 

@@ -27,10 +27,10 @@ public class Support
 	def frame
 
 	// non-OS specific parameters for business issues
-	String propertyfile = './resources/properties/menu.properties'  
+	String propertyfile = 'resources/properties/menu.properties'  
 
 	// non-OS specific parameters for technical issues
-	String pathfile = './resources/properties/path.properties'  
+	String pathfile = 'resources/properties/path.properties'  
 
 	def config
 	def paths

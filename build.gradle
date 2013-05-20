@@ -260,7 +260,7 @@ task srcZip2(type: Zip) {
 }
 //assemble.dependsOn(srcZip)
 
-=======
+
 task zip2(type: Zip) {
     baseName = 'MouselessMenus'
     appendix = 'core'

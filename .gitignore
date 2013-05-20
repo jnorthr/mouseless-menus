@@ -27,6 +27,14 @@ tmp/**/*
 *.log
 *.sql
 *.sqlite
+*.log.1
+*.log.2
+*.log.3
+*.log.4
+*.log.5
+*_tmp
+.gradle*
+build/classes/*
 
 # OS generated files #
 ######################

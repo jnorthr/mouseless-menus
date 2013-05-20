@@ -27,7 +27,7 @@ Font[] allFonts = ge.getAllFonts();
 
 class FontSupport
 {
-	String pathpropertyfile = './resources/path.properties'
+	String pathpropertyfile = './resources/properties/path.properties'
   
 	// OS-specific parms; cannot be in same config file as config.rewrite looses some path info
 	def os = System.getProperty('os.name')

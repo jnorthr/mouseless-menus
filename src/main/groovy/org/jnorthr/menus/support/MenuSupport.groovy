@@ -10,7 +10,7 @@ import java.awt.GridLayout
 
 public class Support
 {
-	def static audit = true
+	def static audit = false
 	def static framefixedtitle = "MENU"
 
 	def ls = System.getProperty('line.separator')
@@ -25,8 +25,13 @@ public class Support
 	def static int top = 0
 	def static int left = 0
 	def frame
-	String propertyfile = './resources/menu.properties'  // non-OS specific parameters for business issues
-	String pathfile = './resources/path.properties'  // non-OS specific parameters for business issues
+
+	// non-OS specific parameters for business issues
+	String propertyfile = './resources/properties/menu.properties'  
+
+	// non-OS specific parameters for technical issues
+	String pathfile = './resources/properties/path.properties'  
+
 	def config
 	def paths
 	def OSN
@@ -88,9 +93,26 @@ public class Support
 		println "... ended"
 	} // end of main
 
+
+
 	// class constructor - loads configuration, get system environmental variables; gets hardware window size;
 	public Support()
 	{
+		// recent test gave:
+		// Support() loaded from :file: 
+		// /Volumes/Media1/Software/menus/build/classes/main/org/jnorthr/menus/support/Support.class
+		URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
+		println "Support() loaded from :"+loc.toString();
+		// Support() loaded from :file:/Volumes/Media1/Software/menus/build/classes/main/
+		// Support() loaded from :file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar
+
+
+        ClassLoader loader = this.class.getClassLoader();
+        println "-->"+loader.getResource("org/jnorthr/menus/support/Support.class");
+		// -->file:/Volumes/Media1/Software/menus/build/classes/main/org/jnorthr/menus/support/Support.class
+		// -->jar:file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar!/org/jnorthr/menus/support/Support.class
+
+
 		// Get all system properties
   		props = System.getProperties()
   		OSN = (String)props.get("os.name");
@@ -330,11 +352,24 @@ public class Support
 				else
 				{		// go fred	- load the menu 'fred' with it's options
 						def fn = tokens[1].trim()	// get the menu filename
-						if (!fn.toLowerCase().endsWith(".txt")) fn += ".txt";		// make sure it ends with .txt
-
-						int i8 = fn.indexOf('/') + fn.indexOf('\\')
-						if (i8 < 0)
+						if (!fn.toLowerCase().endsWith(".txt")) 
+						{
+							fn += ".txt";		// make sure it ends with .txt
+							say "fn did not have a .txt extension, so now="+fn
+						} // end of if
+						
+						int i8 = fn.indexOf("/") 
+						int i9 = fn.indexOf("\\")
+						if (i8 < 0 && i9 < 0)
+						{
+							say "fn <$fn> had no folder information, i8 ="+i8+" i9="+i9
 							fn = getConfig().menuFolder + fn; 
+							say "fn had no folder information, so now ="+fn
+						} // end of if
+						else
+						{
+							say "fn now has name="+fn
+						}
 
 						def f1 = new File(fn)
 						cmd = (f1.exists()) ? "¤${fn}" : null 

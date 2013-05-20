@@ -122,7 +122,7 @@ class Menus implements KeyListener
 {
 
 	def static audit = true
-	//String propertyfile = './resources/menu.properties'  		// non-OS specific parameters for business issues
+	//String propertyfile = './resources/properties/menu.properties'  		// non-OS specific parameters for business issues
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
@@ -132,7 +132,7 @@ class Menus implements KeyListener
 	def static frame	
 	def frametitle 
 	JTextPane jtp;
-	def helpfilename = "./resources/help.html"
+	def helpfilename = "./resources/documents/help.html"
 	Border cyanline = new LineBorder(Color.red,1);
 	def mono = new Font("Monospaced", Font.PLAIN, 10)
 

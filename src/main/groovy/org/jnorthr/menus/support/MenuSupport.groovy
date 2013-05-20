@@ -120,10 +120,14 @@ public class Support
   		def tokens = OSN.trim().toLowerCase().split(' ').toList()
   		def osid = new StringBuffer();
   		tokens.each{tok -> osid << tok;}
+  		
 		say("... Support() set to use $osid in pwd=$pwd" )
+		
        	paths = new ConfigSlurper(osid.toString()).parse(new File(pathfile).toURL())
+       	
 		say("... config is set to use '$osid' paths")
 		commandPrefix = paths.commandPrefix		// something like 'open ' on mac os
+		
        	config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
        	env = System.getenv()
 		getWindowSize()
@@ -673,8 +677,8 @@ public class Support
 	public JTextPane getTextPane()
 	{
 		jtp = new JTextPane();
-		jtp.setPreferredSize(new Dimension(780, 410)) 
-		jtp.setMaximumSize(new Dimension(780, 510))
+		jtp.setPreferredSize(new Dimension(1280, 1024)) 
+		//jtp.setMaximumSize(new Dimension(780, 510))
 		jtp.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		jtp.setForeground(Color.green);
 		jtp.setBackground(Color.black);

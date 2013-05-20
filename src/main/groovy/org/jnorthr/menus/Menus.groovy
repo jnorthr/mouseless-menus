@@ -121,7 +121,6 @@ The following workaround works fine :
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
 {
-
 	def static audit = true
 	//String propertyfile = 'resources/properties/menu.properties'  		// non-OS specific parameters for business issues
 	def support
@@ -142,7 +141,7 @@ class Menus implements KeyListener
 	GridBagConstraints c = new GridBagConstraints();
 	def p1 
 	def footer1 = "F1=Help   F2=Allow   F3=Exit   F5=Refresh   F9=Recall   F10/F12=Cancel   F15=All Menus   F17=Cmds"
-	def footer2 = " "
+	def footer2 = "xx "
 	def l1 
 	def l2 
 	def l3 
@@ -512,7 +511,7 @@ class Menus implements KeyListener
 		c.weightx = 0.0;
 		c.gridx = 0; // column number where zero is first column
 		c.gridy = 0; // row number where zero is first row
-		c.anchor = GridBagConstraints.WEST; // direction of drift 4 this component when smaller than window 
+		c.anchor = GridBagConstraints.NONE; // direction of drift 4 this component when smaller than window 
 		c.fill = GridBagConstraints.NONE; // rule to let a component expand both ways when more space is available on resize
 
  
@@ -522,11 +521,11 @@ class Menus implements KeyListener
 			defaultCloseOperation:JFrame.EXIT_ON_CLOSE, preferredSize:[800, 600]) 
 		{   
 
-		splitPane(orientation:JSplitPane.VERTICAL_SPLIT)  //, dividerLocation:280) 
+		splitPane(orientation:JSplitPane.VERTICAL_SPLIT, dividerLocation:160) 
 		{		
 		   panel(background:Color.PINK)  // ,constraints: "top" layout:new GridBagLayout(), 
 		   {
-			c.fill = GridBagConstraints.BOTH; // HORIZONTAL
+			c.fill = GridBagConstraints.NONE; // HORIZONTAL
 			c.weighty = 0.0;
 			c.weightx = 0.0;
 
@@ -537,8 +536,10 @@ class Menus implements KeyListener
 			panel(id:'hd',background:Color.BLUE ) { widget(ps.getPanel()) }  // constraints: c, 
 			c.gridy += 1;
 
-			c.weighty = 0.1;
+			c.weighty = 0.2;
 			c.gridx  = 0
+
+			c.weightx = 0.20;
 
 			// layout menu item columns
 			panel(background:Color.YELLOW) // constraints: c,
@@ -549,6 +550,7 @@ class Menus implements KeyListener
 				//label "    "
  		    	sp3 = scrollPane(id:'sp3',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[2].getColumn()) }
 		    } // end of hbox
+			c.gridy += 1;
 
 		   } // end of JPanel
 
@@ -556,7 +558,7 @@ class Menus implements KeyListener
 
 		   panel(constraints: "bottom",background:Color.BLACK)  // layout:new GridBagLayout(), 
 		   {
-		    	c.fill = GridBagConstraints.BOTH; 	// rule to let a component expand both ways when more space is available on resize
+		    	c.fill = GridBagConstraints.NONE; 	// rule to let a component expand both ways when more space is available on resize
 				c.gridwidth = GridBagConstraints.RELATIVE
 				c.gridy += 1;  				// row three and first column
 				c.gridx = 0;  				// row four and first column
@@ -571,19 +573,19 @@ class Menus implements KeyListener
 					tf = textField(id:'tf', foreground:Color.GREEN, columns: 100, border:bb,  font:mono, actionPerformed: { event -> saver()}, minimumSize:[550, 12], opaque:true, background:Color.BLACK)
 					tf.addKeyListener(this);
 					tf.setCaretColor(Color.YELLOW)
-					tf.getCaret().setBlinkRate(400);
+					tf.getCaret().setBlinkRate(700);
 					t3.setHorizontalTextPosition(JLabel.LEFT);
 				} // end of hbox
 
 				c.gridy += 1;  				// row four and first column
 				c.gridx = 0;  				// first column
-				c.weighty = 0.1;
+				c.weighty = 0.0;
 				c.gridwidth = GridBagConstraints.REMAINDER; // makes this component span all columns if last in row
 
 				panel(background:Color.WHITE,layout:new FlowLayout(FlowLayout.LEFT,1,3)) // constraints: c,lowLayout.LEFT
 				{
 					label(id:'f1',font:mono,foreground:Color.GREEN, text:"${footer1}",constraints: c)   
-					label "    "
+					//label "    "
 					label(id:'f2',font:mono,foreground:Color.YELLOW, text:"${footer2}",constraints: c)   
 				} // end of hbox
 		   

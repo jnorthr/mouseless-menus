@@ -8,17 +8,18 @@ iMac:groovysamples jim$ echo  $PATH
 ----------------------
 how to connect to mysql db in gradle: http://stackoverflow.com/questions/6329872/how-to-add-external-jar-files-to-gradle-build-script
 */
-
 //import org.apache.ivy.core.report.ResolveReport
 //apply plugin:'java'
 apply plugin:'groovy'
 apply plugin:'application'
-
+//apply plugin:'gradle-cf-plugin'
+ 
 // to add junit to build.gradle:
 repositories {
     //mavenLocal()
     mavenCentral()
     //mavenRepo("http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.pom")
+    maven { url "http://repo.springsource.org/libs-milestone-s3-cache" }
 }
 
 dependencies {
@@ -31,6 +32,9 @@ dependencies {
     //compile 'mysql:mysql-connector-java:5.1.6'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
     compile group:'com.miglayout', name:'miglayout', version:'3.7.4'
+    //runtime group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.1-SNAPSHOT'
+    //classpath group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.0'
+    'org.gradle.api.plugins:gradle-cf-plugin:0.2.0'
 }
 
 /*

@@ -1,4 +1,5 @@
 package org.jnorthr.menus;
+import net.miginfocom.swing.MigLayout;
 import java.awt.GridBagConstraints.*
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -186,6 +187,30 @@ class Menus implements KeyListener
 			} // end of 
 			break;
 
+			case KeyEvent.VK_F4:  // move x coordinate left
+			if (f)
+			{
+				println "F16 key pressed"
+				def path = "./resources"
+				org.jnorthr.menus.support.Search mf = new org.jnorthr.menus.support.Search(path);
+				def re = mf.parseResults(swing.tf.text);
+				re.each{println "--->"+it;}
+				mf.writeResults(path,re, """Your Search for '${swing.tf.text.trim()}'""")				
+				String menu = "./resources/.menulist.txt"; 
+				MenuColumnSupport.loadMenu(cs,menu)    
+				frame.setTitle(MenuColumnSupport.getFrameTitle())
+				support.resetStack()
+				swing.tf.text=""
+				swing.tf.requestFocusInWindow()
+				swing.tf.grabFocus();
+			} // end of shift
+
+			else
+			{
+				println "F4 key pressed"
+				//ender()
+			} // end of 
+			break;
 			case KeyEvent.VK_ENTER:  
 			if (f)
 			{
@@ -493,12 +518,13 @@ class Menus implements KeyListener
  
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		swing = new SwingBuilder()
-		frame = swing.frame(title:"${frametitle}", background:Color.black, pack:false, show:true, defaultCloseOperation:JFrame.EXIT_ON_CLOSE,size:[800, 660]) 
+		frame = swing.frame(title:"${frametitle}", background:Color.black, pack:false, show:true, 
+			defaultCloseOperation:JFrame.EXIT_ON_CLOSE, preferredSize:[800, 600]) 
 		{   
 
 		splitPane(orientation:JSplitPane.VERTICAL_SPLIT)  //, dividerLocation:280) 
 		{		
-		   panel(constraints: "top",background:Color.PINK)  // layout:new GridBagLayout(), 
+		   panel(background:Color.PINK)  // ,constraints: "top" layout:new GridBagLayout(), 
 		   {
 			c.fill = GridBagConstraints.BOTH; // HORIZONTAL
 			c.weighty = 0.0;
@@ -508,19 +534,19 @@ class Menus implements KeyListener
 			c.gridx = 0;
 
 			// layout headings
-			hbox(constraints: c, id:'hd',background:Color.BLUE ) { widget(ps.getPanel()) }
+			panel(id:'hd',background:Color.BLUE ) { widget(ps.getPanel()) }  // constraints: c, 
 			c.gridy += 1;
 
 			c.weighty = 0.1;
 			c.gridx  = 0
 
 			// layout menu item columns
-			hbox(constraints: c,background:Color.YELLOW)
+			panel(background:Color.YELLOW) // constraints: c,
  		    {			
  		    	sp1 = scrollPane(id:'sp1',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[0].getColumn()) }   
 				label "    "
  		    	sp2 = scrollPane(id:'sp2',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[1].getColumn()) }
-				label "    "
+				//label "    "
  		    	sp3 = scrollPane(id:'sp3',border:null,minimumSize:[160,110],preferredSize:[250,140]) {widget(cs[2].getColumn()) }
 		    } // end of hbox
 
@@ -538,7 +564,7 @@ class Menus implements KeyListener
 				c.weightx = 0.0;
 
 				// command entry field
-				hbox(constraints: c)
+				panel() //constraints: c)
 				{
 					def t3 = label(id:'t3','Enter menu # or command : ', font:mono, foreground:Color.GREEN)  
 
@@ -554,7 +580,7 @@ class Menus implements KeyListener
 				c.weighty = 0.1;
 				c.gridwidth = GridBagConstraints.REMAINDER; // makes this component span all columns if last in row
 
-				hbox(constraints: c,background:Color.WHITE)
+				panel(background:Color.WHITE,layout:new FlowLayout(FlowLayout.LEFT,1,3)) // constraints: c,lowLayout.LEFT
 				{
 					label(id:'f1',font:mono,foreground:Color.GREEN, text:"${footer1}",constraints: c)   
 					label "    "
@@ -566,7 +592,10 @@ class Menus implements KeyListener
 				//c.weightx = 1.0;
 				//c.gridy += 1;  				// row five and first column	
 				//c.fill = GridBagConstraints.BOTH;
-				sp = scrollPane(id:'sp',border:cyanline) {widget(jtp) } // ,constraints: "bottom"
+				panel()
+				{
+					sp = scrollPane(id:'sp',border:cyanline) {widget(jtp) } // ,constraints: "bottom"
+				} // end of JPanel
 		   } // end of JPanel
 
 		} // end of splitPane

@@ -1,5 +1,5 @@
 package org.jnorthr.menus;
-import net.miginfocom.swing.MigLayout;
+//import net.miginfocom.swing.MigLayout;
 import java.awt.GridBagConstraints.*
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -517,7 +517,7 @@ class Menus implements KeyListener
  
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		swing = new SwingBuilder()
-		frame = swing.frame(title:"${frametitle}", background:Color.black, pack:false, show:true, 
+		frame = swing.frame(title:"${frametitle}", background:Color.black, pack:true, show:true, 
 			defaultCloseOperation:JFrame.EXIT_ON_CLOSE, preferredSize:[800, 600]) 
 		{   
 
@@ -582,11 +582,11 @@ class Menus implements KeyListener
 				c.weighty = 0.0;
 				c.gridwidth = GridBagConstraints.REMAINDER; // makes this component span all columns if last in row
 
-				panel(background:Color.WHITE,layout:new FlowLayout(FlowLayout.LEFT,1,3)) // constraints: c,lowLayout.LEFT
+				panel(background:Color.BLACK,layout:new FlowLayout(FlowLayout.LEFT,1,3)) // constraints: c,lowLayout.LEFT
 				{
 					label(id:'f1',font:mono,foreground:Color.GREEN, text:"${footer1}",constraints: c)   
 					//label "    "
-					label(id:'f2',font:mono,foreground:Color.YELLOW, text:"${footer2}",constraints: c)   
+					label(id:'f2',font:mono,foreground:Color.GREEN, text:"${footer2}",constraints: c)   
 				} // end of hbox
 		   
 				//c.gridx = 0;  				// first column

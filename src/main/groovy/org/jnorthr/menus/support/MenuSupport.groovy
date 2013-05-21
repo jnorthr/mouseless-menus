@@ -111,7 +111,11 @@ public class Support
         println "-->"+loader.getResource("org/jnorthr/menus/support/Support.class");
 		// -->file:/Volumes/Media1/Software/menus/build/classes/main/org/jnorthr/menus/support/Support.class
 		// -->jar:file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar!/org/jnorthr/menus/support/Support.class
-
+        PathFinder resourcePath = new PathFinder();		
+        if (resourcePath.exists())
+       	{
+           	println "    has resource path at :"+resourcePath.getResourcePath();        
+       	}
 
 		// Get all system properties
   		props = System.getProperties()

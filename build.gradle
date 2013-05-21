@@ -30,8 +30,8 @@ dependencies {
     //compile group: 'javax.servlet',        name: 'servlet-api', version: '2.5' 
     //compile group: 'mysql-connector-java', name:'mysql', version: '5.1.6'
     //compile 'mysql:mysql-connector-java:5.1.6'
-    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
-    compile group:'com.miglayout', name:'miglayout', version:'3.7.4'
+    //compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
+    //compile group:'com.miglayout', name:'miglayout', version:'3.7.4'
     //runtime group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.1-SNAPSHOT'
     //classpath group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.0'
     'org.gradle.api.plugins:gradle-cf-plugin:0.2.0'
@@ -184,6 +184,14 @@ task(runEatFF, dependsOn: 'classes', type: JavaExec)
 	classpath = sourceSets.main.runtimeClasspath
 	//args 'jim.txt'
 	systemProperty 'simple.message', 'Hello '
+}
+
+
+task(runPathFinder, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.PathFinder'  
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'jar:file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class'
 }
 
 
@@ -359,9 +367,6 @@ task copyTask(type: Zip) {
         from configurations.runtime
     }
 }
-
-
-
 
 
 //fred+="/resources"

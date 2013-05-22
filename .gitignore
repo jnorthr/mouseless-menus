@@ -8,9 +8,7 @@
 *.so
 build/**/*
 tmp/**/* 
-.gradle/1.1/taskArtifacts/fileSnapshots.bin
-.gradle/1.1/taskArtifacts/outputFileStates.bin
-.gradle/1.1/taskArtifacts/taskArtifacts.bin
+.gradle/**/*.bin
 
 # Packages #
 ############

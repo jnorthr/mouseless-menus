@@ -121,7 +121,7 @@ The following workaround works fine :
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
 {
-	def static audit = true
+	def static audit = false
 	//String propertyfile = 'resources/properties/menu.properties'  		// non-OS specific parameters for business issues
 	def support
 	java.util.List<MenuColumnSupport> cs = []

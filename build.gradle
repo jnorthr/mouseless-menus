@@ -191,7 +191,7 @@ task(runPathFinder, dependsOn: 'classes', type: JavaExec)
 {
 	main = 'org.jnorthr.menus.support.PathFinder'  
 	classpath = sourceSets.main.runtimeClasspath
-	//args 'jar:file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class'
+	args 'jar:file:/Volumes/Media1/Software/menus/build/libs/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class'
 }
 
 

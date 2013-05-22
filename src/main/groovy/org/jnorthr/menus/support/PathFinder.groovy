@@ -14,7 +14,9 @@ public class PathFinder
     // does path exist ? - assume no
     def flag = false
     def resourcePath = "";
-        
+    String location = "";
+
+
     // does a resources path exist ?    
     public exists()
     {
@@ -41,10 +43,15 @@ public class PathFinder
     {
         URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
         say "PathFinder() loaded from :"+loc.toString();
+
         ClassLoader loader = this.class.getClassLoader();
-		String at = loader.getResource("org/jnorthr/menus/support/PathFinder.class").toString();
-		say "-->"+at;
-		discovery(at);
+		location = loader.getResource("org/jnorthr/menus/support/PathFinder.class").toString();
+		say "-->"+location;
+		
+		if (location==null) location=loc;
+		
+		// ok, let's do it
+		discovery(location);
     } // end of constructor
 
 
@@ -58,31 +65,65 @@ public class PathFinder
     // discovery method - 
     public discovery(String path)
     {        
+		say "... discovery underway for "+path
         resourcePath = path;
+
+		// here we split the path into tokens using /
         def tokens = path.trim().split("/").toList()
         tokens.each{tok -> say tok;}
+
         int ct = tokens.size()
         say "\nthere are "+ct+" tokens\n"
+
+
+		// at will point to the token with a lib or libs value
         int at = -1;
 
-        while(ct-- > 0)
+		def walking = true;
+
+		// walk backward thru the list until < 0 or lib/libs found
+        while(walking)
         {
+			ct-=1;
             say "ct="+ct+" and tokens["+ct+"] ="+tokens[ct]
             if (tokens[ct].toLowerCase().equals("lib"))
             {
                 at  = ct;
+				walking = false;
             } // end of if
+
+            if (tokens[ct].toLowerCase().equals("libs"))
+            {
+                at  = ct;
+				walking = false;
+            } // end of if
+
+			if (ct<1) walking = false;
+
         } // end of while
 
-        at = ( tokens[0].toLowerCase().startsWith("jar:") ) ? at : -1;
+
+        def jar = ( tokens[0].toLowerCase().startsWith("jar:") ) ? true : false;
     
-        tokens.eachWithIndex{tok, ix -> 
-                say "ix="+ix+" : "+tok;
+		say "\nis this a jar ? "+jar+" and lib is at ${at}\n"
+		
+		// walk forward for each token
+        tokens.eachWithIndex
+		{ tok, ix -> 
+                print "ix="+ix+" : "+tok;
                 if (ix > 0 && ix < at)
                 {
-                    osid +="/"+tok.trim()
+                    osid +="/"+tok.trim();
+					print " osid = "+osid;
+                	flag = chkobj(osid+"/"+menuproperties);
+                	if (flag) 
+					{ 
+						resourcePath = osid; 
+						print "  --> ok, we're setting resourcePath="+osid;
+					} // end of if
+										
                 } // end of if
-    
+    			println ""
         } // end of each
 
 
@@ -90,12 +131,12 @@ public class PathFinder
         if (at > -1)
         {
             flag = new File(osid).exists()
-            say "does osid=${osid} path exist? "+flag
+            say "\ndoes osid=${osid} path exist? "+flag
 
             // ok, if that path exists, does our /resources folder exist too ?
             if (flag)
             {                
-                flag = new File(osid+"/"+menuproperties).exists()
+                flag = chkobj(osid+"/"+menuproperties);
                 if (flag) { resourcePath = osid; }
             } // end of if
     
@@ -107,35 +148,82 @@ public class PathFinder
     } // end of constructor
 
 
+	// does this filename point to a file that is present ?
+	public boolean chkobj(String f)
+	{
+		return new File(f).exists();
+	}
+
+	// =======================================================================
     // test harness for this class
     public static void main(String[] args)
     {    
-        println "... started"
-        def path="jar:file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class"
+        println "\n==============================/n... started"
+        def path="jar:file:/Volumes/Media1/Software/menus/build/libs/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class"
         PathFinder resourcePath;
- 
-        if (args.size() > 0)
-        {
-            path = args[0];        
-        	resourcePath = new PathFinder(path)
-        } // end of if
-		else
-		{
-        	resourcePath = new PathFinder();		
-		} // end of else
 
-        if (resourcePath.exists())
-       	{
-           	println "... path to:"+path
+        println "... path input:"+path
+        resourcePath = new PathFinder(path)
+       	if (resourcePath.exists())
+      	{
+          	println "... path to:"+path
            	println "    has resource path at :"+resourcePath.getResourcePath();        
        	}
        	else
        	{
            	println "... path to:"+path
-           	println "    exists ?"+resourcePath.exists();
+           	println "    exists ? "+resourcePath.exists();
    		} // end of else
 
-        println "... ended"
+ 		println "\n----------------------------------------\n"
+
+        if (args.size() > 0)
+        {
+            path = args[0];        
+        	resourcePath = new PathFinder(path)
+            println "... path input:"+path
+        	if (resourcePath.exists())
+       		{
+           		println "... path to:"+path
+           		println "    has resource path at :"+resourcePath.getResourcePath();        
+       		}
+       		else
+       		{
+           		println "... path to:"+path
+           		println "    exists ? "+resourcePath.exists();
+   			} // end of else
+
+        } // end of if
+
+
+ 		println "\n----------------------------------------\n"
+        resourcePath = new PathFinder();		
+       	if (resourcePath.exists())
+       	{
+           	println "... path to:"+resourcePath.location
+           	println "    has resource path at :"+resourcePath.getResourcePath();        
+       	}
+       	else
+      	{
+         	println "... path to:"+resourcePath.location
+           	println "    exists ? "+resourcePath.exists();
+		} // end of else
+
+		println "\n----------------------------------------\n"
+        resourcePath = new PathFinder(resourcePath.menuproperties);		
+       	if (resourcePath.exists())
+       	{
+           	println "... path to:"+resourcePath.menuproperties
+           	println "    has resource path at :"+resourcePath.getResourcePath();        
+       	}
+       	else
+      	{
+         	println "... path to:"+resourcePath.menuproperties
+           	println "    exists ? "+resourcePath.exists();
+		} // end of else
+
+
+        println "... ended\n===================================\n"
     } // end of main
 
 

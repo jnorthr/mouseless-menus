@@ -1,13 +1,15 @@
 package org.jnorthr.menus.support;
 /*
-Class to resolve the path to the ./resources folder when the
-menu system is run from a .jar, as this may have a different path to ./resources
+	Class to resolve the path to the ./resources folder when the
+	menu system is run from a .jar, as this may have a different path to ./resources
 */
 
 public class PathFinder
 {
     def audit = true
     def osid = new StringBuffer();
+    
+    String menuproperties = "resources/properties/menu.properties";
 
     // does path exist ? - assume no
     def flag = false
@@ -92,13 +94,14 @@ public class PathFinder
 
             // ok, if that path exists, does our /resources folder exist too ?
             if (flag)
-            {
-                osid+="/resources"
-                flag = new File(osid).exists()
-                if (flag) resourcePath = osid;
+            {                
+                flag = new File(osid+"/"+menuproperties).exists()
+                if (flag) { resourcePath = osid; }
             } // end of if
     
         } // end of if
+        
+        // no, there is no /lib
           
         say "\n... found at=${at} and osid=${osid} and does it exist? ${flag}\n--- the end ---"
     } // end of constructor

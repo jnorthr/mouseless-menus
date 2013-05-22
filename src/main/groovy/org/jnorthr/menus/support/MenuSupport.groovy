@@ -114,8 +114,10 @@ public class Support
         PathFinder resourcePath = new PathFinder();		
         if (resourcePath.exists())
        	{
-           	println "    has resource path at :"+resourcePath.getResourcePath();        
-       	}
+           	propertyfile = resourcePath.getResourcePath() + "/" + propertyfile;        
+           	pathfile = resourcePath.getResourcePath() + "/" + pathfile;        
+           	println "    has resource path at :"+resourcePath.getResourcePath()+"\n and propertyfile now :"+propertyfile;
+       	} // end of if
 
 		// Get all system properties
   		props = System.getProperties()

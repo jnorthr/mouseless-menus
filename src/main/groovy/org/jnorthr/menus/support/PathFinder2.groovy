@@ -4,7 +4,7 @@ package org.jnorthr.menus.support;
 	menu system is run from a .jar, as this may have a different path to ./resources
 */
 
-public class PathFinder
+public class PathFinder2
 {
     def audit = true
     def osid = new StringBuffer();
@@ -39,13 +39,13 @@ public class PathFinder
 
         
     // default class constructor - 
-    public PathFinder()
+    public PathFinder2()
     {
         URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
-        say "PathFinder() loaded from :"+loc.toString();
+        say "PathFinder2() loaded from :"+loc.toString();
 
         ClassLoader loader = this.class.getClassLoader();
-		location = loader.getResource("org/jnorthr/menus/support/PathFinder.class").toString();
+		location = loader.getResource("org/jnorthr/menus/support/PathFinder2.class").toString();
 		say "-->"+location;
 		
 		if (location==null) location=loc;
@@ -56,7 +56,7 @@ public class PathFinder
 
 
     // class constructor - 
-    public PathFinder(String path)
+    public PathFinder2(String path)
     {        
 		discovery(path);
     } // end of constructor
@@ -70,44 +70,81 @@ public class PathFinder
 
 		// here we split the path into tokens using /
         def tokens = path.trim().split("/").toList()
-        tokens.each{tok -> say "...."+tok;}
+        tokens.each{tok -> say tok;}
 
         int ct = tokens.size()
-        say "\nthere are "+ct+" tokens\n----------------------------\n"
+        say "\nthere are "+ct+" tokens\n"
 
-		def type = 0;
-        type += ( tokens[0].toLowerCase().startsWith("jar:") ) ? 1 : 0 ;
-        type += ( tokens[0].toLowerCase().startsWith("file:") ) ? 2 : 0 ;
-    
-    	// set lowest starting token
-    	int i = (type>0) ? 0 : -1;
-		say "\nwhat is this ? "+type+" and i=${i}\n"
-		          
-		// if no tokens, dont walk else walk
-		def walking = ( ct > 0 ) ? true : false;
-		def pn="";
-		
-		while (walking)
-		{
-			if (--ct > i)
-			{
-				println "\n... "+ct+" = "+tokens[ct]+"; ";
-				pn="";
-				ct.times{a -> print " a="+a+"; " 
-						if (a>i) pn += "/"+tokens[a]				 
-				} // end of times
-				
-				def fg = chkobj(pn+"/"+menuproperties)
-				println pn+" exists ? "+fg;
-				
-				
-			}
-		
-			//ct-=1;
+
+		// at will point to the token with a lib or libs value
+        int at = -1;
+
+		def walking = true;
+
+		// walk backward thru the list until < 0 or lib/libs found
+        while(walking)
+        {
+			ct-=1;
+            say "ct="+ct+" and tokens["+ct+"] ="+tokens[ct]
+            if (tokens[ct].toLowerCase().equals("lib"))
+            {
+                at  = ct;
+				walking = false;
+            } // end of if
+
+            if (tokens[ct].toLowerCase().equals("libs"))
+            {
+                at  = ct;
+				walking = false;
+            } // end of if
+
 			if (ct<1) walking = false;
-		} // end of while
+
+        } // end of while
+
+
+        def jar = ( tokens[0].toLowerCase().startsWith("jar:") ) ? true : false;
+    
+		say "\nis this a jar ? "+jar+" and lib is at ${at}\n"
 		
-        //say "\n... found at=${at} and osid=${osid} and does it exist? ${flag}\n--- the end ---"
+		// walk forward for each token
+        tokens.eachWithIndex
+		{ tok, ix -> 
+                print "ix="+ix+" : "+tok;
+                if (ix > 0 && ix < at)
+                {
+                    osid +="/"+tok.trim();
+					print " osid = "+osid;
+                	flag = chkobj(osid+"/"+menuproperties);
+                	if (flag) 
+					{ 
+						resourcePath = osid; 
+						print "  --> ok, we're setting resourcePath="+osid;
+					} // end of if
+										
+                } // end of if
+    			println ""
+        } // end of each
+
+
+        // do we have a /lib entry from above search ? at > -1 if yes
+        if (at > -1)
+        {
+            flag = new File(osid).exists()
+            say "\ndoes osid=${osid} path exist? "+flag
+
+            // ok, if that path exists, does our /resources folder exist too ?
+            if (flag)
+            {                
+                flag = chkobj(osid+"/"+menuproperties);
+                if (flag) { resourcePath = osid; }
+            } // end of if
+    
+        } // end of if
+        
+        // no, there is no /lib
+          
+        say "\n... found at=${at} and osid=${osid} and does it exist? ${flag}\n--- the end ---"
     } // end of constructor
 
 
@@ -122,11 +159,11 @@ public class PathFinder
     public static void main(String[] args)
     {    
         println "\n==============================/n... started"
-        def path="jar:file:/Volumes/Media1/Software/menus/build/libs/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class"
-        PathFinder resourcePath;
+        def path="jar:file:/Volumes/Media1/Software/menus/build/libs/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder2.class"
+        PathFinder2 resourcePath;
 
         println "... path input:"+path
-        resourcePath = new PathFinder(path)
+        resourcePath = new PathFinder2(path)
        	if (resourcePath.exists())
       	{
           	println "... path to:"+path
@@ -143,7 +180,7 @@ public class PathFinder
         if (args.size() > 0)
         {
             path = args[0];        
-        	resourcePath = new PathFinder(path)
+        	resourcePath = new PathFinder2(path)
             println "... path input:"+path
         	if (resourcePath.exists())
        		{
@@ -160,7 +197,7 @@ public class PathFinder
 
 
  		println "\n----------------------------------------\n"
-        resourcePath = new PathFinder();		
+        resourcePath = new PathFinder2();		
        	if (resourcePath.exists())
        	{
            	println "... path to:"+resourcePath.location
@@ -173,7 +210,7 @@ public class PathFinder
 		} // end of else
 
 		println "\n----------------------------------------\n"
-        resourcePath = new PathFinder(resourcePath.menuproperties);		
+        resourcePath = new PathFinder2(resourcePath.menuproperties);		
        	if (resourcePath.exists())
        	{
            	println "... path to:"+resourcePath.menuproperties

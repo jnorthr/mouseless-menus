@@ -25,8 +25,11 @@ public class PathFinder
     // give full path name to path props
     def pathPropertiesPath = "";
     
-    // folder where this class currently sits - if 
+    // folder where this class currently sits - if getClass was called, but might not be if found earlier in search seq.
     String location = "";
+
+    // where is the path ?
+    def resourcePathDiscovery = "not found";
 
 
     // cook your own class toString
@@ -50,6 +53,12 @@ public class PathFinder
         return resourcePath;
     } // end of method
     
+    // does a resources path exist ?    
+    public getResourcePathLocation()
+    {
+        return resourcePathDiscovery;
+    } // end of method
+    
     
     // show audit trail ?    
     public say(tx)
@@ -61,20 +70,39 @@ public class PathFinder
     // get MENU_RESOURCES
     public getEnvironmentVariable()
     {
-        return System.getenv("MENU_RESOURCES");
+        resourcePathDiscovery = "MENU_RESOURCES Environment Variable"
+        String env = System.getenv("MENU_RESOURCES");
+        if (env==null) env="";
+        int j = env.lastIndexOf('/');
+        if (j>-1) j+=1;
+        int k = env.size();
+        if (j<k && j > -1)
+        {
+        	env+="/"
+        } // end of if
+        
+        say "getEnvironmentVariable() returns "+env
+        return env;
     } // end of
     
 
     // get current directory
     public getPWD()
     {
-        return System.getProperty("user.dir");
+        resourcePathDiscovery = "Current Working Directory (pwd)"    
+        String pwd = System.getProperty("user.dir");
+        say "getPWD() returns "+pwd
+        return pwd;
     } // end of
+        
         
     // get home directory
     public getHOME()
     {
-        return System.getProperty("user.home");
+        resourcePathDiscovery = "User's Home Directory"    
+        String home = System.getProperty("user.home");
+        say "getHOME() returns "+home
+        return home;
     } // end of
 
 
@@ -82,13 +110,20 @@ public class PathFinder
     public getCLASS()
     {
         URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
-        say "PathFinder() loaded from :"+loc.toString();
+        say "getCLASS() PathFinder loaded from :"+loc.toString();
 
+        resourcePathDiscovery = "Class Loader Path"    
         ClassLoader loader = this.class.getClassLoader();
         location = loader.getResource("org/jnorthr/menus/support/PathFinder.class").toString();
-        say "-->"+location;
+        say "getCLASS() ClassLoader location :"+location;
         
-        if (location==null) location=loc;
+        if ( location.equals("null") ) 
+        {
+        	location=loc;
+	        resourcePathDiscovery = "Class Location"    
+        } // end of if
+        
+        say "getCLASS() returns "+location;
         return location;
     } // end of
 
@@ -98,6 +133,7 @@ public class PathFinder
     // 1.current working directory  2.user's home directory  3.location of this class  4.MENU_RESOURCES env. variable
     public PathFinder()
     {
+    	say "PathFinder() default constructor"
         if (!exists())
         {
             discovery(getPWD());
@@ -109,12 +145,6 @@ public class PathFinder
             discovery(getHOME());
         } // end of if 
         
-
-        if (!exists())
-        {
-            discovery(getCLASS());
-        } // end of if         
-        
                 
         if (!exists())
         {
@@ -125,53 +155,88 @@ public class PathFinder
             } // end of if    
         } // end of if 
 
+
+        if (!exists())
+        {
+            discovery(getCLASS());
+        } // end of if         
+        
+
+        if (!exists())
+        {
+        	resourcePathDiscovery = "not found"
+            JOptionPane.showMessageDialog(null, "Cannot find ${menuproperties} property files\nset MENU_RESOURCES environment var.", 
+            "Bad News !", JOptionPane.ERROR_MESSAGE); 
+            //System.exit(1);
+        } // end of if 
+
     } // end of constructor
 
 
     // class constructor - 
+    // your choice, but if no properties found, say so
     public PathFinder(String path)
     {        
+    	say "PathFinder(${path}) constructor"
         discovery(path);
+
+        if (!exists())
+        {
+        	resourcePathDiscovery = "not found"
+            JOptionPane.showMessageDialog(null, "Cannot find ${menuproperties} property files\nset MENU_RESOURCES environment var.", 
+            "Bad News !", JOptionPane.ERROR_MESSAGE); 
+            //System.exit(1);
+        } // end of if 
+
     } // end of constructor
 
 
+	// -------------------------------------------------------------------------------
     // discovery method - 
     public discovery(String path)
     {        
         say "... discovery underway for "+path
         
-        if (path==null || ( path.size() < 2 ))
+        if (path==null || ( path.size() < 1 ))
             return;
             
-        resourcePath = path;
-
         // here we split the path into tokens using /
         def tokens = path.trim().split("/").toList()
         tokens.each{tok -> say "...."+tok;}
 
         int ct = tokens.size()
-        say "\nthere are "+ct+" tokens\n----------------------------\n"
+        say "there are "+ct+" tokens\n----------------------------"
+
+
+		// no words in path ? bail out...
+		if (ct<1) return;
+
 
         def type = 0;
         type += ( tokens[0].toLowerCase().startsWith("jar:") ) ? 1 : 0 ;
         type += ( tokens[0].toLowerCase().startsWith("file:") ) ? 2 : 0 ;
+        type += ( tokens[0].size() < 1 ) ? 4 : 0 ;  // root declaration like /Volumes/Users/jim
     
         // set lowest starting token
         int i = (type>0) ? 0 : -1;
         say "\nwhat is this ? "+type+" and i=${i}\n"
                   
-        // if no tokens, dont walk else walk
-        def walking = ( ct > 0 ) ? true : false;
+		// set loop flag
+        def walking = true;
         def pn="";
         
         while (walking)
         {
-            if (--ct > i)
+            if (ct > i)
             {
                 say "\n... "+ct+" = "+tokens[ct]+"; ";
                 pn="";
-                ct.times{a -> if (audit){print " a="+a+"; ";} 
-                        if (a>i) pn += "/"+tokens[a]                 
+                ct.times{a -> 
+                        if ( a > i  && ( tokens[a].size() > 0 ) ) 
+                        {
+                        	if (a>0) { pn += "/"; }
+                        	pn += tokens[a];
+                        } // end of if                 
                 } // end of times
                 
                 def fg = chkobj(pn+"/"+menuproperties)
@@ -180,7 +245,7 @@ public class PathFinder
                 if (fg)
                 {
 
-                    if ( chkobj(menuPropertiesPath) && chkobj(pathPropertiesPath) )
+                    if ( chkobj(pn+"/"+menuproperties) && chkobj(pn+"/"+pathproperties) )
                     {
                         walking = false;
                         found = true;
@@ -200,11 +265,10 @@ public class PathFinder
                 } // end of if                
             } // end of if
         
-            if (ct<1) walking = false;
+            if ( --ct < 0 ) walking = false;
 
         } // end of while
         
-        //say "\n... found at=${at} and osid=${osid} and does it exist? ${found}\n--- the end ---"
     } // end of constructor
 
 
@@ -228,7 +292,8 @@ public class PathFinder
         if (resourcePath.exists())
         {
               println "... path to:"+path
-               println "    has resource path at :"+resourcePath.getResourcePath();        
+               println "    has resource path at :"+resourcePath.getResourcePath();      
+               println "    found resource path at :"+resourcePath.getResourcePathLocation();      
            }
            else
            {
@@ -247,7 +312,8 @@ public class PathFinder
             if (resourcePath.exists())
                {
                    println "... path to:"+path
-                   println "    has resource path at :"+resourcePath.getResourcePath();        
+                   println "    has resource path at :"+resourcePath.getResourcePath(); 
+                   println "    found resource path at :"+resourcePath.getResourcePathLocation();             
                }
                else
                {
@@ -266,7 +332,8 @@ public class PathFinder
            if (resourcePath.exists())
            {
                println "... path to:"+resourcePath.location
-               println "    has resource path at :"+resourcePath.getResourcePath();        
+               println "    has resource path at :"+resourcePath.getResourcePath(); 
+               println "    found resource path at :"+resourcePath.getResourcePathLocation();                            
            }
            else
           {
@@ -275,13 +342,15 @@ public class PathFinder
         } // end of else
 
         println "\n----------------------------------------\n"
+        path = "./resources/properties/menu.properties"
         println "Search for path using relative local directory argument:"+path
-        resourcePath = new PathFinder(resourcePath.menuproperties);
+        resourcePath = new PathFinder(path);
         println resourcePath;        
            if (resourcePath.exists())
            {
                println "... path to:"+resourcePath.menuproperties
-               println "    has resource path at :"+resourcePath.getResourcePath();        
+               println "    has resource path at :"+resourcePath.getResourcePath();
+               println "    found resource path at :"+resourcePath.getResourcePathLocation();                             
            }
            else
           {

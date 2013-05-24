@@ -319,7 +319,7 @@ class Menus implements KeyListener
 	// help
 	def helpme =  
 	{	
-		def help = support.getConfig().helpfilename 
+		def help = support.getMenuMap().helpfilename 
 		
 		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
 		
@@ -608,7 +608,7 @@ class Menus implements KeyListener
 		// store handle to frame, then position frame in center of display
 		support.setFrame(frame)
 		frame.setTitle(support.getFrameTitle())
-		def loc = support.getConfig().location
+		def loc = support.getMenuMap().location
 		support.moveWindow(loc) 			// move this frame to center of display 
 		swing.tf.requestFocusInWindow()
 		swing.tf.grabFocus();

@@ -27,15 +27,11 @@ public class Support
 	def static int left = 0
 	def frame
 
-	// non-OS specific parameters for business issues
-	def menuProperties      // = 'resources/properties/menu.properties'   // propertyfile  
-
-	// OS specific parameters for technical issues
-	String pathProperties = 'resources/properties/path.properties'  
-
-	def config
-	def paths
+	PathFinder pathFinder
+	def menuMap
+	def pathMap
 	def OSN
+
 	JTextPane jtp;			
 	StyledDocument doc;
 	SimpleAttributeSet as0
@@ -99,27 +95,27 @@ public class Support
 	// class constructor - loads configuration, get system environmental variables; gets hardware window size;
 	public Support()
 	{
-        PathFinder resourcePath = new PathFinder();	
-		config = resourcePath.menuMap;
-		paths  = resourcePath.pathMap;
+        	pathFinder = new PathFinder();	
+		menuMap = pathFinder.menuMap;
+		pathMap  = pathFinder.pathMap;
 
 		// Get all system properties
   		props = System.getProperties()
 		OSN = System.getProperty('os.name')
 		pwd = System.getProperty('user.dir')
 
-		commandPrefix = paths.commandPrefix		// something like 'open ' on mac os
+		commandPrefix = pathMap.commandPrefix		// something like 'open ' on mac os
 		
-       	env = System.getenv()
+       		env = System.getenv()
 		getWindowSize()
 		mono = new Font("Monospaced", Font.PLAIN, 10)
 		say("... Support() ready..\nCommand prefix:<$commandPrefix>\nOSN=<$OSN>\npwd=<$pwd>")
 	} // end of constructor
 
-	// return a handle to the config file
-	public getConfig()
+	// return a handle to the menuMap file
+	public getMenuMap()
 	{
-		return config
+		return menuMap
 	}
 
 	// return a handle to the name of the operating system name
@@ -348,7 +344,7 @@ public class Support
 						if (i8 < 0 && i9 < 0)
 						{
 							say "fn <$fn> had no folder information, i8 ="+i8+" i9="+i9
-							fn = getConfig().menuFolder + fn; 
+							fn = pathFinder.getResourcePath()+"/resources/"+fn;   //getMenuMap().menuFolder + fn; 
 							say "fn had no folder information, so now ="+fn
 						} // end of if
 						else
@@ -587,7 +583,7 @@ public class Support
 
 		// This did not work as there was no wait for the process to complete, so need a blocking method
 		// to hold here til it does; also need solution for commands like man which require several keypresses to cpmplete
-		//def cmd = config.menus.commands[option]
+		//def cmd = menuMap.menus.commands[option]
 		//def result = cmd.execute()
 		//println result.text
 
@@ -627,7 +623,7 @@ public class Support
 	// set up frame title
 	public String getFrameTitle()
 	{
-		return getConfig().menutitle.trim() + " " + framefixedtitle
+		return getMenuMap().menutitle.trim() + " " + framefixedtitle
 	} // end of label 1
 
 	// set up frame title
@@ -859,7 +855,7 @@ public class Support
 			//vbox(constraints: BorderLayout.CENTER)
 			vbox()
 			{	label "hi kids"
-				//menuLines.times{ml -> label(id:'l${ml}',"${ml+1}. ${config.menus.names[ml]}")}
+				//menuLines.times{ml -> label(id:'l${ml}',"${ml+1}. ${menuMap.menus.names[ml]}")}
 				//vstrut(8)
 			} // end of vbox
 			panel   //(constraints: BorderLayout.SOUTH)

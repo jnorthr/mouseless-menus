@@ -6,29 +6,41 @@
         http.proxyHost 10.0.1.4 https.proxyPort 8080
 ---------  */
 package org.jnorthr.menus;
+import org.jnorthr.menus.support.PathFinder
 public class CommandSet
 {
     def cmd = "command set" // iMac PPC version      // "cmd /c  "  RedApple  mac os command to see environmental variables
     def txt
     def map =[:]
-    String propertyfile = './resources/properties/menu.properties'  		// non-OS specific parameters for business issues
+    //String propertyfile = './resources/properties/menu.properties'  		// non-OS specific parameters for business issues
     def config
 
+	def audit = false
+	
+	public say(tx){if(audit) println tx;}
+	
     public CommandSet()
     {
 
+		PathFinder resourcePath = new PathFinder(); 
+		config = resourcePath.menuMap;
+		config.each{ck,cv -> say "ck=$ck and cv=$cv"}
+		say "---------------\n"
+/*		
 		def flag = (new File(propertyfile).exists()) ? true : false;
-		if (flag) println "\n$propertyfile exists" 
-		else println "\n$propertyfile does not exist !!!\n\n"
+		if (flag) say "\n$propertyfile exists" 
+		else say "\n$propertyfile does not exist !!!\n\n"
        	config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
-
+*/
         Properties props = System.getProperties()
-		println "\n\nSystem properties follow:"
-		props.each{k,v -> println "k=$k and v=$v"}
+		say "\n\nSystem properties follow:"
+		props.each{k,v -> say "k=$k and v=$v"}
+
+
 		def tx
 		cmd = config.cmd;	// load o/s specific command prefix
 
-		println "\ncan we use this on iMac PPC ? :<"+cmd+">"		
+		say "\ncan we use this on iMac PPC ? :<"+cmd+">"		
 		config.propertykeys.each 
 		{ k ->  
 			tx = (props.get(k)) ?  (String)props.get(k) : "unknown"  
@@ -48,7 +60,7 @@ public class CommandSet
 			if (line.trim().size() > 0)
 			{
 	            def words = line.split(/=/)
-		    	//println "<"+line+"> has "+words.size()+" words";
+		    	//say "<"+line+"> has "+words.size()+" words";
 		    	if (words.size()>1)
 		    	{
             		    word1=words[0].toLowerCase()
@@ -66,7 +78,7 @@ public class CommandSet
 		if (line.trim().size() > 0)
 		{
 			def tokens = line.trim().split()
-			//println tokens[0]+" "+tokens[1]
+			//say tokens[0]+" "+tokens[1]
 			if (tokens[0].toLowerCase()=="inet") {map.put(tokens[0],tokens[1])}
 			if (tokens[0].toLowerCase()=="ipv4") {map.put("inet",tokens[tokens.size()-1])}
 		}

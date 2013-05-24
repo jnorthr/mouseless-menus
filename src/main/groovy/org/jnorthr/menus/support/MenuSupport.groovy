@@ -7,10 +7,11 @@ import javax.swing.BorderFactory;
 import javax.swing.border.*
 import javax.swing.border.LineBorder
 import java.awt.GridLayout
+import org.jnorthr.menus.support.PathFinder
 
 public class Support
 {
-	def static audit = false
+	def static audit = true
 	def static framefixedtitle = "MENU"
 
 	def ls = System.getProperty('line.separator')
@@ -27,10 +28,10 @@ public class Support
 	def frame
 
 	// non-OS specific parameters for business issues
-	String propertyfile = 'resources/properties/menu.properties'  
+	def menuProperties      // = 'resources/properties/menu.properties'   // propertyfile  
 
-	// non-OS specific parameters for technical issues
-	String pathfile = 'resources/properties/path.properties'  
+	// OS specific parameters for technical issues
+	String pathProperties = 'resources/properties/path.properties'  
 
 	def config
 	def paths
@@ -98,43 +99,17 @@ public class Support
 	// class constructor - loads configuration, get system environmental variables; gets hardware window size;
 	public Support()
 	{
-		// recent test gave:
-		// Support() loaded from :file: 
-		// /Volumes/Media1/Software/menus/build/classes/main/org/jnorthr/menus/support/Support.class
-		URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
-		println "Support() loaded from :"+loc.toString();
-		// Support() loaded from :file:/Volumes/Media1/Software/menus/build/classes/main/
-		// Support() loaded from :file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar
-
-
-        ClassLoader loader = this.class.getClassLoader();
-        println "-->"+loader.getResource("org/jnorthr/menus/support/Support.class");
-		// -->file:/Volumes/Media1/Software/menus/build/classes/main/org/jnorthr/menus/support/Support.class
-		// -->jar:file:/Volumes/Media1/TestData/menus-1.0/lib/menus-1.0.jar!/org/jnorthr/menus/support/Support.class
-        PathFinder resourcePath = new PathFinder();		
-        if (resourcePath.exists())
-       	{
-           	propertyfile = resourcePath.getResourcePath() + "/" + propertyfile;        
-           	pathfile = resourcePath.getResourcePath() + "/" + pathfile;        
-           	println "    has resource path at :"+resourcePath.getResourcePath()+"\n and propertyfile now :"+propertyfile;
-       	} // end of if
+        PathFinder resourcePath = new PathFinder();	
+		config = resourcePath.menuMap;
+		paths  = resourcePath.pathMap;
 
 		// Get all system properties
   		props = System.getProperties()
-  		OSN = (String)props.get("os.name");
-  		pwd = (String)props.get("user.dir");
-  		def tokens = OSN.trim().toLowerCase().split(' ').toList()
-  		def osid = new StringBuffer();
-  		tokens.each{tok -> osid << tok;}
-  		
-		say("... Support() set to use $osid in pwd=$pwd" )
-		
-       	paths = new ConfigSlurper(osid.toString()).parse(new File(pathfile).toURL())
-       	
-		say("... config is set to use '$osid' paths")
+		OSN = System.getProperty('os.name')
+		pwd = System.getProperty('user.dir')
+
 		commandPrefix = paths.commandPrefix		// something like 'open ' on mac os
 		
-       	config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
        	env = System.getenv()
 		getWindowSize()
 		mono = new Font("Monospaced", Font.PLAIN, 10)

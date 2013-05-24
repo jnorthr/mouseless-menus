@@ -4,6 +4,7 @@ package org.jnorthr.menus.support;
 import javax.swing.*
 import java.awt.*
 import groovy.swing.SwingBuilder
+import org.jnorthr.menus.support.PathFinder
 
 public class PanelSupport
 {
@@ -15,10 +16,8 @@ public class PanelSupport
 	// default constructor to setup the JPanel using GridBagLayout
 	public PanelSupport()
 	{
-		String propertyfile = 'resources/properties/menu.properties'  // non-OS specific parameters for business issues
-	       	def config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
-
-		swing = new SwingBuilder()
+		PathFinder resourcePath = new PathFinder(); 
+		def config = resourcePath.menuMap;			swing = new SwingBuilder()
 		panelsupportpanel = swing.panel(background:Color.BLACK,layout:new GridLayout(rows:1,columns:3,hgap:14,vgap:1))		
 
 		// now build 3 columns of menu item titles

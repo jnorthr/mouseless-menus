@@ -119,6 +119,12 @@ task(runMenus, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
+task(runCommandSet, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.CommandSet'
+	classpath = sourceSets.main.runtimeClasspath
+}
+
 task(runBB, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.support.BottomBorder' 
@@ -143,6 +149,11 @@ task(runPanelSupport, dependsOn: 'classes', type: JavaExec)
 	//systemProperty 'simple.message', 'Hello '
 }
 
+task(runSupport, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.Support' 
+	classpath = sourceSets.main.runtimeClasspath
+}
 
 task(runFonts, dependsOn: 'classes', type: JavaExec) 
 {

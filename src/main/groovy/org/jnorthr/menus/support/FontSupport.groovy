@@ -10,9 +10,13 @@ import java.util.*
 import java.awt.*
 import javax.swing.*
 import java.awt.Font
+import org.jnorthr.menus.support.PathFinder
 
 /*
 For maximum portability, use the generic font names, but you can use any font installed in the system. It is suggested to use a font family name, and create the font from that, but you can also use the fonts directly. You can get an array of all available font family names or all fonts. 
+
+The path.properties config file uses the 'environments' aspect of groovy ConfigSlurper(), so you pass in an
+args. of the name of an o/s within this environment like 'linux'
 
 // Font info is obtained from the current graphics environment.
 GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -27,11 +31,10 @@ Font[] allFonts = ge.getAllFonts();
 
 class FontSupport
 {
-	String pathpropertyfile = './resources/properties/path.properties'
-  
 	// OS-specific parms; cannot be in same config file as config.rewrite looses some path info
-	def os = System.getProperty('os.name')
+	def os = System.getProperty('os.name')	// like: Mac OS X
 
+	// handle on specific environment subset of the config file
 	def paths
 	def fontpath
 	def monofontfilename
@@ -75,7 +78,8 @@ class FontSupport
 	{
 		say("... FontSupport() set to use paths for $osid")
 
-		paths = new ConfigSlurper(osid).parse(new File(pathpropertyfile).toURL())
+		PathFinder resourcePath = new PathFinder(); 
+		paths = resourcePath.pathMap;	
 		say("paths is set to use '$osid' paths of '${paths.fontpath}'")
 
 		fontpath = paths.fontpath
@@ -95,7 +99,7 @@ class FontSupport
 		else
 		{
 		    say "$fn was NOT found !"
-			def todo = "$fn was not found\nChange $pathpropertyfile to point to a valid font"
+			def todo = "$fn was not found\nChange path.properties to point to a valid font"
 			int messageType = JOptionPane.INFORMATION_MESSAGE; // no standard icon
 			JOptionPane.showMessageDialog(null, "$todo", "Font File Missing", messageType);
 		} // end of else
@@ -121,18 +125,21 @@ class FontSupport
     // test harness for this class
     public static void main(String[] args)
     {	
+        println "\n==============================\n... started\n"
 		FontSupport ivs = new FontSupport()
 		println "font file name is ${ivs.getMonoFontFilename()}"
 		println "access path is "+ivs.getPaths();
 		println "font path is "+ivs.getFontPath();
 		println "font name is "+ivs.getMonoFontFilename()
+		
+        println "\n=============================="
 
 		ivs = new FontSupport("usbkey");
 		println "font file name is ${ivs.getMonoFontFilename()}"
 		println "access path is "+ivs.getPaths();
 		println "font path is "+ivs.getFontPath();
 		println "font name is "+ivs.getMonoFontFilename()
-
+        println "\n==============================\n... ended\n"
     } // end of main
 };    // end of class 
 

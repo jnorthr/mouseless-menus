@@ -2,16 +2,22 @@ package org.jnorthr.menus.support;
 /*
     Class to resolve the path to the ./resources folder when the
     menu system is run from a .jar, as this may have a different path to ./resources
+
+	from some directory, use groovy to run directly like
+	groovy /Volumes/Media1/Software/menus/src/main/groovy/org/jnorthr/menus/support/PathFinder.groovy
 */
 import javax.swing.JOptionPane;
 
 public class PathFinder
 {
     def audit = false
-    def osid = new StringBuffer();
-    
-    String menuproperties = "resources/properties/menu.properties";
-    String pathproperties = "resources/properties/path.properties";
+
+	// OS-specific parms; cannot be in same config file as config.rewrite looses some path info
+	def os = System.getProperty('os.name')
+    def osid = ""; // like 'Mac OS X' becomes 'macosx'
+
+    String menupropertiesname = "resources/properties/menu.properties";
+    String pathpropertiesname = "resources/properties/path.properties";
 
     // does path exist ? - assume no
     def found = false
@@ -26,16 +32,19 @@ public class PathFinder
     def pathPropertiesPath = "";
     
     // folder where this class currently sits - if getClass was called, but might not be if found earlier in search seq.
-    String location = "";
+    String location = "undiscovered";
 
     // where is the path ?
     def resourcePathDiscovery = "not found";
+	String task = "unknown";
 
+	def menuMap
+	def pathMap
 
     // cook your own class toString
     public String toString()
     {
-        String tx = "Resource found ? ${(found)?"yes":"no";}\nPath to Resource : ${resourcePath}\nPath to menu properties : ${menuPropertiesPath}\nPath to path properties : ${pathPropertiesPath}"
+        String tx = "\nResource found ? ${(found)?"yes":"no";}\nPath to Resource : ${resourcePath}\nPath to menu properties : ${menuPropertiesPath}\nPath to path properties : ${pathPropertiesPath}\nresourcePathDiscovery : ${resourcePathDiscovery}\nClass location : ${location}"
         return tx;    
     } // end of toString()
     
@@ -47,13 +56,14 @@ public class PathFinder
     } // end of method
     
     
-    // does a resources path exist ?    
+    // get the resources path    
     public getResourcePath()
     {
         return resourcePath;
     } // end of method
     
-    // does a resources path exist ?    
+
+    // get how resources path was found ?    
     public getResourcePathLocation()
     {
         return resourcePathDiscovery;
@@ -67,10 +77,10 @@ public class PathFinder
     }
 
 
-    // get MENU_RESOURCES
+    // get MENU_RESOURCES Environment Variable
     public getEnvironmentVariable()
     {
-        resourcePathDiscovery = "MENU_RESOURCES Environment Variable"
+        task = "MENU_RESOURCES Environment Variable"
         String env = System.getenv("MENU_RESOURCES");
         if (env==null) env="";
         int j = env.lastIndexOf('/');
@@ -89,7 +99,7 @@ public class PathFinder
     // get current directory
     public getPWD()
     {
-        resourcePathDiscovery = "Current Working Directory (pwd)"    
+        task = "Current Working Directory (pwd)"    
         String pwd = System.getProperty("user.dir");
         say "getPWD() returns "+pwd
         return pwd;
@@ -99,7 +109,7 @@ public class PathFinder
     // get home directory
     public getHOME()
     {
-        resourcePathDiscovery = "User's Home Directory"    
+        task = "User's Home Directory"    
         String home = System.getProperty("user.home");
         say "getHOME() returns "+home
         return home;
@@ -112,7 +122,7 @@ public class PathFinder
         URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
         say "getCLASS() PathFinder loaded from :"+loc.toString();
 
-        resourcePathDiscovery = "Class Loader Path"    
+        task = "Class Loader Path"    
         ClassLoader loader = this.class.getClassLoader();
         location = loader.getResource("org/jnorthr/menus/support/PathFinder.class").toString();
         say "getCLASS() ClassLoader location :"+location;
@@ -120,12 +130,34 @@ public class PathFinder
         if ( location.equals("null") ) 
         {
         	location=loc;
-	        resourcePathDiscovery = "Class Location"    
+	        task = "Class Location"    
         } // end of if
         
         say "getCLASS() returns "+location;
         return location;
     } // end of
+
+
+	// now that we have an actual path to our menu property file, slurp it
+	public loadProperties(String environment)
+	{
+		// get non-path related static values
+        menuMap = new ConfigSlurper().parse(new File(menuPropertiesPath).toURL())	
+
+		try
+		{
+			// get path related static values
+        	pathMap = new ConfigSlurper(environment).parse(new File(pathPropertiesPath).toURL())	
+			pathMap.each 
+			{ k ->  
+				say "k="+k
+			} // end of each
+					
+			say "\n -- end of pathMap.each ---"
+		}
+		catch(Exception x) {println x.printStackTrace();}
+
+    } // end of method
 
 
     // default class constructor -
@@ -134,16 +166,17 @@ public class PathFinder
     public PathFinder()
     {
     	say "PathFinder() default constructor"
-        if (!exists())
-        {
-            discovery(getPWD());
-        } // end of if 
-        
+		resetClass();
 
+        discovery(getPWD());
+
+		say "... after getPWD() exists:"+exists()
+		
         if (!exists())
         {
             discovery(getHOME());
         } // end of if 
+		say "... after getHOME() exists:"+exists()
         
                 
         if (!exists())
@@ -154,21 +187,27 @@ public class PathFinder
                 discovery(path_to_resources);
             } // end of if    
         } // end of if 
+		say "... after MENU_RESOURCES exists:"+exists()
 
 
         if (!exists())
         {
             discovery(getCLASS());
         } // end of if         
+		say "... after getCLASS() exists:"+exists()
         
 
         if (!exists())
         {
         	resourcePathDiscovery = "not found"
-            JOptionPane.showMessageDialog(null, "Cannot find ${menuproperties} property files\nset MENU_RESOURCES environment var.", 
+            JOptionPane.showMessageDialog(null, "Cannot find ${menupropertiesname} property files\nset MENU_RESOURCES environment var.", 
             "Bad News !", JOptionPane.ERROR_MESSAGE); 
-            //System.exit(1);
+            System.exit(1);
         } // end of if 
+		else
+		{
+			loadProperties(osid);
+		}
 
     } // end of constructor
 
@@ -178,16 +217,22 @@ public class PathFinder
     public PathFinder(String path)
     {        
     	say "PathFinder(${path}) constructor"
+		resetClass();
+		
+		task = "External path provided "
         discovery(path);
 
         if (!exists())
         {
-        	resourcePathDiscovery = "not found"
-            JOptionPane.showMessageDialog(null, "Cannot find ${menuproperties} property files\nset MENU_RESOURCES environment var.", 
+            JOptionPane.showMessageDialog(null, "Cannot find ${menupropertiesname} property files\nset MENU_RESOURCES environment var.", 
             "Bad News !", JOptionPane.ERROR_MESSAGE); 
-            //System.exit(1);
+            System.exit(1);
         } // end of if 
-
+		else
+		{
+			task = "External path was given"
+			loadProperties(osid);
+		}
     } // end of constructor
 
 
@@ -215,7 +260,7 @@ public class PathFinder
         def type = 0;
         type += ( tokens[0].toLowerCase().startsWith("jar:") ) ? 1 : 0 ;
         type += ( tokens[0].toLowerCase().startsWith("file:") ) ? 2 : 0 ;
-        type += ( tokens[0].size() < 1 ) ? 4 : 0 ;  // root declaration like /Volumes/Users/jim
+        type += ( tokens[0].size() < 1 ) ? 4 : 0 ;  // root declaration like /Volumes/Users/jim has blank 1st token
     
         // set lowest starting token
         int i = (type>0) ? 0 : -1;
@@ -239,27 +284,26 @@ public class PathFinder
                         } // end of if                 
                 } // end of times
                 
-                def fg = chkobj(pn+"/"+menuproperties)
+                def fg = chkobj(pn+"/"+menupropertiesname)
                 say pn+" exists ? "+fg;
                 
                 if (fg)
                 {
 
-                    if ( chkobj(pn+"/"+menuproperties) && chkobj(pn+"/"+pathproperties) )
+                    if ( chkobj(pn+"/"+menupropertiesname) && chkobj(pn+"/"+pathpropertiesname) )
                     {
                         walking = false;
                         found = true;
                         resourcePath = pn;
-                        menuPropertiesPath = pn+"/"+menuproperties;
-                        pathPropertiesPath = pn+"/"+pathproperties;
+                        menuPropertiesPath = pn+"/"+menupropertiesname;
+                        pathPropertiesPath = pn+"/"+pathpropertiesname;
+						resourcePathDiscovery = task;
+						say "---> fg at "+task
                     }
                     else
                     {
-                        found = false;
-                        resourcePath = "";
-                        menuPropertiesPath = "";
-                        pathPropertiesPath = "";
-                        JOptionPane.showMessageDialog(null, "Path ${pn} does not have both property files", "Bad News !", JOptionPane.ERROR_MESSAGE); 
+    					resetClass();
+                    	JOptionPane.showMessageDialog(null, "Path ${pn} does not have both property files", "Bad News !", JOptionPane.ERROR_MESSAGE); 
                     } // end of else
                     
                 } // end of if                
@@ -271,6 +315,21 @@ public class PathFinder
         
     } // end of constructor
 
+
+	// logic to reset class
+	private resetClass()
+	{
+        found = false;
+        resourcePath = "";
+        menuPropertiesPath = "";
+        pathPropertiesPath = "";
+		task="unknown";
+		resourcePathDiscovery="not found";
+		def tokens = os.split(' ').toList()
+		tokens.each{e-> osid+=e;}
+		osid = osid.toLowerCase()
+		say "-----> os="+os+" giving osid="+osid
+	}
 
     // does this filename point to a file that is present ?
     public boolean chkobj(String f)
@@ -285,10 +344,10 @@ public class PathFinder
         println "\n==============================/n... started\n"
         def path="jar:file:/Volumes/Media1/Software/menus/build/libs/menus-1.0.jar!/org/jnorthr/menus/support/PathFinder.class"
         PathFinder resourcePath;
-
         println "Search path with existing properties files:"+path
         resourcePath = new PathFinder(path)
         println resourcePath;
+		println "";
         if (resourcePath.exists())
         {
               println "... path to:"+path
@@ -301,6 +360,8 @@ public class PathFinder
                println "    exists ? "+resourcePath.exists();
            } // end of else
 
+
+
          println "\n----------------------------------------\n"
 
         if (args.size() > 0)
@@ -309,6 +370,7 @@ public class PathFinder
             println "Search for path using command line argument:"+path
             resourcePath = new PathFinder(path)
             println resourcePath;
+        	println ""
             if (resourcePath.exists())
                {
                    println "... path to:"+path
@@ -327,8 +389,8 @@ public class PathFinder
         println "\n----------------------------------------\n"
         println "Search for path using default search sequence:"
         resourcePath = new PathFinder();   
-        println resourcePath;
-     
+        println resourcePath
+        println ""
            if (resourcePath.exists())
            {
                println "... path to:"+resourcePath.location
@@ -338,23 +400,25 @@ public class PathFinder
            else
           {
              println "... path to:"+resourcePath.location
-               println "    exists ? "+resourcePath.exists();
+             println "    exists ? "+resourcePath.exists();
         } // end of else
+
 
         println "\n----------------------------------------\n"
         path = "./resources/properties/menu.properties"
         println "Search for path using relative local directory argument:"+path
         resourcePath = new PathFinder(path);
-        println resourcePath;        
+        println resourcePath
+        println "";
            if (resourcePath.exists())
            {
-               println "... path to:"+resourcePath.menuproperties
+               println "... path to:"+resourcePath.menupropertiesname
                println "    has resource path at :"+resourcePath.getResourcePath();
                println "    found resource path at :"+resourcePath.getResourcePathLocation();                             
            }
            else
           {
-             println "... path to:"+resourcePath.menuproperties
+             println "... path to:"+resourcePath.menupropertiesname
                println "    exists ? "+resourcePath.exists();
         } // end of else
 

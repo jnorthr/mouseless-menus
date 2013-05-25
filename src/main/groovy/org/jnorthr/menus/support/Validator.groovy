@@ -1,5 +1,7 @@
 package org.jnorthr.menus.support;
 import org.jnorthr.menus.support.ColorManager;
+import java.awt.Color;
+
 /* 
  * A validation utility. Confirm certain things about a string
  */ 
@@ -37,6 +39,9 @@ public class Validator
     // integer equivalent of colorComponent
     int colorInteger = 0;
 
+    // internally maintained in synch with fontcolor; 
+    java.awt.Color textColor = new java.awt.Color(0);	
+
     // ===============================================
     // constructor determines validity of string
     public Validator(String ln)
@@ -69,6 +74,7 @@ public class Validator
 		def cm = new ColorManager(colorComponent);
 		colorComponent = cm.getHexCode();
 		colorInteger = cm.getColorCode();
+		textColor = new Color(colorInteger);
 	    } // end of if
 
 	    colorComponent = colorComponent.trim()
@@ -171,7 +177,7 @@ public class Validator
     // class toString() method
     String toString() 
     { 
-        return "remarks=<${remarks}> valid=<${valid}> hasColor=<${hasColor}> semiIndex=<${semiIndex}> menuSignatureIndex=<${menuSignatureIndex}> colorComponent=<${colorComponent}> colorInteger=<${colorInteger}> textComponent=<${textComponent}> commandComponent=<${commandComponent}>"
+        return "remarks=<${remarks}> valid=<${valid}> hasColor=<${hasColor}> semiIndex=<${semiIndex}> menuSignatureIndex=<${menuSignatureIndex}> colorComponent=<${colorComponent}> colorInteger=<${colorInteger}> textColor=<${textColor}> textComponent=<${textComponent}> commandComponent=<${commandComponent}>"
     }    // end of method
 
 

@@ -7,86 +7,34 @@ import java.awt.Color;
 public class ColorManager
 {
     // show/hide audit trail msgs
-    boolean audit = true;
+    boolean audit = false;
     
     // filled in at constructor
     def colors = [:]        // map of color names
 
-    // Filled in when/if a color code or name was found at start of text string
-    // code;item
-    // #c00080;Some Text
-    private String original = "";   // trimmed input string in constructor 
-
-	// has a remark/comment 
-    private boolean remarks = false;
-
-	// not a remark/comment and has valid menu signature  :=
-    private boolean valid = true;
-
-	// color signature  ;   found only if valid and !remarks
-    public boolean hasColor = false;
-
-    private String code=""; 		// what's left  of input string to the left of the leading ; if any
-    private String text="";    		// what's right of input string to the right of the leading ; if any
-    private String command="";    	// what's right of := of input string 
-
     // the hexadecimal representation of the value to left of ; from 'code' above w/o leading #
-    private String hexcode="000000";    
+    String hexcode="000000";    
 
     // the numeric integer equiv. of hexcode
-    private int colorcode=0;    
+    int colorcode=0;    
 
 
-	// ===============================================
-	// default constructor loads internal color tables
+    // ===============================================
+    // default constructor loads internal color tables
     public ColorManager()
     {
         loadColorArray();
     }    // end of class constructor
 
 
-	// ===============================================
+    // ===============================================
     // 1 arg string constructor like : "0x336699;Declare normal color sig 0x336699; with semicolon."
     public ColorManager(String tx)
     {
-		this();
-		say tx;
-		validate(tx);
-		if (!remarks)
-		{
-			if (hasSemi(tx))
-			{
-        		hasColor = getWord(tx);					
-			}
-			// no semi, but still divide := if poss.
-			else
-			{
-			
-			}
-		}
-    }    // end of class constructor
-
-
-    // =========================================
-    // confirm menu signature
-    public validate(tx)
-    {
-		valid = false;
-        original = tx.trim();            
-
-		// disallow comment & remarks lines
-		int j = original.indexOf("//");
-		remarks = ( j < 0 || j > 4 ) ? false : true ;
-
-        if (original.indexOf(":=") > -1 && !remarks) 
-    	{
-        	println tx;
-        	text = tx.toLowerCase();
-			valid = true
-    	} // end of if
-		
-		return valid;
-    }   // end of method
+	this();
+	say tx;
+	process(tx);
+    } // end of class constructor
 
 
     // =========================================
@@ -248,37 +196,6 @@ public class ColorManager
 
 
     // =========================================
-    // see if text line had a color declaration
-    public boolean hasColor()
-    {
-        // find color declaration
-        return hasColor;
-    } // end of hasColor
-
-
-
-    // =========================================
-    // return whats left of text after color code is removed
-    public getText()
-    {
-        return text;
-    }    // end of method
-
-    // =========================================
-    // return color code what's on left-side of text as a String
-    public getCode()
-    {
-        return code;
-    }    // end of method
-
-    // =========================================
-    // return what's on right-side of ; as text as a String
-    public getItem()
-    {
-        return leftSide;
-    }    // end of method
-
-    // =========================================
     // return color code as an integer
     public int getColorCode()
     {
@@ -286,49 +203,24 @@ public class ColorManager
     }    // end of method
 
     // =========================================
-    // return whats left of text after color code is removed as a String
+    // return String corresponding to colorcode above
     public getHexCode()
     {
         return hexcode;
     }    // end of method
 
 
-	// divide text string into two pieces
-	public allocateComponents(String ln)
-	{
-		int k = ln.indexOf(":=");
-		if (k < 0)
-		{
-			text = ln;
-		}
-		else
-		{
-			text = ln.substring(0,k)
-			command = ln.substring(k+1)
-		}
-	} // end of method
-
-
     // =========================================
     // find word before semicolon like #c00080; = #c00080
-    public boolean getWord(String wd)
+    public boolean process(String code)
     {
-        // find first semi-colon ; or return if none found
-        def at = getSemi(wd); 
-        say "\nat="+at+" wd="+wd
-     
-        // fill 'code' with either the color name or some hex value as a string
-        code = wd.substring(0,at).trim().toLowerCase();
-
-		allocateComponents(wd.substring(at+1))
-
-        say "code="+code
         boolean ok = getHexColor(code);
         say "ok="+ok+" hexcode="+hexcode
 
         if (!(ok) || hexcode.size() < 2) 
         {
             hexcode="000000";
+	    colorcode = 0;
             return false;
         }    // end of method
 
@@ -346,30 +238,12 @@ public class ColorManager
         if (colorcode<0) 
         {
             hexcode="000000";
+	    colorcode = 0;
             return false;
         } // end of if
 
         return true;
-    } // end of getWord
-
-
-    // =========================================
-    // see if semi-colon
-    public boolean hasSemi(String text)
-    {
-        // find first semi-colon ;
-        def at =  text.indexOf(';') 
-        def flag = (at < 0 || at > 17) ? false : true; 
-        return flag
-    } // end of hasSemi
-
-    // =========================================
-    // get index to semi-colon
-    public int getSemi(String text)
-    {
-        return text.indexOf(';'); 
-    } // end of hasSemi
-
+    } // end of process
 
 
     // =========================================
@@ -379,12 +253,13 @@ public class ColorManager
     // #cc88aa;Some Text
     // 0xDarkRed;Some Text
     // darkred;Some Text
-    public getHexColor(word)
+    public getHexColor(tx)
     {
+	def word = tx.trim().toLowerCase();
         hexcode="000000";
         say "getHexColor(${word})"
 
-        if (word.size() < 3 )
+        if (word.size() < 3 || word.size() > 17)
         {
              return false;
         }    // end of if
@@ -402,23 +277,33 @@ public class ColorManager
         say "now getHexColor(${word})"
 
         // so 0xcc88aa comes out as cc88aa & #cc88aa comes out as cc88aa 
-		// and cornflowerblue comes out as 6495ed
-        if (colors.containsKey(word))
+	// and cornflowerblue comes out as 6495ed
+        if (colors.containsKey( word ))
         {
             hexcode = colors[(word)]
             say "... colors.containsKey($word) giving ($hexcode)"
         }    // end of if
         else
         {
-            hexcode = word;
-            say "...failed to find color name ($word)"
+	    if (word.size()>6) {return false}
+	    if (decodeHexColor(word)>0)
+	    {
+            	hexcode = word;
+	    }
+	    else
+	    {	    
+            	hexcode = "000000";
+                say "...failed to find color name ($word)"
+		return false;
+	    } // end of else
+
         }    // end of else
 
         return true;
     } // end of getSignature
 
 
-    // logic to yield an Integer from a hex code
+    // logic to yield an Integer from a hex code string
     public decodeHexColor(hexcode)
     {
         def i = 0;
@@ -426,7 +311,7 @@ public class ColorManager
         {
              i = Integer.parseInt(hexcode,16);
         }
-        catch (NumberFormatException e) { i = -1; }
+        catch (NumberFormatException e) { i = 0; }
 
         return i;
 
@@ -436,7 +321,7 @@ public class ColorManager
     // class toString() method
     String toString() 
     { 
-        return "remarks=<${remarks}> text=<$text> valid=<${valid}> hasColor=<${hasColor}> item=<${getText()}> code=<$code> hexcode=<${getHexCode()}> colorcode=<${getColorCode()}>"
+        return "hexcode=<${getHexCode()}> colorcode=<${getColorCode()}>"
     }    // end of method
 
 
@@ -446,7 +331,7 @@ public class ColorManager
     {    
         println "--------------------------------------------------"
         println "... started"
-        ColorManager mf = new ColorManager("#336699;Hi Kids !");
+        ColorManager mf = new ColorManager("#336699");
         println mf;
         println "";
 
@@ -457,69 +342,61 @@ public class ColorManager
             println "";
         } // end of if
         
-        mf = new ColorManager("0x336699;Declare normal color signature 0x336699; with semicolon.");
-        println mf;
-        if (mf.hasColor()) 
-        {
-            println "getText() ="+mf.getText();
-            println "getCode() ="+mf.getCode();
-            println "getItem() ="+mf.getItem();
-            println "getColorCode() ="+mf.getColorCode();
-            println "getHexCode() ="+mf.getHexCode();
-        } // end of if
-        println "";
-
-
-        mf = new ColorManager("0x369;Declare normal color signature 0x369; with semicolon.");
+        mf = new ColorManager("0x336699");
         println mf;
         println "";
 
-        mf = new ColorManager("#336699;Declare normal color signature #336699; with semicolon.");
+
+        mf = new ColorManager("0x369");
         println mf;
         println "";
 
-        mf = new ColorManager("darkred;Declare normal color signature darkred; with semicolon.");
+        mf = new ColorManager("#336699");
+        println mf;
+        println "";
+
+        mf = new ColorManager("darkred");
         println "";
         println mf;
 
-        mf = new ColorManager("DarkBlue;Declare normal color signature darkblue; with semicolon.");
+        mf = new ColorManager("DarkBlue");
         println mf;
-        if (mf.hasColor()) 
-        {
-            println "getText() ="+mf.getText();
-            println "getCode() ="+mf.getCode();
-            println "getItem() ="+mf.getItem();
-            println "getColorCode() ="+mf.getColorCode();
-            println "getHexCode() ="+mf.getHexCode();
-        } // end of if
         println "";
 
-        mf = new ColorManager("#c00080;Declare normal color signature #c00080; with semicolon.");
+        mf = new ColorManager("#c00080");
         println mf;
         println "";
 
         mf = new ColorManager("#c00080;Declare normal color signature #c00080; with semicolon.");
         println mf;
-        if (mf.hasColor()) 
-        {
-            println "getText() ="+mf.getText();
-            println "getCode() ="+mf.getCode();
-            println "getItem() ="+mf.getItem();
-            println "getColorCode() ="+mf.getColorCode();
-            println "getHexCode() ="+mf.getHexCode();
-        } // end of if
+        println "getColorCode() ="+mf.getColorCode();
+        println "getHexCode() ="+mf.getHexCode();
         println "";
 
-        mf = new ColorManager("Something normal:=daffy");
+        mf = new ColorManager("  12345");
         println mf;
-        if (mf.hasColor()) 
-        {
-            println "getText() ="+mf.getText();
-            println "getCode() ="+mf.getCode();
-            println "getItem() ="+mf.getItem();
-            println "getColorCode() ="+mf.getColorCode();
-            println "getHexCode() ="+mf.getHexCode();
-        } // end of if
+        println "getColorCode() ="+mf.getColorCode();
+        println "getHexCode() ="+mf.getHexCode();
+        println "";
+
+        mf = new ColorManager("ccaabb");
+        println mf;
+        println "";
+
+        mf = new ColorManager("c00080");
+        println mf;
+        println "";
+
+        mf = new ColorManager("255");
+        println mf;
+        println "";
+
+
+        mf = new ColorManager();
+	mf.process("c00080");
+        println mf;
+        println "getColorCode() ="+mf.getColorCode();
+        println "getHexCode() ="+mf.getHexCode();
         println "";
 
 
@@ -528,19 +405,19 @@ public class ColorManager
         println mf;
         println "";
 
-        mf = new ColorManager("darkblack;Declare unknown color signature darkblack; with semicolon.");
+        mf = new ColorManager("darkblack");
         println mf;
         println "";
 
-        mf = new ColorManager("#6t55rr;Declare bad color signature darkblack; with semicolon.");
+        mf = new ColorManager("Declare bad color signature darkblack; with semicolon.");
         println mf;
         println "";
 
-        mf = new ColorManager("c00080; Declare normal color signature c00080; with semicolon but no #.");
+        mf = new ColorManager("-16");
         println mf;
         println "";
 
-        mf = new ColorManager("fred; was; here;");
+        mf = new ColorManager(" kid");
         println mf;
         println "";
 

@@ -7,46 +7,98 @@ import java.awt.Color;
 public class ColorManager
 {
     // show/hide audit trail msgs
-    boolean audit = false;
+    boolean audit = true;
     
     // filled in at constructor
     def colors = [:]        // map of color names
-    private String text="";    // trimmed & lowercase input string
-    public boolean hasCode = false;
 
     // Filled in when/if a color code or name was found at start of text string
     // code;item
     // #c00080;Some Text
-    private String code=""; // what's left  of input string to the left of the leading ; if any
-    private String item="";    // what's right of input string to the right of the leading ; if any
-    private String original = "";    // input string in constructor
+    private String original = "";   // trimmed input string in constructor 
 
-    // the hexidecimal representation of the value to left of ; from 'code' above
+	// has a remark/comment 
+    private boolean remarks = false;
+
+	// not a remark/comment and has valid menu signature  :=
+    private boolean valid = true;
+
+	// color signature  ;   found only if valid and !remarks
+    public boolean hasColor = false;
+
+    private String code=""; 		// what's left  of input string to the left of the leading ; if any
+    private String text="";    		// what's right of input string to the right of the leading ; if any
+    private String command="";    	// what's right of := of input string 
+
+    // the hexadecimal representation of the value to left of ; from 'code' above w/o leading #
     private String hexcode="000000";    
 
     // the numeric integer equiv. of hexcode
     private int colorcode=0;    
 
 
+	// ===============================================
+	// default constructor loads internal color tables
+    public ColorManager()
+    {
+        loadColorArray();
+    }    // end of class constructor
+
+
+	// ===============================================
     // 1 arg string constructor like : "0x336699;Declare normal color sig 0x336699; with semicolon."
     public ColorManager(String tx)
     {
-        original = tx;
-        loadColorArray();
-            
-        text= tx.trim();
-        hasCode = getWord(text);
-    }    // end of method
+		this();
+		say tx;
+		validate(tx);
+		if (!remarks)
+		{
+			if (hasSemi(tx))
+			{
+        		hasColor = getWord(tx);					
+			}
+			// no semi, but still divide := if poss.
+			else
+			{
+			
+			}
+		}
+    }    // end of class constructor
+
+
+    // =========================================
+    // confirm menu signature
+    public validate(tx)
+    {
+		valid = false;
+        original = tx.trim();            
+
+		// disallow comment & remarks lines
+		int j = original.indexOf("//");
+		remarks = ( j < 0 || j > 4 ) ? false : true ;
+
+        if (original.indexOf(":=") > -1 && !remarks) 
+    	{
+        	println tx;
+        	text = tx.toLowerCase();
+			valid = true
+    	} // end of if
+		
+		return valid;
+    }   // end of method
+
 
     // =========================================
     // show audit trail if allowed
     public say(tx)
     {
         if (audit) 
-    {
-        println tx;
-    } // end of if
+    	{
+        	println tx;
+    	} // end of if
     }    // end of method
+
 
     // =========================================
     // insert each html color name plus it's hex equivalent ;
@@ -196,29 +248,11 @@ public class ColorManager
 
 
     // =========================================
-    // see if semi-colon
-    public int hasSemi(String text)
-    {
-        // find first semi-colon ;
-        def at =  text.indexOf(';') 
-        switch(at)
-        {
-            case -1 : break;
-            case 0..17 : break;
-            default : at = -1;        
-        }    // end of switch
-
-        return at;
-    } // end of hasSemi
-
-
-
-    // =========================================
     // see if text line had a color declaration
     public boolean hasColor()
     {
         // find color declaration
-        return hasCode;
+        return hasColor;
     } // end of hasColor
 
 
@@ -241,11 +275,11 @@ public class ColorManager
     // return what's on right-side of ; as text as a String
     public getItem()
     {
-        return item;
+        return leftSide;
     }    // end of method
 
     // =========================================
-    // return whats left of text after color code is removed as an integer
+    // return color code as an integer
     public int getColorCode()
     {
         return colorcode;
@@ -258,27 +292,43 @@ public class ColorManager
         return hexcode;
     }    // end of method
 
+
+	// divide text string into two pieces
+	public allocateComponents(String ln)
+	{
+		int k = ln.indexOf(":=");
+		if (k < 0)
+		{
+			text = ln;
+		}
+		else
+		{
+			text = ln.substring(0,k)
+			command = ln.substring(k+1)
+		}
+	} // end of method
+
+
     // =========================================
     // find word before semicolon like #c00080; = #c00080
     public boolean getWord(String wd)
     {
-        hexcode = null;
-        colorcode = -1;
-
         // find first semi-colon ; or return if none found
-        def at = hasSemi(wd); 
-        say "\nat="+at
-        if (at<0)    return false;
-
+        def at = getSemi(wd); 
+        say "\nat="+at+" wd="+wd
+     
         // fill 'code' with either the color name or some hex value as a string
         code = wd.substring(0,at).trim().toLowerCase();
+
+		allocateComponents(wd.substring(at+1))
+
         say "code="+code
         boolean ok = getHexColor(code);
         say "ok="+ok+" hexcode="+hexcode
 
         if (!(ok) || hexcode.size() < 2) 
         {
-            hexcode=null;
+            hexcode="000000";
             return false;
         }    // end of method
 
@@ -295,18 +345,30 @@ public class ColorManager
         say "colorcode="+colorcode
         if (colorcode<0) 
         {
-            hexcode=null;
+            hexcode="000000";
             return false;
-        }
-        else
-        {
-            // convert of hex to integer went ok, so we fill 'item' with all text to right of ;
-            item = text.substring(at+1)
-            say "item="+item
-        }
+        } // end of if
 
         return true;
     } // end of getWord
+
+
+    // =========================================
+    // see if semi-colon
+    public boolean hasSemi(String text)
+    {
+        // find first semi-colon ;
+        def at =  text.indexOf(';') 
+        def flag = (at < 0 || at > 17) ? false : true; 
+        return flag
+    } // end of hasSemi
+
+    // =========================================
+    // get index to semi-colon
+    public int getSemi(String text)
+    {
+        return text.indexOf(';'); 
+    } // end of hasSemi
 
 
 
@@ -319,7 +381,7 @@ public class ColorManager
     // darkred;Some Text
     public getHexColor(word)
     {
-        hexcode=null;
+        hexcode="000000";
         say "getHexColor(${word})"
 
         if (word.size() < 3 )
@@ -339,7 +401,8 @@ public class ColorManager
         
         say "now getHexColor(${word})"
 
-         // so 0xcc88aa comes out as cc88aa & #cc88aa comes out as cc88aa and cornflowerblue comes out as 6495ed
+        // so 0xcc88aa comes out as cc88aa & #cc88aa comes out as cc88aa 
+		// and cornflowerblue comes out as 6495ed
         if (colors.containsKey(word))
         {
             hexcode = colors[(word)]
@@ -362,7 +425,6 @@ public class ColorManager
         try 
         {
              i = Integer.parseInt(hexcode,16);
-             //Integer.decode(hex);
         }
         catch (NumberFormatException e) { i = -1; }
 
@@ -374,7 +436,7 @@ public class ColorManager
     // class toString() method
     String toString() 
     { 
-        return "text=<$text> hasCode=<${hasCode}> item=<${getText()}> code=<$code> hexcode=<${getHexCode()}> colorcode=<${getColorCode()}>"
+        return "remarks=<${remarks}> text=<$text> valid=<${valid}> hasColor=<${hasColor}> item=<${getText()}> code=<$code> hexcode=<${getHexCode()}> colorcode=<${getColorCode()}>"
     }    // end of method
 
 

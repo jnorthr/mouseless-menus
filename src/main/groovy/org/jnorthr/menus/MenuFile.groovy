@@ -2,12 +2,14 @@
 // if exists, parse out menu title with :=*MENUTITLE and if found set boolean menuFileExists as true
 // if true, can then use accessor methods to gain values
 package org.jnorthr.menus;
+import org.jnorthr.menus.support.Validator;
+
 public class MenuFile
 {
 	private String dialogTitle	// shows in title of dialog from getTitle()
 	private String menuFileName	// when a BIC of 'go' says load and display another menu, this is the file name to load; typically like ../menudata/menu.txt
-    	private boolean menuFileExists // true if go menufile confirmed to exist         
-
+    private boolean menuFileExists // true if go menufile confirmed to exist         
+    Validator val;
  
 	// accessor for dialog title
 	public getTitle()
@@ -31,7 +33,7 @@ public class MenuFile
 	// make a valid menu item text string like:  abc:=./resources/fred.txt
 	public crtMenuEntry()
 	{
-		return (menuFileExists) ? dialogTitle + ":=" + menuFileName : ""	
+		return (menuFileExists) ? dialogTitle + ":=go " + menuFileName : ""	
 	} // end of method
 
 
@@ -50,10 +52,12 @@ public class MenuFile
 	{
 		this();
 		menuFileName = fn;
-		if ( chkobj(fn) )
+		menuFileExists = chkobj(fn);
+		if ( menuFileExists )
 		{ 
-			getTitle(fn); 
-			}
+			rtvobjnam(fn);
+			loader(fn); 
+		}
 	}	// end of method
 
 
@@ -61,16 +65,20 @@ public class MenuFile
     // look up filename if it exists; print message showing results, if audit flag is set 
     public chkobj(def filename)
     {
-        def fi = new File(filename);
-        def flag2 = (fi.exists()) ? true : false
-        def tx = (flag2) ? "file $filename exists" : "file $filename does not exist";
-		say tx;
-		if (flag2)
-		{
-			menuFileName = fi.getCanonicalFile().toString().trim();
-		}
-        return flag2
+        return new File(filename).exists();
     } // end of method
+
+
+    // ==================================================================
+    // look up filename if it exists; print message showing results, if audit flag is set 
+    public rtvobjnam(def filename)
+    {
+		menuFileName = new File(filename).getCanonicalFile().toString().trim();
+        return menuFileName
+    } // end of method
+
+
+
 
 	// ===============================================================
 	// class output debug / print internals
@@ -83,8 +91,18 @@ public class MenuFile
 
 	// ==================================================================
 	// logic to find a line in this menu text file like abc:=*MENUTITLE
-	private getTitle(def fn)
+	private loader(def fn)
 	{
+		new File(fn).eachLine{  ln ->
+			println ln;
+		    val = new Validator(ln);
+			if (!val.remarks && val.valid)
+			{		
+				println "->"+val.colorComponent+" : "+val.textComponent+" : "+val.commandComponent+"<-"
+			} // end of if 
+		} // end of each 
+	
+	
         def fi = new File(fn);
 		def lines = fi.readLines();
 		lines.each{ln ->
@@ -168,7 +186,7 @@ public class MenuFile
 		println " "
 		
 		println "... test using file located at actual full directory location "
-		mf = new MenuFile("/Volumes/Media/Software/menus/resources/jim.txt");
+		mf = new MenuFile("/Volumes/Media1/Software/menus/resources/jim.txt");
 		println mf
 		println "isMenuFile() ? :"+mf.isMenuFile();
 		println "getTitle() :"+mf.getTitle();

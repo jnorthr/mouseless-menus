@@ -46,24 +46,24 @@ public class Validator
     // constructor determines validity of string
     public Validator(String ln)
     {
-	say ln;
-	remarks = hasRemark(ln);
+		say ln;
+		remarks = hasRemark(ln);
 
-	if (!remarks)
-	{	
-	    hasColor = hasSemi(ln)
-	    valid = isValid(ln)
+		if (!remarks)
+		{	
+	    	hasColor = hasSemi(ln)
+	    	valid = isValid(ln)
 
-	    if (valid)
-	    {
-	        menuSignatureIndex = getSignatureIndex(ln)
-		textComponent = getTextComponent(ln);
-		commandComponent = getCommandComponent(ln)
-	    } // end of if
-	    else
-	    {
-		textComponent = ln;
-	    } // end of else
+	    	if (valid)
+	    	{
+	        	menuSignatureIndex = getSignatureIndex(ln)
+				textComponent = getTextComponent(ln);
+				commandComponent = getCommandComponent(ln)
+	    	} // end of if
+	    	else
+	    	{
+				textComponent = ln;
+	    	} // end of else
 
 	    // divide string into components
 	    if (hasColor)
@@ -222,6 +222,7 @@ public class Validator
 
         mf = new Validator("    darkred;  darkred");
         println mf;
+		println mf.textComponent;
         println "";
 
         println "... the end "

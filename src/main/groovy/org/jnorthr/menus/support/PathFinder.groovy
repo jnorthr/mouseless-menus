@@ -1,50 +1,73 @@
 package org.jnorthr.menus.support;
+import javax.swing.JOptionPane;
+
 /*
     Class to resolve the path to the ./resources folder when the
     menu system is run from a .jar, as this may have a different path to ./resources
 
 	from some directory, use groovy to run directly like
 	groovy /Volumes/Media1/Software/menus/src/main/groovy/org/jnorthr/menus/support/PathFinder.groovy
+	
+	The constructor will take a string pointing to a folder holding the menus, documents and properties for this app, or will fail
+	with an option panel.
+	
+	Alternatively, run the default constructor with no parms/args to have this module find the menu folder named 'resources'
 */
-import javax.swing.JOptionPane;
 
 public class PathFinder
 {
-    def audit = false
+	// print audit messages ?
+    def audit = true
+
 
 	// OS-specific parms; cannot be in same config file as config.rewrite looses some path info
 	def os = System.getProperty('os.name')
     def osid = ""; // like 'Mac OS X' becomes 'macosx'
 
+	// here are the two poperty files we need to run this app
     String menupropertiesname = "resources/properties/menu.properties";
     String pathpropertiesname = "resources/properties/path.properties";
+
 
     // does path exist ? - assume no
     def found = false
     
     // what is the path ?
+	// if resolved, it's the absolute path name of the menus folder like: /Volumes/Media1/Software/menus but w/o /resources
     def resourcePath = "";
     
-    // give full path name to menu props
+    // give full path name to menu props: the folder, resource and property folders plus the property file name
     def menuPropertiesPath = "";
+
 
     // give full path name to path props
     def pathPropertiesPath = "";
     
+
     // folder where this class currently sits - if getClass was called, but might not be if found earlier in search seq.
     String location = "undiscovered";
 
-    // where is the path ?
+    // where is the path ? task eventually fills this string w/description of how the menu folder was located
     def resourcePathDiscovery = "not found";
 	String task = "unknown";
 
+
+
+    // give canonical file name of located file from locate() method
+    def locatedFileCanonicalName= "locate() not yet used";
+   
+
+
+	// holds the loaded map from both property files
 	def menuMap
 	def pathMap
+
+
 
     // cook your own class toString
     public String toString()
     {
-        String tx = "\nResource found ? ${(found)?"yes":"no";}\nPath to Resource : ${resourcePath}\nPath to menu properties : ${menuPropertiesPath}\nPath to path properties : ${pathPropertiesPath}\nresourcePathDiscovery : ${resourcePathDiscovery}\nClass location : ${location}"
+        String tx = "\nResource found ? ${(found)?"yes":"no";}\nPath to Resource : ${resourcePath}\nPath to menu properties : ${menuPropertiesPath}\nPath to path properties : ${pathPropertiesPath}\nresourcePathDiscovery : ${resourcePathDiscovery}\nClass location : ${location}  locatedFileCanonicalName : ${locatedFileCanonicalName}"
         return tx;    
     } // end of toString()
     
@@ -56,7 +79,7 @@ public class PathFinder
     } // end of method
     
     
-    // get the resources path    
+    // get the resources path - folder name   
     public getResourcePath()
     {
         return resourcePath;
@@ -106,7 +129,7 @@ public class PathFinder
     } // end of
         
         
-    // get home directory
+    // get user's home directory
     public getHOME()
     {
         task = "User's Home Directory"    
@@ -116,7 +139,7 @@ public class PathFinder
     } // end of
 
 
-    // get directory of executing class
+    // get directory of executing class, or failing that, the location of the class loader
     public getCLASS()
     {
         URL loc = this.class.getProtectionDomain().getCodeSource()?.getLocation();
@@ -138,6 +161,7 @@ public class PathFinder
     } // end of
 
 
+	// ===================================================================
 	// now that we have an actual path to our menu property file, slurp it
 	public loadProperties(String environment)
 	{
@@ -160,9 +184,12 @@ public class PathFinder
     } // end of method
 
 
-    // default class constructor -
+    // default class constructor - ( when no user folder was named )
     // searches for our properties in this sequence : 
-    // 1.current working directory  2.user's home directory  3.location of this class  4.MENU_RESOURCES env. variable
+    // 1.current working directory  
+	// 2.user's home directory  
+	// 3.MENU_RESOURCES env. variable  
+	// 4.location of this class
     public PathFinder()
     {
     	say "PathFinder() default constructor"
@@ -172,6 +199,8 @@ public class PathFinder
 
 		say "... after getPWD() exists:"+exists()
 		
+		
+		// when menu folder was not found in the current working directory
         if (!exists())
         {
             discovery(getHOME());
@@ -179,6 +208,7 @@ public class PathFinder
 		say "... after getHOME() exists:"+exists()
         
                 
+		// when menu folder was not found in the user's home directory
         if (!exists())
         {
             String path_to_resources = getEnvironmentVariable();
@@ -190,6 +220,7 @@ public class PathFinder
 		say "... after MENU_RESOURCES exists:"+exists()
 
 
+		// when menu folder was not found due to missing environment variable MENU_RESOURCES
         if (!exists())
         {
             discovery(getCLASS());
@@ -197,6 +228,8 @@ public class PathFinder
 		say "... after getCLASS() exists:"+exists()
         
 
+		// ------------------------------------------------------
+		// bad news, no folder found, so die
         if (!exists())
         {
         	resourcePathDiscovery = "not found"
@@ -234,6 +267,53 @@ public class PathFinder
 			loadProperties(osid);
 		}
     } // end of constructor
+
+
+
+	// -------------------------------------------------------------------------------
+    // locate method -
+ 	// try to find the absolute location of a file, either menu.txt, a document.html or xxx.properties file
+    public locate(String file)
+    {        
+        say "... locate underway to find "+file
+		boolean dot = ( file.lastIndexOf('.') > -1 ) ? true : false;
+		if (!dot) 
+		{
+			file+=".txt";
+			say "file had no suffix, so gave it a .txt and now it's :"+file
+		} // end of if
+
+		int k = file.lastIndexOf('.')
+		def suffix = file.substring(k+1)
+		def suffixLC = suffix.toLowerCase()
+
+		say "... k=$k suffix=<$suffix> suffixLC=<${suffixLC}>"
+		def prop = ( suffixLC.equals("properties") ) ? true : false ;
+		def doc = ( suffixLC.equals("html") || suffixLC.equals("htm") ) ? true : false ;
+		def menu = ( suffixLC.equals("text") || suffixLC.equals("txt") ) ? true : false ;
+		
+		// this is something we cannot handle, so bail out
+		if (!prop && !doc && !menu) 
+		{
+			say "... cannot handle this name:"+file;
+			return false;
+		} // end of if
+		
+		def folder = resourcePath + "/resources"
+		folder += (prop) ? "/properties" : "" ;
+		folder += (doc) ? "/documents" : "" ;
+		folder += "/"+file;
+		say "... went looking for this folder:"+folder
+		def fi = new File(folder);
+		boolean located = fi.exists()
+		say "    found ? "+located
+
+		locatedFileCanonicalName = fi.canonicalFile.toString()
+		if (located) println locatedFileCanonicalName
+
+		return located
+    } // end of method
+
 
 
 	// -------------------------------------------------------------------------------
@@ -313,7 +393,7 @@ public class PathFinder
 
         } // end of while
         
-    } // end of constructor
+    } // end of method
 
 
 	// logic to reset class
@@ -403,25 +483,58 @@ public class PathFinder
              println "    exists ? "+resourcePath.exists();
         } // end of else
 
+		String name = "main";
+		boolean found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
+		name = "main.txt";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
+		name = "main.html";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
+		name = "menu.properties";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
 
         println "\n----------------------------------------\n"
+
+
         path = "./resources/properties/menu.properties"
         println "Search for path using relative local directory argument:"+path
         resourcePath = new PathFinder(path);
         println resourcePath
         println "";
-           if (resourcePath.exists())
-           {
-               println "... path to:"+resourcePath.menupropertiesname
-               println "    has resource path at :"+resourcePath.getResourcePath();
-               println "    found resource path at :"+resourcePath.getResourcePathLocation();                             
-           }
-           else
-          {
-             println "... path to:"+resourcePath.menupropertiesname
-               println "    exists ? "+resourcePath.exists();
+        if (resourcePath.exists())
+        {
+            println "... path to:"+resourcePath.menupropertiesname
+            println "    has resource path at :"+resourcePath.getResourcePath();
+            println "    found resource path at :"+resourcePath.getResourcePathLocation();                             
+        }
+        else
+        {
+            println "... path to:"+resourcePath.menupropertiesname
+            println "    exists ? "+resourcePath.exists();
         } // end of else
 
+		name = "main";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
+		name = "main.txt";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
+		name = "main.html";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+
+		name = "path.properties";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
 
         println "... ended\n===================================\n"
     } // end of main

@@ -179,6 +179,17 @@ task(runMenuLine, dependsOn: 'classes', type: JavaExec)
 	//systemProperty 'simple.message', 'Hello '
 }
 
+
+task(runMenuFile, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.MenuFile' 
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'jim.txt'
+}
+
+
+
+
 task(runMenuItemObject, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.MenuItemObject' 

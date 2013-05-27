@@ -1,16 +1,32 @@
 // a module to confirm a text file exists with given name
 // if exists, parse out menu title with :=*MENUTITLE and if found set boolean menuFileExists as true
 // if true, can then use accessor methods to gain values
+
+// also keeps all valid non-remark lines in a list
+
+// it's the responsibility of the calling module to provide a menu file name that points to a real file
 package org.jnorthr.menus;
 import org.jnorthr.menus.support.Validator;
 
 public class MenuFile
 {
-	private String dialogTitle	// shows in title of dialog from getTitle()
-	private String menuFileName	// when a BIC of 'go' says load and display another menu, this is the file name to load; typically like ../menudata/menu.txt
-    private boolean menuFileExists // true if go menufile confirmed to exist         
+    // show/hide audit trail msgs
+    boolean audit = false;
+
+	// shows in title of dialog from getTitle()
+	private String dialogTitle
+
+	// when a BIC of 'go' says load and display another menu, this is the file name to load; typically like ../menudata/menu.txt
+	private String menuFileName
+
+	private boolean menuFileExists // true if go menufile confirmed to exist         
+
+	// handle to validator of a single line
     Validator val;
- 
+    	
+	// List of lines that would make good menu entries 
+	List<Validator> menuLines = []   	
+    	
 	// accessor for dialog title
 	public getTitle()
 	{
@@ -29,13 +45,17 @@ public class MenuFile
 		return menuFileExists;	
 	} // end of method
 
- 
+ 	// accessor to find number of lines in the menu table
+	public int getMenuLineCount()
+	{
+		return menuLines.size();	
+	} // end of method
+
 	// make a valid menu item text string like:  abc:=./resources/fred.txt
 	public crtMenuEntry()
 	{
 		return (menuFileExists) ? dialogTitle + ":=go " + menuFileName : ""	
 	} // end of method
-
 
 
 	// no args constructor
@@ -85,7 +105,7 @@ public class MenuFile
 	// print text (maybe)
 	public void say(def text) 
 	{
-		println "$text" 
+		if (audit) println "$text" 
 	} // end of say
 
 
@@ -93,31 +113,43 @@ public class MenuFile
 	// logic to find a line in this menu text file like abc:=*MENUTITLE
 	private loader(def fn)
 	{
-		new File(fn).eachLine{  ln ->
-			println ln;
-		    val = new Validator(ln);
-			if (!val.remarks && val.valid)
-			{		
-				println "->"+val.colorComponent+" : "+val.textComponent+" : "+val.commandComponent+"<-"
-			} // end of if 
+		menuLines = [];	
+		new File(fn).eachLine{ ln ->
+			if ( ln.size() > 1 ) processor(ln);
 		} // end of each 
 	
-	
-        def fi = new File(fn);
-		def lines = fi.readLines();
-		lines.each{ln ->
-				def words = ln.split(":=");
-				if (words.size() > 1)	
-				{
-					//say "ln has two words: $ln"
-					def w1 = words[1].toLowerCase() 
-					if (w1.equals("*menutitle"))
-					{
-						dialogTitle = words[0].trim();
-						menuFileExists = true; 	
-					}	// end of if
-				} // end of if
-			}	// end of each
+	}	// end of method
+
+
+	// ==================================================================
+	// logic to find a line in this menu text file like abc:=*MENUTITLE
+	private processor(ln)
+	{
+		say ln;
+	    val = new Validator(ln);
+		if (!val.remarks && val.valid)
+		{		
+			say "->"+val.colorComponent+" : "+val.textComponent+" : "+val.commandComponent+"<-"
+			def w1 = val.commandComponent.toLowerCase() 
+			if (w1.equals("*menutitle"))
+			{
+				dialogTitle = val.textComponent;
+			}	// end of if
+			else
+			{
+				menuLines += val;
+			} // end of else
+			
+		} // end of if 
+		else
+		{
+			if (!val.remarks)
+			{
+				menuLines += val;
+			} // end of if
+					
+		} // end of else
+		
 	}	// end of method
 
 
@@ -152,6 +184,7 @@ public class MenuFile
 		println "getTitle() :"+mf.getTitle();
 		println "crtMenuEntry() :"+mf.crtMenuEntry()
 		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();
 
 		println " "
 
@@ -162,6 +195,7 @@ public class MenuFile
 		println "getTitle() :"+mf.getTitle();
 		println "crtMenuEntry() :"+mf.crtMenuEntry()
 		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();
 
 		println " "
 
@@ -172,6 +206,7 @@ public class MenuFile
 		println "getTitle() :"+mf.getTitle();
 		println "crtMenuEntry() :"+mf.crtMenuEntry()
 		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();
 
 		println " "
 		
@@ -182,6 +217,7 @@ public class MenuFile
 		println "getTitle() :"+mf.getTitle();
 		println "crtMenuEntry() :"+mf.crtMenuEntry()
 		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();
 
 		println " "
 		
@@ -192,6 +228,8 @@ public class MenuFile
 		println "getTitle() :"+mf.getTitle();
 		println "crtMenuEntry() :"+mf.crtMenuEntry()
 		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();
+		
 		println " "
 		
 		println "... test with no file name at all"
@@ -201,6 +239,8 @@ public class MenuFile
 		println "getTitle() :"+mf.getTitle();
 		println "crtMenuEntry() :"+mf.crtMenuEntry()
 		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();
+
 		println " "
 		
 		println "... the end "

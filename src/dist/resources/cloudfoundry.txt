@@ -1,0 +1,5 @@
+Cloud Foundry Menu:=*MENUTITLE
+VCAP Java GIT Source 4 CF:=open https://github.com/cloudfoundry/vcap-java-client
+Gradle Cloud Foundry PLugin:=open https://github.com/melix/gradle-cf-plugin
+What's New in CF youtube:=open http://www.youtube.com/watch?v=25hWn46YTro
+

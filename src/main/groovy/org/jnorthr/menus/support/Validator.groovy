@@ -212,6 +212,11 @@ public class Validator
         println mf;
         println "";
 
+
+        mf = new Validator("Fred Flintstone:=*menutitle");
+        println mf;
+        println "";
+
         mf = new Validator("  #336699;   Hi Kids !   :=   groovy -v   ");
         println mf;
         println "";

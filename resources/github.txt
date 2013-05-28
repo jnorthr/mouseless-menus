@@ -28,5 +28,8 @@ Git Basics - Getting a Git Repository:=open http://git-scm.com/book/en/Git-Basic
 Lovely Git Cheatsheet:=open http://ndpsoftware.com/git-cheatsheet.html#loc=workspace;
 Make User/Org Wiki Pgs 4 Github:=open https://help.github.com/articles/creating-pages-with-the-automatic-generator
 Github Pages Wiki:=open https://github.com/blog/272-github-pages
+Git Reference:=open http://gitref.org/basic/#reset
+Setup GitHub Pages:=open https://gist.github.com/chrisjacob/833223
+Getting the Hang of GitHub:=open http://net.tutsplus.com/tutorials/other/getting-the-hang-of-github/
 
 

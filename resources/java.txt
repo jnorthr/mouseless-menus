@@ -3,3 +3,7 @@ Create URL in Java:=open http://download.oracle.com/javase/tutorial/networking/u
 Java Class Desktop:=open http://download.oracle.com/javase/6/docs/api/java/awt/Desktop.html#browse%28java.net.URI%29
 Building a Java Desktop Database Application:=open http://netbeans.org/kb/docs/java/gui-db.html
 Java swing Layouts:=open http://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
+JOption Panes:=open http://docs.oracle.com/javase/6/docs/api/javax/swing/JOptionPane.html
+How to Use Editor Panes and Text Panes:=open http://docs.oracle.com/javase/tutorial/uiswing/components/editorpane.html#textpane
+
+

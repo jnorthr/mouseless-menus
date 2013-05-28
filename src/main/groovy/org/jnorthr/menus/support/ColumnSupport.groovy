@@ -12,7 +12,7 @@ import javax.swing.border.LineBorder
 public class MenuColumnSupport
 {
 	// holds decoded menu items filled from static loadMenu method
-	def static audit = false		// true will print debug text
+	def static audit = false 		// true will print debug text
 	def static menuLines = 0		// how many visible lines appear in the columns
 	def static menuOptions = 0		// how many actual menu options appear in the columns which maybe less than menuLines if titles only
 	def static menuTitle = []
@@ -97,52 +97,56 @@ public class MenuColumnSupport
 
 	public static void cleanup(def nc, menufilename)
 	{
-    			// only clear variables if this menu file has at least one := command
-    			if (nc)
-    			{  
-					say " - cleanup"     
-    					notCleared=false
-    					menuLines = 0
-    					menuOptions = 0
-    					bicNumber = []
-    					menuTitle = []  	// this text is what appears on the menu panel
-    					menuCommand = []	// this is the command to be executed if this option is chosen
-    					show = []
-    					setFrameTitle("$menufilename")
-    			} // end of if
+    	// only clear variables if this menu file has at least one := command
+    	if (nc)
+    	{  
+			say " - cleanup"     
+    		notCleared=false
+   			menuLines = 0
+    		menuOptions = 0
+   			bicNumber = []
+    		menuTitle = []  	// this text is what appears on the menu panel
+   			menuCommand = []	// this is the command to be executed if this option is chosen
+    		show = []
+  			setFrameTitle("$menufilename")
+		} // end of if
 	}	// end of cleanup
 
 
-    	public static void loadMenu(def cs, def mifilename)
-    	{  
+    public static void loadMenu(def cs, def mifilename)
+    {  
 		loadMenu(cs, mifilename,false)
 	}
 
 
-    	// originally had menu options and commands as part of properties file but now these are found in their own .txt file
-    	// this method reloads them and divides 1st third into left column, the remainder into the middle and right columns
-    	// mifilename is name of menu file to load
-	// cs is array of menu columns, mifilename is the name of the .txt file holding; showCommandText is a boolean to show the actual command in place of menu text of function key F17 used
-    	public static void loadMenu(def cs, def mifilename, def showCommandText)
-    	{  
-    		notCleared = true	// flag to avoid clearing prior menu if current menu file does not have at least 1 menu item;
+    // originally had menu options and commands as part of properties file but now these are found in their own .txt file
+   	// this method reloads them and divides 1st third into left column, the remainder into the middle and right columns
+    // mifilename is name of menu file to load
+	// cs is array of menu columns, mifilename is the name of the .txt file holding;
+	// showCommandText is a boolean to show the actual command in place of menu text of function key F17 used
+    public static void loadMenu(def cs, def mifilename, def showCommandText)
+   	{  
+		println "----> ColumnSupport.groovy will try to load menu named <${mifilename}>"
 
-    		def f = new File(mifilename)   // get handle for the menu text file
-    		def words
-    		int ix2 = 0
+
+
+    	notCleared = true	// flag to avoid clearing prior menu if current menu file does not have at least 1 menu item;
+
+    	def f = new File(mifilename)   // get handle for the menu text file
+    	def words
+   		int ix2 = 0
 		say "opening menu file $mifilename"
 
-    		// how many menu items ?
-    		f.eachLine 		// walk thru each line of menu file ignoring comment lines starting with //
-    		{	aline ->
+    	// how many menu items ?
+    	f.eachLine 		// walk thru each line of menu file ignoring comment lines starting with //
+   		{	aline ->
 
 			say " - $aline"
-    			// code to ignore comment lines
-    			def useme = true		// true when this line is a possibility to hold :=
-    			ix2 = aline.trim().indexOf("//")
-
-    			useme = true 		// ignore comment lines starting with //
-    			switch (ix2) 
+    		// code to ignore comment lines
+    		def useme = true		// true when this line is a possibility to hold :=
+    		ix2 = aline.trim().indexOf("//")
+    		useme = true 		// ignore comment lines starting with //
+    		switch (ix2) 
 			{
 				case 0..3 : 	useme = false;
 						break;
@@ -150,19 +154,19 @@ public class MenuColumnSupport
 
 
 			// if not a comment and line has := then split
-    			if (useme && aline =~ /^.*\:=.*/) 		// signature for a menu option is text:=command
-    			{
+    		if (useme && aline =~ /^.*\:=.*/) 		// signature for a menu option is text:=command
+    		{
 				MenuColumnSupport.cleanup(notCleared, mifilename)
 
-    				words = aline.split(/\:=/)	// break menu entry into 2 parts: 1) option text description 2) option command
-    				int wc = words.size()
-    				def word1 = ""
-    				def word2 = ""
-    				boolean flag = false	// set true when the command pair form a valid command
-    				int bic = 0		// set to zero unless this is an internal menu feature, a built-in command
+    			words = aline.split(/\:=/)	// break menu entry into 2 parts: 1) option text description 2) option command
+    			int wc = words.size()
+    			def word1 = ""
+    			def word2 = ""
+   				boolean flag = false	// set true when the command pair form a valid command
+   				int bic = 0		// set to zero unless this is an internal menu feature, a built-in command
 				switch (wc)		// word count governs how it's handled
-    				{
-    					case 2:		// typical text:=command
+   				{
+    				case 2:		// typical text:=command
     						flag = true
     						word1=words[0].trim()
     						word2=words[1].trim()
@@ -180,41 +184,41 @@ public class MenuColumnSupport
     						} // end of if
     						break;
 
-    					// a word count of one means line format was 'xxx:='  without text after :=
-    					// was this for menu text only displays ?
-    					case 1:
+    				// a word count of one means line format was 'xxx:='  without text after :=
+    				// was this for menu text only displays ?
+    				case 1:
     						flag = true
     						bic = 3
     						word1=words[0].trim(); //say "word0=<$word1>"
     						break;
-					default:
+				default:
 						say "unknown wc=$wc for line <${aline}>"
 						bic = 99
 						break;
-    				} // end of switch
+    			} // end of switch
 
 
-    				// this is a valid pair, so store
-    				if (flag)
-    				{	 
+    			// this is a valid pair, so store
+    			if (flag)
+    			{	 
 					say " - word1=<${word1}> bic=$bic and flag=$flag";
-    					switch(bic)	// identify the builtin command or zero if normal menu option
-    					{
-    					    case 99:	break;
+    				switch(bic)	// identify the builtin command or zero if normal menu option
+   					{
+   					    case 99:	break;
 
-    					    // menu text only - not a command so allocate no number to it
-    					    case 3:
+   					    // menu text only - not a command so allocate no number to it
+   					    case 3:
 	    					menuLines += 1
-    					    	bicNumber << bic
+    					   	bicNumber << bic
 	    					menuTitle   << word1
-    					    	break;
+    					   	break;
 
     					    // color sample - *RED
     					    case 2:
 	    					menuLines += 1
-    					    	bicNumber << bic
+    					   	bicNumber << bic
 	    					menuTitle   << word1
-    					    	break;
+    					   	break;
 
     					    // *MENUTITLE
     					    case 1: 
@@ -223,27 +227,27 @@ public class MenuColumnSupport
 
     				   	   // typical built-in command of zero
     					    default:
-    					    	bicNumber << bic
+    					   	bicNumber << bic
 	    					menuLines += 1
 	    					menuCommand << word2
 
-						if (showCommandText)
-						{
-							def tx =  (word2.size() > 40) ? word2.substring(0,40)   : word2
-							word1 = tx
-						} // end of if
+							if (showCommandText)
+							{
+								def tx =  (word2.size() > 40) ? word2.substring(0,40)   : word2
+								word1 = tx
+							} // end of if
 
-						menuTitle << word1; // (showCommandText) ? word2 : word1;	
+							menuTitle << word1; // (showCommandText) ? word2 : word1;	
 
 	    					break;
-    					} // end of switch
+    				} // end of switch
 
-				say " - there are $menuLines menu lines"
+					say " - there are $menuLines menu lines"
    				} // end of if
 
-    			} // end of aLine is a menu command
+    		} // end of aLine is a menu command
     			
-    		} // end of eachLine
+    	} // end of eachLine
 
 
 

@@ -6,6 +6,7 @@ import java.awt.*
 import javax.swing.text.*;
 import org.jnorthr.menus.CommandSet;
 
+
 public class HeaderSupport
 {
     JTextPane column;            	// the onscreen representation of the document            

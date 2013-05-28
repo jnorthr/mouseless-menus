@@ -122,7 +122,6 @@ The following workaround works fine :
 class Menus implements KeyListener 
 {
 	def static audit = false
-	//String propertyfile = 'resources/properties/menu.properties'  		// non-OS specific parameters for business issues
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
@@ -157,147 +156,155 @@ class Menus implements KeyListener
 	public void keyTyped(KeyEvent e)   {}
 	public void keyPressed(KeyEvent ke) 
 	{
-		boolean f = false
-
-		if (ke.isShiftDown()) 
-		{
-			f = true
-		} // end of if
-
+		boolean f = (ke.isShiftDown()) ? true : false;
 		switch (ke.getKeyCode()) 
 		{
+			// menu exit command
 			case KeyEvent.VK_F3:  // move x coordinate left
-			if (f)
-			{
-				//println "F15 key pressed"
-				String menu = "resources/.menulist.txt"; 
-				MenuColumnSupport.loadMenu(cs,menu)    
-				frame.setTitle(MenuColumnSupport.getFrameTitle())
-				support.resetStack()
-				swing.tf.text=""
-				swing.tf.requestFocusInWindow()
-				swing.tf.grabFocus();
-			} // end of shift
+				// if F15 key ?  F3+shift key
+				if (f)
+				{
+					say "F15 key pressed"
+					String menu = "resources/.menulist.txt"; 
+					MenuColumnSupport.loadMenu(cs,menu)    
+					frame.setTitle(MenuColumnSupport.getFrameTitle())
+					support.resetStack()
+					swing.tf.text=""
+					swing.tf.requestFocusInWindow()
+					swing.tf.grabFocus();
+					} // end of shift
 
-			else
-			{
-				//println "F3 key pressed"
-				ender()
-			} // end of 
-			break;
+				else
+				{
+					say "F3 key pressed"
+					ender()
+				} // end of 
+				break;
 
+			// menu find command
 			case KeyEvent.VK_F4:  // move x coordinate left
-			if (f)
-			{
-				println "F16 key pressed"
-				def path = "resources"
-				org.jnorthr.menus.support.Search mf = new org.jnorthr.menus.support.Search(path);
-				def re = mf.parseResults(swing.tf.text);
-				re.each{println "--->"+it;}
-				mf.writeResults(path,re, """Your Search for '${swing.tf.text.trim()}'""")				
-				String menu = "resources/.menulist.txt"; 
-				MenuColumnSupport.loadMenu(cs,menu)    
+				// if F16 find key ?  
+				if (f)
+				{
+					say "F16 key pressed"
+					def path = "resources"
+					org.jnorthr.menus.support.Search mf = new org.jnorthr.menus.support.Search(path);
+					def re = mf.parseResults(swing.tf.text);
+					re.each{println "--->"+it;}
+					mf.writeResults(path,re, """Your Search for '${swing.tf.text.trim()}'""")				
+					String menu = "resources/.menulist.txt"; 
+					MenuColumnSupport.loadMenu(cs,menu)    
+					frame.setTitle(MenuColumnSupport.getFrameTitle())
+					support.resetStack()
+					swing.tf.text=""
+					swing.tf.requestFocusInWindow()
+					swing.tf.grabFocus();
+				} // end of shift
+
+				else
+				{
+					println "F4 key pressed"
+			    } // end of 
+				break;
+				
+			case KeyEvent.VK_ENTER:  
+				if (f)
+				{
+				 	say"Shift+ENTER key pressed"
+					swing.tf.text=""
+				}
+				else
+				{
+					say "ENTER key pressed"
+				} // end of
+				 
+				break;
+
+			// allow focus in joblog, the lower pane of the splitpane group	
+			case KeyEvent.VK_F2: 
+				foc = (foc) ? false : true;
+				jtp.setFocusable(foc)
+				break;
+
+			// ask for help	
+			case KeyEvent.VK_F1: 
+				helpme(); 
+				break;
+
+
+			// F5 - reload menu commands
+			case KeyEvent.VK_F5:
+				String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
+
+				// use F17 to toggle show/hide of menu items
+				if (f) 
+				{
+					MenuColumnSupport.loadMenu(cs,menu,true)    
+				}	// end of if
+				else
+				{
+					MenuColumnSupport.loadMenu(cs,menu)    // menuitemsfilename)
+				} // end of else
+
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
 				support.resetStack()
 				swing.tf.text=""
 				swing.tf.requestFocusInWindow()
 				swing.tf.grabFocus();
-			} // end of shift
-
-			else
-			{
-				println "F4 key pressed"
-				//ender()
-			} // end of 
-			break;
-			case KeyEvent.VK_ENTER:  
-			if (f)
-			{
-				//println "Shift+ENTER key pressed"
-				swing.tf.text=""
-			}
-			else
-			{
-				//println "ENTER key pressed"
-			} // end of 
-			break;
-
-			case KeyEvent.VK_F2: // allow focus in joblog
-			foc = (foc) ? false : true;
-			jtp.setFocusable(foc)
-			break;
-
-
-			case KeyEvent.VK_F1: // ask for help
-			helpme(); 
-			break;
-
-			// F5 --------------------------------------
-			case KeyEvent.VK_F5: // reload menu commands
-
-			String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
-
-			// use F17 to toggle show/hide of menu items
-			if (f) 
-			{
-				MenuColumnSupport.loadMenu(cs,menu,true)    
-			}	// end of if
-			else
-			{
-				MenuColumnSupport.loadMenu(cs,menu)    // menuitemsfilename)
-			} // end of else
-
-			frame.setTitle(MenuColumnSupport.getFrameTitle())
-			support.resetStack()
-			swing.tf.text=""
-			swing.tf.requestFocusInWindow()
-			swing.tf.grabFocus();
-			break;
+				break;
 
 
 			// F9 --------------------------------------
-			case KeyEvent.VK_F9: // recall prior command
-			swing.tf.text = support.getStackEntry(true)
-			break;
+			// recall prior command
+			case KeyEvent.VK_F9: 
+				swing.tf.text = support.getStackEntry(true)
+				break;
 
 			// Up Arrow --------------------------------------
-			case KeyEvent.VK_UP: // recall prior command - moving backward thru commands from most recent to oldest, then wrap after blank line
-			swing.tf.text = support.getStackEntry(true)
-			break;
+			// recall prior command - moving backward thru commands from most recent to oldest, then wrap after blank line
+			case KeyEvent.VK_UP: 
+				swing.tf.text = support.getStackEntry(true)
+				break;
 
 
 			// Down Arrow --------------------------------------
-			case KeyEvent.VK_DOWN: // recall next command
-			swing.tf.text = support.getStackEntry(false)
-			break;
+			// recall next command
+			case KeyEvent.VK_DOWN: 
+				swing.tf.text = support.getStackEntry(false)
+				break;
 
 			// Backstep thru previous menus using either F10 or F12 function keys or the escape key --------------------------------------
 			case KeyEvent.VK_ESCAPE: 
-			case KeyEvent.VK_F12: // mimic F12 for short keyboards
+			case KeyEvent.VK_F12: // F12 for long keyboards
 			case KeyEvent.VK_F10: // mimic F12 for short keyboards
-			String priormenu = MenuColumnSupport.getStorage().getPriorMenu()
-			String cm = MenuColumnSupport.getStorage().getCurrentMenu()
-			if (!priormenu.equals(cm))
-			{
-				MenuColumnSupport.getStorage().pop()
-				MenuColumnSupport.loadMenu(cs,priormenu)    // menuitemsfilename)
-				frame.setTitle(MenuColumnSupport.getFrameTitle())
-			} // end of if
 
-			// reset pointer to command stack, then re-focus
-			support.resetStack()
-			swing.tf.text=""
-			swing.tf.requestFocusInWindow()
-			swing.tf.grabFocus();
-			break;
+				// geet prior menu name
+				String priormenu = MenuColumnSupport.getStorage().getPriorMenu()
+
+				// get current menu name
+				String cm = MenuColumnSupport.getStorage().getCurrentMenu()
+				
+				// if they are not the same, reload the previous menu file
+				if (!priormenu.equals(cm))
+				{
+					MenuColumnSupport.getStorage().pop()
+					MenuColumnSupport.loadMenu(cs,priormenu)    // menuitemsfilename)
+					frame.setTitle(MenuColumnSupport.getFrameTitle())
+				} // end of if
+
+				// reset pointer to command stack, then re-focus
+				support.resetStack()
+				swing.tf.text=""
+				swing.tf.requestFocusInWindow()
+				swing.tf.grabFocus();
+				break;
 
 		} // end of switch
 
-    	} // end of keyPressed
+    } // end of keyPressed method
 
 
-
-    	// turn on auditlog listing
+    // turn on auditlog listing
 	public static void setAudit() {audit=true}
 	
 	public void say(def text) 

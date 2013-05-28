@@ -17,7 +17,8 @@ public class PanelSupport
 	public PanelSupport()
 	{
 		PathFinder resourcePath = new PathFinder(); 
-		def config = resourcePath.menuMap;			swing = new SwingBuilder()
+		def config = resourcePath.menuMap;			
+		swing = new SwingBuilder()
 		panelsupportpanel = swing.panel(background:Color.BLACK,layout:new GridLayout(rows:1,columns:3,hgap:14,vgap:1))		
 
 		// now build 3 columns of menu item titles

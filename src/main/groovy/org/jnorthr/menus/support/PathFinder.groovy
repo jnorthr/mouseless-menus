@@ -53,7 +53,7 @@ public class PathFinder
 
     // give canonical file name of located file from locate() method
     def locatedFileCanonicalName= "";
-
+	boolean located = false;
 
 	// holds the loaded map from both property files
 	def menuMap
@@ -230,7 +230,7 @@ public class PathFinder
         	resourcePathDiscovery = "not found"
             JOptionPane.showMessageDialog(null, "Cannot find ${menupropertiesname} property files\nset MENU_RESOURCES environment var.", 
             "Bad News !", JOptionPane.ERROR_MESSAGE); 
-            System.exit(1);
+            //System.exit(1);
         } // end of if 
 		else
 		{
@@ -254,7 +254,7 @@ public class PathFinder
         {
             JOptionPane.showMessageDialog(null, "Cannot find ${menupropertiesname} property files\nset MENU_RESOURCES environment var.", 
             "Bad News !", JOptionPane.ERROR_MESSAGE); 
-            System.exit(1);
+            //System.exit(1);
         } // end of if 
 		else
 		{
@@ -288,6 +288,8 @@ public class PathFinder
 		def suffixLC = suffix.toLowerCase()
 
 		say "... k=$k suffix=<$suffix> suffixLC=<${suffixLC}>"
+		
+		// decide which folder to use
 		def prop = ( suffixLC.equals("properties") ) ? true : false ;
 		def doc = ( suffixLC.equals("html") || suffixLC.equals("htm") ) ? true : false ;
 		def menu = ( suffixLC.equals("text") || suffixLC.equals("txt") ) ? true : false ;
@@ -305,12 +307,14 @@ public class PathFinder
 		folder += "/"+file;
 		say "... went looking for this folder:"+folder
 		def fi = new File(folder);
-		boolean located = fi.exists()
+		located = fi.exists()
 		say "    found ? "+located
 
-		locatedFileCanonicalName = fi.canonicalFile.toString()
-		if (located) println locatedFileCanonicalName
-
+		if (located) 
+		{
+     		locatedFileCanonicalName = fi.canonicalFile.toString()
+			println locatedFileCanonicalName
+		} // end of if
 		return located
     } // end of method
 
@@ -430,14 +434,18 @@ public class PathFinder
 		println "";
         if (resourcePath.exists())
         {
-              println "... path to:"+path
-               println "    has resource path at :"+resourcePath.getResourcePath();      
-               println "    found resource path at :"+resourcePath.getResourcePathLocation();      
+            println "... path to:"+path
+            println "    has resource path at :"+resourcePath.getResourcePath();      
+            println "    found resource path at :"+resourcePath.getResourcePathLocation();
+            println "    find main :"+ resourcePath.locate("main") 
+            if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName
+    
            }
            else
            {
                println "... path to:"+path
                println "    exists ? "+resourcePath.exists();
+               if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName
            } // end of else
 
 
@@ -455,12 +463,15 @@ public class PathFinder
                {
                    println "... path to:"+path
                    println "    has resource path at :"+resourcePath.getResourcePath(); 
-                   println "    found resource path at :"+resourcePath.getResourcePathLocation();             
+                   println "    found resource path at :"+resourcePath.getResourcePathLocation();
+            	   println "    find main :"+ resourcePath.locate("main")                    
+                   if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName             
                }
                else
                {
                    println "... path to:"+path
                    println "    exists ? "+resourcePath.exists();
+                   if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName
                } // end of else
 
         } // end of if
@@ -475,33 +486,45 @@ public class PathFinder
            {
                println "... path to:"+resourcePath.location
                println "    has resource path at :"+resourcePath.getResourcePath(); 
-               println "    found resource path at :"+resourcePath.getResourcePathLocation();                            
+               println "    found resource path at :"+resourcePath.getResourcePathLocation();   
+               println "    find main :"+ resourcePath.locate("main") 
+               if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
            }
            else
           {
-             println "... path to:"+resourcePath.location
-             println "    exists ? "+resourcePath.exists();
+               println "... path to:"+resourcePath.location
+               println "    exists ? "+resourcePath.exists();
+               println "    find main :"+ resourcePath.locate("main") 
+               if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
         } // end of else
 
 		String name = "main";
 		boolean found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 		name = "main.txt";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 		name = "main.html";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 		name = "menu.properties";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 
         println "\n----------------------------------------\n"
@@ -516,33 +539,45 @@ public class PathFinder
         {
             println "... path to:"+resourcePath.menupropertiesname
             println "    has resource path at :"+resourcePath.getResourcePath();
-            println "    found resource path at :"+resourcePath.getResourcePathLocation();                             
+            println "    found resource path at :"+resourcePath.getResourcePathLocation();
+            println "    find main :"+ resourcePath.locate("main")                              
+            if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
         }
         else
         {
             println "... path to:"+resourcePath.menupropertiesname
             println "    exists ? "+resourcePath.exists();
+            println "    find main :"+ resourcePath.locate("main") 
+            if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
         } // end of else
 
 		name = "main";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 		name = "main.txt";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 		name = "main.html";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
 		name = "path.properties";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
 		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
         println "... ended\n===================================\n"
     } // end of main

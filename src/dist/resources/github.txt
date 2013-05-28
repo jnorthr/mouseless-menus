@@ -22,4 +22,11 @@ git init:=git init
 git add conf lib public test:=git add conf lib public test
 git init commit:= git commit -m init
 git push:=git push heroku master
+gradle git plugin:=open https://github.com/ajoberstar/gradle-git
+Git SCM How-To Book:=open http://git-scm.com/book/en/Git-Tools-Stashing
+Git Basics - Getting a Git Repository:=open http://git-scm.com/book/en/Git-Basics-Getting-a-Git-Repository
+Lovely Git Cheatsheet:=open http://ndpsoftware.com/git-cheatsheet.html#loc=workspace;
+Make User/Org Wiki Pgs 4 Github:=open https://help.github.com/articles/creating-pages-with-the-automatic-generator
+Github Pages Wiki:=open https://github.com/blog/272-github-pages
+
 

@@ -51,18 +51,13 @@ public class PathFinder
     def resourcePathDiscovery = "not found";
 	String task = "unknown";
 
-
-
     // give canonical file name of located file from locate() method
-    def locatedFileCanonicalName= "locate() not yet used";
-   
+    def locatedFileCanonicalName= "";
 
 
 	// holds the loaded map from both property files
 	def menuMap
 	def pathMap
-
-
 
     // cook your own class toString
     public String toString()
@@ -269,6 +264,11 @@ public class PathFinder
     } // end of constructor
 
 
+	// what was the full canonical filename of that file we just located ?
+	public getFullName()
+	{
+		return locatedFileCanonicalName
+	} // end of method
 
 	// -------------------------------------------------------------------------------
     // locate method -
@@ -486,18 +486,22 @@ public class PathFinder
 		String name = "main";
 		boolean found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 		name = "main.txt";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 		name = "main.html";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 		name = "menu.properties";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 
         println "\n----------------------------------------\n"
@@ -523,18 +527,22 @@ public class PathFinder
 		name = "main";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 		name = "main.txt";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 		name = "main.html";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
 		name = "path.properties";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
 
         println "... ended\n===================================\n"
     } // end of main

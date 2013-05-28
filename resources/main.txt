@@ -25,6 +25,8 @@ Test3 recurse paths:=groovy /Volumes/UBUNTU/Groovy/Test3/recurse.groovy
 BBC 1:=open http://newsvote.bbc.co.uk/2/hi/uk_news/default.stm
 11 Nice Tools:=open http://net.tutsplus.com/articles/general/9-ways-to-instantly-code-faster/
 Apple Developer Scripting Tut:=open https://developer.apple.com/library/mac/#documentation/opensource/Conceptual/ShellScripting/AdvancedTechniques/AdvancedTechniques.html#//apple_ref/doc/uid/TP40004268-TP40003521-SW35
+What Font Typeface to Use?:=open http://www.smashingmagazine.com/2010/12/14/what-font-should-i-use-five-principles-for-choosing-and-using-typefaces/
+Grand Central Station 4 Cloud Bees:=open https://grandcentral.cloudbees.com/#
                      
                      
 // user.home /Users/leanne

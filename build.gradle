@@ -125,6 +125,19 @@ task(runCommandSet, dependsOn: 'classes', type: JavaExec)
 	classpath = sourceSets.main.runtimeClasspath
 }
 
+
+task(runMenuColumnSupport, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.MenuColumnSupport' 
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runValidator, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.Validator' 
+	classpath = sourceSets.main.runtimeClasspath
+}
+
 task(runBB, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.support.BottomBorder' 

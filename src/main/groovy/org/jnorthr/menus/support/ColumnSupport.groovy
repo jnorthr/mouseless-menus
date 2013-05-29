@@ -8,6 +8,8 @@ import java.awt.BorderLayout
 import javax.swing.BorderFactory; 
 import javax.swing.border.*
 import javax.swing.border.LineBorder
+import org.jnorthr.menus.support.PathFinder;
+import org.jnorthr.menus.MenuFile;
  
 public class MenuColumnSupport
 {
@@ -26,6 +28,7 @@ public class MenuColumnSupport
 	// keep stack of menu file names - how deep is menu layer that F12 key can use to retrace prior menu choices 
 	static Storage storage
 
+	static PathFinder pathfinder;
 	JTextPane column;			// the onscreen representation of the document			
 	StyledDocument doc;			// a storage repository for text
 	static SimpleAttributeSet as1;		// text decorations to apply to text within 'doc'
@@ -126,12 +129,40 @@ public class MenuColumnSupport
 	// showCommandText is a boolean to show the actual command in place of menu text of function key F17 used
     public static void loadMenu(def cs, def mifilename, def showCommandText)
    	{  
-		println "----> ColumnSupport.groovy will try to load menu named <${mifilename}>"
+		say "----> ColumnSupport.groovy will try to load menu named <${mifilename}>"
 
+		// strip trailing .txt and any path prefix before last / 
+		def kk = mifilename.lastIndexOf("/");
+		def mifn = (kk > -1) ? mifilename.substring(kk + 1) : mifilename;
+		kk = mifn.lastIndexOf(".");
+		mifn = (kk > -1) ? mifn.substring( 0, kk ) : mifn;
+		say "loadMenu($mifilename) becomes <${mifn}>"
+		mifilename = mifn;
+		
+		// get full path plus filename
+		boolean located = pathfinder.locate(mifilename)		
+		if (located) mifilename = pathfinder.getFullName();
+		say "ColumnSupport will now open <${mifilename}>"
+		
+		MenuFile mf = new MenuFile(mifilename);
+		println mf
+		println "isMenuFile() ? :"+mf.isMenuFile();
+		println "getTitle() :"+mf.getTitle();
+		println "crtMenuEntry() :"+mf.crtMenuEntry()
+		println "getFullFileName() :"+mf.getFullFileName();
+		println "getMenuLineCount() :"+mf.getMenuLineCount();		
+/*
+	ColumnSupport will now open </Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt>
+	menuFileName=/Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt & menuFileExists=true title=<Java, Javascript, CSS Stylesheets, Beans, Menus & ProcessBuilder>
+	isMenuFile() ? :true
+	getTitle() :Java, Javascript, CSS Stylesheets, Beans, Menus & ProcessBuilder
+	crtMenuEntry() :Java, Javascript, CSS Stylesheets, Beans, Menus & ProcessBuilder:=go /Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt
+	getFullFileName() :/Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt
+	getMenuLineCount() :25
 
-
+*/		
+		
     	notCleared = true	// flag to avoid clearing prior menu if current menu file does not have at least 1 menu item;
-
     	def f = new File(mifilename)   // get handle for the menu text file
     	def words
    		int ix2 = 0
@@ -251,16 +282,14 @@ public class MenuColumnSupport
 
 
 
-    		// do not disturb current menu if this menu file has no lines with := command identifier
-    		if (notCleared) return		
+    	// do not disturb current menu if this menu file has no lines with := command identifier
+    	if (notCleared) return		
 
-    		// if the new menu name is not the same as the current menu name, then stack it
-    		if (!(storage.getCurrentMenu().equals(mifilename)))
-    		{
-    			storage.leftShift(mifilename)
-    		} // end of if
+		// try to stack but ignore
+    	// if the new menu name is the same as the current menu name 
+    	storage.leftShift(mifilename)
 
-    		// erase each menu item column
+    	// erase each menu item column
 		cs.eachWithIndex{ va, ix -> cs[ix].clearColumnText(cs[ix]) }
 
     		// =====================================================================================================
@@ -422,6 +451,7 @@ public class MenuColumnSupport
 		clearColumnText(this)
 		setColumn(this)
 		storage = new Storage()
+		pathfinder = new PathFinder();
 	} // end of constructor
 
 

@@ -13,13 +13,15 @@ public class MenuFile
     // show/hide audit trail msgs
     boolean audit = false;
 
-	// shows in title of dialog from getTitle()
+	// shows in title of dialog from getTitle(); loaded from *menutitle line
 	private String dialogTitle
 
-	// when a BIC of 'go' says load and display another menu, this is the file name to load; typically like ../menudata/menu.txt
+	// this is the file name just load; typically like ../menudata/menu.txt
+	// filled with canonical name in chkobj if menuFileExists
 	private String menuFileName
 
-	private boolean menuFileExists // true if go menufile confirmed to exist         
+	// true if menufile confirmed to exist
+	private boolean menuFileExists          
 
 	// handle to validator of a single line
     Validator val;
@@ -76,6 +78,7 @@ public class MenuFile
 		if ( menuFileExists )
 		{ 
 			rtvobjnam(fn);
+			// now read each line, validate it and store in menuLines
 			loader(fn); 
 		}
 	}	// end of method

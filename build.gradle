@@ -1,6 +1,6 @@
 /*
 cd /Volumes/Media/Software/caelyf/caelyf-template-project-0.1d
-export PATH=/opt/local/bin:/opt/local/sbin:.:/usr/local/bin:/Volumes/Media/Software/gradle-1.4/bin:/Volumes/Media/Software/Play-1.2.4:/bin:/Volumes/Media/Software/groovy-2.0.5/bin:/Volumes/Media/Software/appengine-java-sdk-1.7.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/local/git/bin
+export PATH=opt/local/bin:/opt/local/sbin:.:/usr/local/bin:/Volumes/Media/Software/gradle-1.4/bin:/Volumes/Media/Software/Play-1.2.4:/bin:/Volumes/Media/Software/groovy-2.0.5/bin:/Volumes/Media/Software/appengine-java-sdk-1.7.0/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/local/git/bin
 
 // for git 1.8.2
 iMac:groovysamples jim$ echo  $PATH
@@ -145,6 +145,13 @@ task(runBB, dependsOn: 'classes', type: JavaExec)
 	args 'jim.txt'
 	systemProperty 'simple.message', 'Hello '
 }
+
+task(runMenuColumnSupport, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.MenuColumnSupport' 
+	classpath = sourceSets.main.runtimeClasspath
+}
+
 
 task(runSearch, dependsOn: 'classes', type: JavaExec) 
 {

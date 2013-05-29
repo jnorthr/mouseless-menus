@@ -5,7 +5,9 @@ class Storage
 {
 	List<String> stackMenu = []
 	boolean audit = false
-	def mainmenufilename = "./resources/main.txt"
+	
+	// PathFinder will give us the full folder name, we add .txt
+	def mainmenufilename = "main"
 
 	// print debug text (maybe)
 	public void say(def text) 
@@ -29,25 +31,37 @@ class Storage
 		//println "stack at ${s.get()}\n"
 		println "--------------------------\n"
 
-		s.leftShift("bill")		// added bill to stack
+		s.leftShift("bill.txt")		// added bill to stack
 		println "PriorMenu=${s.getPriorMenu()}"
 		println "CurrentMenu=${s.getCurrentMenu()}"
 		//println "stack at ${s.get()}\n"
 		println "--------------------------\n"
 
-		s.leftShift("eve")		// added fred to stack
+		s.leftShift("./resources/eve")		// added fred to stack
 		println "PriorMenu=${s.getPriorMenu()}"
 		println "CurrentMenu=${s.getCurrentMenu()}"
 		//println "stack at ${s.get()}\n\n"
 		println "--------------------------\n"
 
-		s.leftShift("fred")		// added fred to stack
+		s.leftShift("./resources/fred.txt")		// added fred to stack
 		println "PriorMenu=${s.getPriorMenu()}"
 		println "CurrentMenu=${s.getCurrentMenu()}"
 		//println "stack at ${s.get()}\n\n"
 		println "--------------------------\n"
 
-		s.leftShift("jim")		// added fred to stack
+		s.leftShift("./resources/jim")		// added jim to stack
+		println "PriorMenu=${s.getPriorMenu()}"
+		println "CurrentMenu=${s.getCurrentMenu()}"
+		//println "stack at ${s.get()}\n\n"
+		println "--------------------------\n"
+
+		s.leftShift("max")					// added max to stack
+		println "PriorMenu=${s.getPriorMenu()}"
+		println "CurrentMenu=${s.getCurrentMenu()}"
+		//println "stack at ${s.get()}\n\n"
+		println "--------------------------\n"
+
+		s.leftShift("max.txt")					// added max to stack again, should not duplicate
 		println "PriorMenu=${s.getPriorMenu()}"
 		println "CurrentMenu=${s.getCurrentMenu()}"
 		//println "stack at ${s.get()}\n\n"
@@ -108,6 +122,7 @@ class Storage
 		return value
 	} // end of getPriorMenu
 
+
 	// non-distructive retrieve prior menu file name
 	public getCurrentMenu()
 	{	
@@ -123,11 +138,34 @@ class Storage
 		return value
 	} // end of getCurrentMenu
 
+
 	// the << overload operator
 	synchronized void leftShift(value)
 	{
 		if(audit) say "stackMenu.size() before push is ${stackMenu.size()}"
-		stackMenu << value
+		def k = value.lastIndexOf("/");
+		
+		def va = (k>-1) ? value.substring(k+1) : value;
+		k = va.lastIndexOf(".");
+		va = (k>-1) ? va.substring(0,k) : va;
+		if(audit) say "leftShift($value) becomes <${va}>"
+		
+		if (audit)
+		{
+			say "stackMenu[ ${stackMenu.size() - 1} ]="+stackMenu[stackMenu.size()-1]+" when trying to add "+va;
+		} // end of if
+		
+		// don't add same menu twice
+		if (stackMenu[stackMenu.size()-1] != va)
+		{
+			stackMenu << va;
+		} // end of if
+		else
+		{
+				if(audit) say "won't push duplicate <$va>"
+		} // end of else
+		
+		
 		if(audit) say "stackMenu.size() after push is ${stackMenu.size()}    \nstorage.pushed: $value at ${stackMenu.size()-1}"
 		notifyAll()
 	} // end of left...

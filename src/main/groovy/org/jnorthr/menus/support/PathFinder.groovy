@@ -1,6 +1,6 @@
 package org.jnorthr.menus.support;
 import javax.swing.JOptionPane;
-
+import java.util.Properties;
 /*
     Class to resolve the path to the ./resources folder when the
     menu system is run from a .jar, as this may have a different path to ./resources
@@ -173,6 +173,12 @@ public class PathFinder
 
 		// is the audit flag set in the menu.properties ?	
 		this.audit = menuMap["audit"]
+
+		def p = new Properties(System.getProperties());
+		p.each 
+		{ pk, pv ->  
+			say "pk="+pk+" pv="+pv
+		} // end of each
 
 		menuMap.each 
 		{ k, v ->  

@@ -145,12 +145,12 @@ public class MenuColumnSupport
 		say "ColumnSupport will now open <${mifilename}>"
 		
 		MenuFile mf = new MenuFile(mifilename);
-		println mf
-		println "isMenuFile() ? :"+mf.isMenuFile();
-		println "getTitle() :"+mf.getTitle();
-		println "crtMenuEntry() :"+mf.crtMenuEntry()
-		println "getFullFileName() :"+mf.getFullFileName();
-		println "getMenuLineCount() :"+mf.getMenuLineCount();		
+		say mf
+		say "isMenuFile() ? :"+mf.isMenuFile();
+		say "getTitle() :"+mf.getTitle();
+		say "crtMenuEntry() :"+mf.crtMenuEntry()
+		say "getFullFileName() :"+mf.getFullFileName();
+		say "getMenuLineCount() :"+mf.getMenuLineCount();		
 /*
 	ColumnSupport will now open </Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt>
 	menuFileName=/Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt & menuFileExists=true title=<Java, Javascript, CSS Stylesheets, Beans, Menus & ProcessBuilder>

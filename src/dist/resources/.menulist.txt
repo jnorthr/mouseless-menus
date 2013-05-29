@@ -1,5 +1,5 @@
-Available Menus As Of Wed. 29 May 2013 10:11:47:=*MENUTITLE
-// This menu was created on : Wed. 29 May 2013 10:11:47 with 33 menu items
+Available Menus As Of Wed. 29 May 2013 19:54:13:=*MENUTITLE
+// This menu was created on : Wed. 29 May 2013 19:54:13 with 33 menu items
 A S / 4 0 0   M e n u:=go /Volumes/Media1/Software/menus/resources/ibm.txt
 
 Ant Menu:=go /Volumes/Media1/Software/menus/resources/ant.txt

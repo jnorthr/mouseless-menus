@@ -26,10 +26,10 @@ public class Splasher
      */
     public static void main(String[] args)  throws Throwable 
     {
-    	System.out.println("... Splasher starting");
+    	//System.out.println("... Splasher starting");
     	String fn = "./resources/sample1.groovy";
-    	String imagepath = "./resources/images/loading.gif";
-		String[] path = {"./resources"};		
+    	String imagepath = "resources/images/loading.gif";
+		String[] path = {"resources"};		
     	
     	if (args.length>0) fn=args[0];
     	if (args.length>1) imagepath=args[1];
@@ -44,7 +44,7 @@ public class Splasher
 		File f = new File(imagepath);
 		if (f.exists())
 		{
-			System.out.println("..."+imagepath+" exists");
+			//System.out.println("..."+imagepath+" exists");
 		}
 
 
@@ -53,7 +53,7 @@ public class Splasher
 		{
   			// The file may or may not exist
   			url=f.toURL(); 
-  			System.out.println("The url is" + url);
+  			//System.out.println("The url is" + url);
 			SplashWindow.splash(url);
 		}
 		catch(Exception x)
@@ -82,7 +82,7 @@ public class Splasher
     	//SplashWindow.invokeMain("MyApplication", args);
 		//System.out.println("   dispose");
 	
-    	System.out.println("    dispose");
+    	//System.out.println("    dispose");
   		try
 		{
     		SplashWindow.disposeSplash();
@@ -91,7 +91,7 @@ public class Splasher
 		{
 			System.out.println(x.getMessage());
 		}		
-    	System.out.println("... Splasher ending");
+    	// System.out.println("... Splasher ending");
     } // end of main
     
 } // end of splasher class

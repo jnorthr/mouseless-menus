@@ -272,7 +272,7 @@ public class PathFinder
 
 	// -------------------------------------------------------------------------------
     // locate method -
- 	// try to find the absolute location of a file, either menu.txt, a document.html or xxx.properties file
+ 	// try to find the absolute location of a file, either menu.txt, a document.html, loading.gif or xxx.properties file
     public locate(String file)
     {        
         say "... locate underway to find "+file
@@ -291,11 +291,12 @@ public class PathFinder
 		
 		// decide which folder to use
 		def prop = ( suffixLC.equals("properties") ) ? true : false ;
-		def doc = ( suffixLC.equals("html") || suffixLC.equals("htm") ) ? true : false ;
+		def doc = ( suffixLC.equals("html") || suffixLC.equals("htm")  || suffixLC.equals("pdf") ) ? true : false ;
 		def menu = ( suffixLC.equals("text") || suffixLC.equals("txt") ) ? true : false ;
+		def img  = ( suffixLC.equals("png") || suffixLC.equals("gif")  || suffixLC.equals("jpg")  || suffixLC.equals("jpeg") ) ? true : false ;
 		
 		// this is something we cannot handle, so bail out
-		if (!prop && !doc && !menu) 
+		if (!prop && !doc && !menu && !img) 
 		{
 			say "... cannot handle this name:"+file;
 			return false;
@@ -304,6 +305,7 @@ public class PathFinder
 		def folder = resourcePath + "/resources"
 		folder += (prop) ? "/properties" : "" ;
 		folder += (doc) ? "/documents" : "" ;
+		folder += (img) ? "/images" : "" ;
 		folder += "/"+file;
 		say "... went looking for this folder:"+folder
 		def fi = new File(folder);
@@ -519,6 +521,14 @@ public class PathFinder
 		println "    find main :"+ resourcePath.locate("main") 
         if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
 
+		name = "FairChild.pdf";
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName          
+
+
 		name = "menu.properties";
 		found = resourcePath.locate(name);
 		println "    went looking for $name; did we find it ?"+found
@@ -550,6 +560,15 @@ public class PathFinder
             println "    find main :"+ resourcePath.locate("main") 
             if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
         } // end of else
+
+
+        name = "loading3.gif"
+		found = resourcePath.locate(name);
+		println "    went looking for $name; did we find it ?"+found
+		println "                                 full name ?"+resourcePath.getFullName()
+		println "    find main :"+ resourcePath.locate("main") 
+        if (resourcePath.located) println "located:"+resourcePath.locatedFileCanonicalName                         
+
 
 		name = "main";
 		found = resourcePath.locate(name);

@@ -121,7 +121,7 @@ The following workaround works fine :
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
 {
-	def static audit = false
+	def static audit = true
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
@@ -327,30 +327,45 @@ class Menus implements KeyListener
 	def helpme =  
 	{	
 		def help = support.getMenuMap().helpfilename 
-		
+		def menu2;
 		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
-		
-		int k = menu.lastIndexOf("/")
 		int dot = menu.lastIndexOf(".")
-		def menu2 = menu.substring(0,dot) + ".html"
 		
-		def name = menu.substring(k+1,k+2).toUpperCase()+menu.substring(k+2,dot).toLowerCase()
+		if (dot < 0)
+		{
+			menu += ".html";
+		}
+		else
+		{
+		 	menu = menu.substring(0,dot) + ".html"
+		} // end of else
 
-		say "helpme menu is <$help>  menu=<$menu>  menu2=<$menu2>   name=<$name>"
+		dot = menu.lastIndexOf("/")
+		if (dot < 0)
+		{
+			menu2 = menu;
+		}
+		else
+		{
+		 	menu2 = menu.substring(dot+1)
+		} // end of else
+		
+		
+		say "helpme menu is <$help>  menu=<$menu>  menu2=<$menu2>"
 
+		// check if context vesion of .html found
         def fi = new File(menu2);
         if (fi.exists()) 
         {
         	help = menu2;
-        	say "... $menu2 exists"
+        	say "... $menu2 help exists - use it rather than $help"
         }
         
-		say "helpme menu is <${menu2}> help file will be <$help> and name is <$name>"
 		File hf = new File(help)
 		URL url=null;
 		url=hf.toURL();
 
-		HelpWindow hw = new HelpWindow("$name Help Text", help);    
+		HelpWindow hw = new HelpWindow("Help Text", help);    
 		swing.tf.requestFocusInWindow()
 		swing.tf.grabFocus();
 
@@ -662,7 +677,7 @@ class Menus implements KeyListener
 		setAudit()
 		Menus ivs = new Menus()
 		ivs.getPanel("resources/main.txt")
-		ivs.frame.show()
+		//ivs.frame.show()
 		//ivs.say("... done ===")
 
 	} // end of main

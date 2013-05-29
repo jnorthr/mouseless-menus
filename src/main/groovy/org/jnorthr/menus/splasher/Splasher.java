@@ -62,9 +62,11 @@ public class Splasher
 		}		
 
 		org.jnorthr.menus.Menus ivs = new org.jnorthr.menus.Menus();
-		
-		GroovyShell shell = new GroovyShell();
-		shell.run(new File(fn), path);
+		ivs.getPanel("resources/main.txt");
+		//ivs.frame.show();
+				
+		//GroovyShell shell = new GroovyShell();
+		//shell.run(new File(fn), path);
   
 		/*	implement worker threads later- only jdk 1.6 and later !!
    			SwingWorker worker = new SwingWorker()    

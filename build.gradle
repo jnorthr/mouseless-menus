@@ -126,12 +126,6 @@ task(runCommandSet, dependsOn: 'classes', type: JavaExec)
 }
 
 
-task(runMenuColumnSupport, dependsOn: 'classes', type: JavaExec) 
-{
-	main = 'org.jnorthr.menus.support.MenuColumnSupport' 
-	classpath = sourceSets.main.runtimeClasspath
-}
-
 task(runValidator, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.support.Validator' 

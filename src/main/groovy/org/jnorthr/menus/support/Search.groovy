@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 public class Search
 {
 	// show/hide audit trail msgs
-	boolean audit = true;
+	boolean audit = false;
 
 	// Create a ref for closure
 	def searchLogic

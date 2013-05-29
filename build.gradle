@@ -95,11 +95,12 @@ test
 // simple tasks  to run individual classes
 task(runSimple, dependsOn: 'classes', type: JavaExec) 
 {
-	main = 'org.jnorthr.menus.Menus'  // 'test24'  //
-	classpath = sourceSets.main.runtimeClasspath
-	//args 'kids'
+	main = 'org.jnorthr.menus.splasher.Splasher'  
+	classpath = sourceSets.main.runtimeClasspath += files('${workingDir}/resources/images/loading.gif') + sourceSets.main.compileClasspath
+	args './resources/sample1.groovy'
 	systemProperty 'simple.message', 'Hello '
 }
+
 
 // confirm if  a single file has a menu signature :=*MENUTITLE	
 // using filename as string into the constructor
@@ -256,7 +257,11 @@ defaultTasks 'runSimple'
 // this line needed for the 'run' feature of the 'application' plugin
 // when you try: gradlew run
 // then the class shown here is the one that is executed
-mainClassName = "org.jnorthr.menus.Menus"
+mainClassName = 'org.jnorthr.menus.splasher.Splasher'	//"org.jnorthr.menus.Menus"
+//	main = 'org.jnorthr.menus.splasher.Splasher'  
+//	classpath = sourceSets.main.runtimeClasspath += files('${workingDir}/resources/images/loading.gif') + sourceSets.main.compileClasspath
+//	args './resources/sample1.groovy'
+//	systemProperty 'simple.message', 'Hello '
 
 
 // declare minimum level of java for both compile and execute phases

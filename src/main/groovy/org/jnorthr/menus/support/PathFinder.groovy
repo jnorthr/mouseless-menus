@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class PathFinder
 {
 	// print audit messages ?
-    def audit = true
+    def audit = false
 
 
 	// OS-specific parms; cannot be in same config file as config.rewrite looses some path info
@@ -65,6 +65,14 @@ public class PathFinder
         String tx = "\nResource found ? ${(found)?"yes":"no";}\nPath to Resource : ${resourcePath}\nPath to menu properties : ${menuPropertiesPath}\nPath to path properties : ${pathPropertiesPath}\nresourcePathDiscovery : ${resourcePathDiscovery}\nClass location : ${location}  locatedFileCanonicalName : ${locatedFileCanonicalName}"
         return tx;    
     } // end of toString()
+
+
+    // get the flag from menu.properties to decide if we print an audit trail   
+    public getAudit()
+    {
+        return audit;
+    } // end of method
+   
     
 
     // does a resources path exist ?    
@@ -162,6 +170,14 @@ public class PathFinder
 	{
 		// get non-path related static values
         menuMap = new ConfigSlurper().parse(new File(menuPropertiesPath).toURL())	
+
+		// is the audit flag set in the menu.properties ?	
+		this.audit = menuMap["audit"]
+
+		menuMap.each 
+		{ k, v ->  
+			say "k="+k+" v="+v
+		} // end of each
 
 		try
 		{

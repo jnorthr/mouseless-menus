@@ -39,7 +39,7 @@ class FontSupport
 	def fontpath
 	def monofontfilename
 
-	def static audit = true
+	def static audit = false
 	public void say(def text) 
 	{
 		if (audit) {println "$text";} 

@@ -11,7 +11,7 @@ import org.jnorthr.menus.support.PathFinder
 
 public class Support
 {
-	def static audit = true
+	def static audit = false
 	def static framefixedtitle = "MENU"
 
 	def ls = System.getProperty('line.separator')

@@ -58,7 +58,11 @@ public class PathFinder
 	// holds the loaded map from both property files
 	def menuMap
 	def pathMap
-
+	
+	// full hit of system properties
+	Properties systemProperties
+	Enumeration enums;
+	
     // cook your own class toString
     public String toString()
     {
@@ -163,6 +167,18 @@ public class PathFinder
         return location;
     } // end of
 
+	// http://mdsaputra.wordpress.com/2011/11/18/java-system-getproperties/
+	private void showAllSystemGetPropertiesParam()
+	{
+    	systemProperties = System.getProperties();
+    	enums = systemProperties.propertyNames();
+    	for (; enums.hasMoreElements();) 
+		{
+        	String key = (String) enums.nextElement();
+        	String value = systemProperties.getProperty(key);
+        	say(key + " = " + value);
+    	} // end of for
+	} // end of method
 
 	// ===================================================================
 	// now that we have an actual path to our menu property file, slurp it
@@ -174,6 +190,8 @@ public class PathFinder
 		// is the audit flag set in the menu.properties ?	
 		this.audit = menuMap["audit"]
 
+		showAllSystemGetPropertiesParam();
+		
 		def p = new Properties(System.getProperties());
 		p.each 
 		{ pk, pv ->  

@@ -124,10 +124,10 @@ public class SplashWindow extends Window {
      */
     public static void splash(Image image) 
     {
-		System.out.println("... starting splash");
+		//System.out.println("... starting splash");
         if (instance == null && image != null) 
 	    {
-			System.out.println("... instance null");
+			//System.out.println("... instance null");
             Frame f = new Frame();
             
             // Create the splash image
@@ -165,8 +165,8 @@ public class SplashWindow extends Window {
      */
     public static void splash(URL imageURL) 
     {
-		String tx = "... starting splash as URL:"+imageURL.toString();
-		System.out.println(tx);
+		//String tx = "... starting splash as URL:"+imageURL.toString();
+		//System.out.println(tx);
         if (imageURL != null) 
 	    {
             splash(Toolkit.getDefaultToolkit().createImage(imageURL));

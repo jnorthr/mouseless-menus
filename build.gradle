@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     //groovy localGroovy()
-    compile 'org.codehaus.groovy:groovy-all:2.0.5'
+    compile 'org.codehaus.groovy:groovy-all:2.1.4'
     groovy group: 'org.apache.ivy', name:'ivy', version:'2.2.0' 
     testCompile 'junit:junit:4.11'
     //compile group: 'javax.servlet',        name: 'servlet-api', version: '2.5' 

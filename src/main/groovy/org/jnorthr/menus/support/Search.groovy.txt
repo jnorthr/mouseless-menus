@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 public class Search
 {
 	// show/hide audit trail msgs
-	boolean audit = true;
+	boolean audit = false;
 
 	// Create a ref for closure
 	def searchLogic
@@ -137,23 +137,23 @@ public class Search
 	    File fh2 = new File(pwd);
 	    def lines
 	    say " gave <$pwd> ";
-            fh2.eachDir
+        fh2.eachDir
 	    { 
-		f -> 	say "fh2.eachDir= ${ f.toString() }"; 
-			searchLogic(f) 
+			f -> 	say "fh2.eachDir= ${ f.toString() }"; 
+					searchLogic(f) 
 	    };
 
         fh2.eachFileMatch(~/.*?\.txt/) 
         {
-	    	// give an audit of the file name that matches the .txt spec
-		//say "fh2.eachFileMatch($it)"
-            	String fn = it.getCanonicalFile();
-		//say "\n.. fh2.eachFileMatch:<"+fn+">"
+			// give an audit of the file name that matches the .txt spec
+			//say "fh2.eachFileMatch($it)"
+            String fn = it.getCanonicalFile();
+			//say "\n.. fh2.eachFileMatch:<"+fn+">"
 				
-		// ignore our own internal .txt file
-		def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true;
+			// ignore our own internal .txt file
+			def ok = (fn.toLowerCase().endsWith(".menulist.txt") ) ? false : true;
 				
-		// build new file handle and get all text from that file 
+			// build new file handle and get all text from that file 
             def fi = new File(fn);
             if (fi.exists() && ok)
             {
@@ -161,18 +161,18 @@ public class Search
 		    	lines = fi.readLines()
 		    	outer: for (line in lines) 
 		    	{	
-				if (!line.trim()) continue
+					if (!line.trim()) continue
     				def words = line.split(/\:=/).toList()
 
-				// find a menu title that identifies this .txt file as a menu file for us
+					// find a menu title that identifies this .txt file as a menu file for us
         			if (words.size() > 1 && words[1].toLowerCase().equals("*menutitle")) 
-				{ 
-					// plug a map with menu filename as key and value= menu title declared in :=*menufile  line
-					menus[fn] = words[0]
-					def temp = words[0].trim()+":=go "+fn.trim(); //+"\n"		
-					matchingMenuLines << temp;					
-					break outer;
-				} // end of if
+					{ 
+						// plug a map with menu filename as key and value= menu title declared in :=*menufile  line
+						menus[fn] = words[0]
+						def temp = words[0].trim()+":=go "+fn.trim()+"\n"		
+						matchingMenuLines << temp;					
+						break outer;
+					} // end of if
 	    	    } // end of for
 
               } // end of if
@@ -225,12 +225,6 @@ public class Search
 	} // end of splitting
 
 
-	// see if this is a menu title line and not a real link
-	def isNotTitleLine(String ln)
-	{
-		int g = ln.toLowerCase().indexOf("*menutitle")
-		return (g < 0) ? true : false;
-	} // end of isTitleLine
 
     // =========================================
 	// Parse map of menu files to identify menu lines within each text file that match the search criteria
@@ -238,16 +232,11 @@ public class Search
 	public parseResults(String findthis, Map menus) 
 	{ 
 		say "parseResults(${findthis})"
-		menus.each{say "... ->"+it}
-
-
-		boolean findAllMenus = (findthis.equals("*ALLMENUS")) ? true : false;
-		boolean findAll = (findthis.equals("*ALL")) ? true : false;
-
+		//menus.each{say "... ->"+it}
 
 		// split search term into several words
 		def words = getParseTokens(findthis);
-		say "parseResults(${findthis}) found ${words.size()} words; findAllMenus=$findAllMenus  findAll=$findAll"
+		say "parseResults(${findthis}) found ${words.size()} words"
 		
 		// keep all matching menu lines in a collection
 		 matchingMenuLines = []
@@ -255,27 +244,26 @@ public class Search
 		//walk thru each menu file
 		menus.each
 		{ men ->
-			say "---> ready for menu :"+men.key
+			//say "---> ready for menu :"+men.key
 			File me = new File(men.key);
 			def lines = me.readLines()
-			say "   ${men.key} had ${lines.size()} lines"
-    			lines.each
+			//say "   ${men.key} had ${lines.size()} lines"
+    		lines.each
 			{
 				ln -> 
 					//if ( ln =~ findthis || convertCase(ln) =~ findthis  ) 
 					if (compareTokens( words, ln ) || convertCase(ln) =~ findthis)
 					{
-						if (isNotTitleLine(ln))
-						{
-							matchingMenuLines << ln;
-							say "... stored "+ln;
-						} // end of if
-        				} // end of if
-        				else
-        				{
-        					say "===> compareTokens( <${words}>, <${ln}> )"
-                			} // end of else        			
-    			} // end of eachLine
+						matchingMenuLines << ln;
+						say "... stored "+ln;
+        			} // end of if
+        			else
+        			{
+        				say "===> compareTokens( <${words}>, <${ln}> )"
+        			
+        			} // end of else
+        			
+    		} // end of eachLine
 			
 			//say "\nso we now have our target lines for "+findthis
 			//matchingMenuLines.each{ say it; }
@@ -315,7 +303,7 @@ public class Search
 	public writeResults(String path, def menus, String tl) 
 	{ 
 		def tmp = new File(path+"/.menulist.txt")
-		say "\n... writing list of menus to "+tmp.getCanonicalFile();
+		println "\n... writing list of menus to "+tmp.getCanonicalFile();
 
 		def reorder=[]
 
@@ -323,7 +311,7 @@ public class Search
 		{ entry ->
 			if (menus instanceof Map)
 			{
-				String xx = entry.value.trim() + "|"+ "${entry.value.trim()} :=go ${entry.key.trim()}\n"		
+				String xx = entry.value.trim() + "|"+ "${entry.value.trim()} :=go ${entry.key.trim()}\n"			
 				reorder << xx;
 			} // end of
 			else
@@ -380,7 +368,7 @@ public class Search
 			def menus = mf.getMenuFileNames()
 			menus.each{fn -> println "... "+fn}
 			mf.audit=true;
-
+/*		
 			println "\n now find a series of menu items that match our search criteria"
 			def as400 = mf.parseResults("as/400 ",menus);    // "^GitHub*"
 			println "\n\n-------------------------\n  Searched for as400 and found:"
@@ -395,12 +383,7 @@ public class Search
 			def re = mf.parseResults("  groovy  grep");
 			re.each{println "--->"+it;}
 			mf.writeResults(path,re, """Your Search for '  groovy  grep' As Of ${mf.now}""")
-
-			re = mf.parseResults("*ALLMENUS");
-			re.each{println "--->"+it;}
-			mf.writeResults(path,re, """Your Search for All Menus As Of ${mf.now}""")
-
-
+*/
 			println "-------------------------\nok\n"
 		} // end of if
 
@@ -420,9 +403,7 @@ public class Search
 				org.jnorthr.menus.support.Search mf = new org.jnorthr.menus.support.Search(path);
 				def re = mf.parseResults(swing.tf.text);
 				re.each{println "--->"+it;}
-				boolean hasText = (swing.tf.text.trim().size() > 0)  ? true : false;
-				def searchWas = (hasText) ? "'"+swing.tf.text.trim()+"'" : "Everything"
-				mf.writeResults(path,re, """Your Search for ${searchWas} """)				
+				mf.writeResults(path,re, """Your Search for '${swing.tf.text.trim()}'""")				
 				String menu = "./resources/.menulist.txt"; 
 				MenuColumnSupport.loadMenu(cs,menu)    
 				frame.setTitle(MenuColumnSupport.getFrameTitle())

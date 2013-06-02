@@ -654,8 +654,8 @@ public class Support
 	public JTextPane getTextPane()
 	{
 		jtp = new JTextPane();
-		//jtp.setMaximumSize(new Dimension(1024, 768)) 
-		//jtp.setPreferredSize(new Dimension(780, 510))
+		jtp.setPreferredSize(new Dimension(1280, 1024)) 
+		//jtp.setMaximumSize(new Dimension(780, 510))
 		jtp.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		jtp.setForeground(Color.green);
 		jtp.setBackground(Color.black);

@@ -14,7 +14,7 @@ import org.jnorthr.menus.MenuFile;
 public class MenuColumnSupport
 {
 	// holds decoded menu items filled from static loadMenu method
-	def static audit = true 		// true will print debug text
+	def static audit = false 		// true will print debug text
 	def static menuLines = 0		// how many visible lines appear in the columns
 	def static menuOptions = 0		// how many actual menu options appear in the columns which maybe less than menuLines if titles only
 	def static menuTitle = []
@@ -123,10 +123,10 @@ public class MenuColumnSupport
 
 
     // originally had menu options and commands as part of properties file but now these are found in their own .txt file
-    // this method reloads them and divides 1st third into left column, the remainder into the middle and right columns
+   	// this method reloads them and divides 1st third into left column, the remainder into the middle and right columns
     // mifilename is name of menu file to load
-    // cs is array of menu columns, mifilename is the name of the .txt file holding;
-    // showCommandText is a boolean to show the actual command in place of menu text of function key F17 used
+	// cs is array of menu columns, mifilename is the name of the .txt file holding;
+	// showCommandText is a boolean to show the actual command in place of menu text of function key F17 used
     public static void loadMenu(def cs, def mifilename, def showCommandText)
    	{  
 		say "----> ColumnSupport.groovy will try to load menu named <${mifilename}>"
@@ -134,11 +134,8 @@ public class MenuColumnSupport
 		// strip trailing .txt and any path prefix before last / 
 		def kk = mifilename.lastIndexOf("/");
 		def mifn = (kk > -1) ? mifilename.substring(kk + 1) : mifilename;
-		say "kk=$kk and mifn=<${mifn}>"
 		kk = mifn.lastIndexOf(".");
-		mifn = (kk > 0) ? mifn.substring( 0, kk ) : mifn;
-		say "kk=$kk and mifn=<${mifn}>"
-
+		mifn = (kk > -1) ? mifn.substring( 0, kk ) : mifn;
 		say "loadMenu($mifilename) becomes <${mifn}>"
 		mifilename = mifn;
 		
@@ -382,9 +379,9 @@ public class MenuColumnSupport
 		column1.setFocusable(false)
 		column1.setEditable(false);
 		column1.setFont(new Font("Monospaced", Font.PLAIN, 10));
-		column1.setMinimumSize(new Dimension(260,100));
-		column1.setPreferredSize(new Dimension(300,110));
-		column1.setMaximumSize(new Dimension(500,190));
+		column1.setMinimumSize(new Dimension(195,70));
+		column1.setPreferredSize(new Dimension(300,100));
+		column1.setMaximumSize(new Dimension(400,260));
 	} // end of setting attributes 
 
 

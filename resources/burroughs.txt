@@ -1,0 +1,13 @@
+Old Kit Links:=*menutitle
+IBM 7090:= http://www-03.ibm.com/ibm/history/exhibits/mainframe/mainframe_PP7090.html
+IBM 704:= http://www-03.ibm.com/ibm/history/exhibits/mainframe/mainframe_PP704.html
+Burroughs:= http://www.burroughs.goldenconti.eu/Bienvenue.html
+IBM SYSTEM 3:= http://www-03.ibm.com/ibm/history/exhibits/rochester/rochester_4008.html
+Burroughs:= http://www.youtube.com/watch?v=K3q5n1mR9iM&feature=player_embedded
+
+B2500/B3500/B5500:= http://www.youtube.com/watch?v=KswWJ6zvBUs
+
+IBM 1401:= The system that started it all : http://www.youtube.com/watch?v=FVsX7aHNENo
+
+RCA 301:= http://blog.modernmechanix.com/rca-301-computer-now-steps-up-to-big-system-workpower/
+RCA 501:= http://archive.computerhistory.org/resources/text/RCA/RCA.501.1958.102646273.pdf

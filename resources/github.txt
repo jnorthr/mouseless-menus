@@ -31,5 +31,15 @@ Github Pages Wiki:=open https://github.com/blog/272-github-pages
 Git Reference:=open http://gitref.org/basic/#reset
 Setup GitHub Pages:=open https://gist.github.com/chrisjacob/833223
 Getting the Hang of GitHub:=open http://net.tutsplus.com/tutorials/other/getting-the-hang-of-github/
+Getting started with GitHub Pages:=open http://xlson.com/2010/11/09/getting-started-with-github-pages.html
+Git Magic:= open http://www-cs-students.stanford.edu/~blynn/gitmagic/ch01.html#_a_silly_superstition
+Git Magic 2 :=open http://www-cs-students.stanford.edu/~blynn/gitmagic/ch06.html#_git_over_ssh_http
+Easy Version Control with Git:=open http://net.tutsplus.com/tutorials/other/easy-version-control-with-git/
+Distributed Git:=open http://learn.github.com/p/remotes.html
+Git Reference Branching & Merging:=open http://gitref.org/branching/
+Githun Mouseless menus:=open https://github.com/jnorthr/mouseless-menus
+Github Mouseless menus ReadMe:=open http://jnorthr.github.io/mouseless-menus/
+
+
 
 

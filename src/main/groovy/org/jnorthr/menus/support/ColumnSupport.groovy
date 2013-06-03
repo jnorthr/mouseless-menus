@@ -139,6 +139,7 @@ public class MenuColumnSupport
 		mifn = (kk > 0) ? mifn.substring( 0, kk ) : mifn;
 		say "kk=$kk and mifn=<${mifn}>"
 
+		mifn += (mifn.endsWith(".txt") ) ? "" : ".txt";
 		say "loadMenu($mifilename) becomes <${mifn}>"
 		mifilename = mifn;
 		
@@ -442,7 +443,7 @@ public class MenuColumnSupport
 		// use bold green text	
 		as1 = new SimpleAttributeSet()
 		StyleConstants.setForeground(as1, Color.green);
-		StyleConstants.setBold(as1, true);
+		//StyleConstants.setBold(as1, true);
 		//StyleConstants.setItalic(as1, true);
 
 		asred = new SimpleAttributeSet()

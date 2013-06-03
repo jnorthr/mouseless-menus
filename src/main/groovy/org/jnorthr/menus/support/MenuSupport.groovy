@@ -38,6 +38,7 @@ public class Support
 	SimpleAttributeSet as1
 	SimpleAttributeSet as2
 	SimpleAttributeSet as3
+	SimpleAttributeSet as4
 	SimpleAttributeSet attr = null
 	//CommandSet comset = new CommandSet()	
 
@@ -682,6 +683,10 @@ public class Support
 		// echo terminal command
 		as3 = new SimpleAttributeSet();
 		StyleConstants.setForeground(as3, Color.green);
+
+		// echo terminal command
+		as4 = new SimpleAttributeSet();
+		StyleConstants.setForeground(as4, Color.white);
 
 		return jtp;
 	} // end of getText

@@ -258,27 +258,55 @@ public class Search
 			say "---> ready for menu :"+men.key
 			File me = new File(men.key);
 			def lines = me.readLines()
-			say "   ${men.key} had ${lines.size()} lines"
-    			lines.each
-			{
-				ln -> 
-					//if ( ln =~ findthis || convertCase(ln) =~ findthis  ) 
-					if (compareTokens( words, ln ) || convertCase(ln) =~ findthis)
-					{
-						if (isNotTitleLine(ln))
-						{
-							matchingMenuLines << ln;
-							say "... stored "+ln;
-						} // end of if
-        				} // end of if
-        				else
-        				{
-        					say "===> compareTokens( <${words}>, <${ln}> )"
-                			} // end of else        			
-    			} // end of eachLine
 			
-			//say "\nso we now have our target lines for "+findthis
-			//matchingMenuLines.each{ say it; }
+			say "   ${men.key} had ${lines.size()} lines"
+			
+			
+			// *ALLMENUS comes here
+			if (findAllMenus) 
+			{
+				def tx2 = men.value.trim() + ":=go " + men.key
+				matchingMenuLines << tx2
+			} // end of if
+			
+			// not *ALLMENUS
+			else
+			{
+				// *ALL to pick each and every menu line that's not a *menutitle
+				if (findAll)
+				{
+		    		lines.each
+					{	li -> 
+						if (isNotTitleLine(li))
+						{
+							matchingMenuLines << li;
+							say "... stored "+li;
+						} // end of if				
+		    		} // end of eachLine
+										
+				} // end of if findAll
+				
+				else
+				{			
+		    		lines.each
+					{	ln -> 
+						if ( convertCase(ln) =~ findthis || compareTokens( words, ln ) )
+						{
+							if (isNotTitleLine(ln))
+							{
+								matchingMenuLines << ln;
+								say "... stored "+ln;
+							} // end of if
+        				} // end of if
+		    		} // end of eachLine
+	
+				} // end of else
+
+			} // end of else
+
+						
+			say "\nso we now have our target lines for "+findthis
+			matchingMenuLines.each{ say it; }
 		} // end of each
 
 		say "--- the end of parse ---"
@@ -300,7 +328,7 @@ public class Search
 	
 
 
-    	// =========================================
+    // =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
 	public writeResults(String path, def matchingMenuLines ) 
 	{ 
@@ -373,6 +401,8 @@ public class Search
 		def fi = new File(path);
 		if (fi.exists())
 		{
+			println "--> running";
+
 			Search mf = new Search(path);
 			mf.audit=false;
 			println "\n... doing pass 2 -> from path="+path
@@ -382,12 +412,10 @@ public class Search
 			mf.audit=true;
 
 			println "\n now find a series of menu items that match our search criteria"
-			def as400 = mf.parseResults("as/400 ",menus);    // "^GitHub*"
-			println "\n\n-------------------------\n  Searched for as400 and found:"
-			as400.each{key ->println "---> key:"+key;}
-			mf.writeResults(path,as400, """Your Search for 'as/400 400' As Of ${mf.now}""")
-
-
+			def github = mf.parseResults("^GitHub*",menus);    
+			println "\n\n-------------------------\n  Searched for github and found:"
+			github.each{key ->println "---> key:"+key;}
+			mf.writeResults(path,github, """Your Search for 'GitHub' As Of ${mf.now}""")
 
 			println "-------------------------\nfind items with two terms in search sequence"
 			println "\n ---> search for '  groovy  grep' found :"

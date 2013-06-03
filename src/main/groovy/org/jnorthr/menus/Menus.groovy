@@ -35,6 +35,7 @@ import org.jnorthr.menus.support.Support;
 import org.jnorthr.menus.support.PanelSupport;
 import org.jnorthr.menus.CommandSet;
 
+import org.jnorthr.menus.support.PathFinder;
 
 /* to do:
 the # character
@@ -121,7 +122,7 @@ The following workaround works fine :
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
 {
-	def static audit = false
+	def static audit = true
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
@@ -132,6 +133,7 @@ class Menus implements KeyListener
 	def frametitle 
 	JTextPane jtp;
 	def helpfilename = "resources/documents/help.html"
+	def todofilename = "resources/documents/todo.html"
 	Border cyanline = new LineBorder(Color.red,1);
 	def mono = new Font("Monospaced", Font.PLAIN, 10)
 
@@ -139,7 +141,7 @@ class Menus implements KeyListener
 
 	GridBagConstraints c = new GridBagConstraints();
 	def p1 
-	def footer1 = "F1=Help   F2=Allow   F3=Exit                    F5=Refresh   F9=Recall   F10/F12=Cancel"
+	def footer1 = "F1=Help   F8=Allow   F3=Exit                    F5=Refresh   F9=Recall   F10/F12=Cancel"
 	def footer2 = "                     F15=All Menus   F16=Find   F17=Cmds"
 	def l1 
 	def l2 
@@ -159,6 +161,54 @@ class Menus implements KeyListener
 		boolean f = (ke.isShiftDown()) ? true : false;
 		switch (ke.getKeyCode()) 
 		{
+			case KeyEvent.VK_ENTER:  
+				if (f)
+				{
+				 	say"Shift+ENTER key pressed"
+					swing.tf.text=""
+				}
+				else
+				{
+					say "ENTER key pressed"
+				} // end of
+				 
+				break;
+
+
+			// ============================================		
+			// Up Arrow --------------------------------------
+			// recall prior command - moving backward thru commands from most recent to oldest, 
+			// then wrap after blank line
+			case KeyEvent.VK_UP: 
+				swing.tf.text = support.getStackEntry(true)
+				break;
+
+
+			// ============================================		
+			// Down Arrow --------------------------------------
+			// recall next command
+			case KeyEvent.VK_DOWN: 
+				swing.tf.text = support.getStackEntry(false)
+				break;
+
+
+			// ============================================		
+			// ask for help	
+			case KeyEvent.VK_F1: 
+				if (!f)
+				{
+					helpme(); 
+				} // end of shift
+
+				else
+				{
+					say "F13 key pressed"
+					todo();
+				} // end of 
+				break;
+
+
+			// ============================================		
 			// menu exit command
 			case KeyEvent.VK_F3:  // move x coordinate left
 				// if F15 key ?  F3+shift key - used to see all the menus 
@@ -174,11 +224,12 @@ class Menus implements KeyListener
 					String menu = ".menulist"; 
 					MenuColumnSupport.loadMenu(cs,menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
+					support.appendText("${pr.size} available menus", support.as4);
 					support.resetStack()
 					swing.tf.text=""
 					swing.tf.requestFocusInWindow()
 					swing.tf.grabFocus();
-					} // end of shift
+				} // end of shift
 
 				else
 				{
@@ -187,6 +238,8 @@ class Menus implements KeyListener
 				} // end of 
 				break;
 
+
+			// ============================================		
 			// menu find command
 			case KeyEvent.VK_F4:  // move x coordinate left
 				// if F16 find key ? if no text, then it's a 'find all' search 
@@ -207,6 +260,8 @@ class Menus implements KeyListener
 					String menu = ".menulist"; 
 					MenuColumnSupport.loadMenu(cs,menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
+					
+					support.appendText("found ${re.size} menu items for ${searchText}", support.as4);
 					support.resetStack()
 					swing.tf.text=""
 					swing.tf.requestFocusInWindow()
@@ -219,31 +274,8 @@ class Menus implements KeyListener
 			    } // end of 
 				break;
 				
-			case KeyEvent.VK_ENTER:  
-				if (f)
-				{
-				 	say"Shift+ENTER key pressed"
-					swing.tf.text=""
-				}
-				else
-				{
-					say "ENTER key pressed"
-				} // end of
-				 
-				break;
 
-			// allow focus in joblog, the lower pane of the splitpane group	
-			case KeyEvent.VK_F2: 
-				foc = (foc) ? false : true;
-				jtp.setFocusable(foc)
-				break;
-
-			// ask for help	
-			case KeyEvent.VK_F1: 
-				helpme(); 
-				break;
-
-
+			// ============================================		
 			// F5 - reload menu commands
 			case KeyEvent.VK_F5:
 				String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
@@ -266,25 +298,29 @@ class Menus implements KeyListener
 				break;
 
 
+			// ============================================		
+			// ask to edit this current menu
+			case KeyEvent.VK_F7: 
+				selfedit(); 
+				break;
+
+			// ============================================		
+			// allow focus in joblog, the lower pane of the splitpane group	
+			case KeyEvent.VK_F8: 
+				foc = (foc) ? false : true;
+				jtp.setFocusable(foc)
+				break;
+
+
+			// ============================================		
 			// F9 --------------------------------------
 			// recall prior command
 			case KeyEvent.VK_F9: 
 				swing.tf.text = support.getStackEntry(true)
 				break;
 
-			// Up Arrow --------------------------------------
-			// recall prior command - moving backward thru commands from most recent to oldest, then wrap after blank line
-			case KeyEvent.VK_UP: 
-				swing.tf.text = support.getStackEntry(true)
-				break;
 
-
-			// Down Arrow --------------------------------------
-			// recall next command
-			case KeyEvent.VK_DOWN: 
-				swing.tf.text = support.getStackEntry(false)
-				break;
-
+			// ============================================		
 			// Backstep thru previous menus using either F10 or F12 function keys or the escape key --------------------------------------
 			case KeyEvent.VK_ESCAPE: 
 			case KeyEvent.VK_F12: // F12 for long keyboards
@@ -335,7 +371,7 @@ class Menus implements KeyListener
 	// setup up gui actions
 	// ==========================
 
-	// help
+	// F1 help
 	def helpme =  
 	{	
 		def help = support.getMenuMap().helpfilename 
@@ -353,35 +389,59 @@ class Menus implements KeyListener
 		} // end of else
 
 		dot = menu.lastIndexOf("/")
-		if (dot < 0)
-		{
-			menu2 = menu;
-		}
-		else
-		{
-		 	menu2 = menu.substring(dot+1)
-		} // end of else
-		
-		
+		menu2 = (dot < 0) ? menu : menu.substring(dot+1); 		
 		say "helpme menu is <$help>  menu=<$menu>  menu2=<$menu2>"
 
 		// check if context vesion of .html found
-        def fi = new File(menu2);
-        if (fi.exists()) 
+        if ( new File(menu2).exists() ) 
         {
         	help = menu2;
-        	say "... $menu2 help exists - use it rather than $help"
+        	say "... context help $menu2 exists, so use it rather than $help"
         }
         
-		File hf = new File(help)
-		URL url=null;
-		url=hf.toURL();
+		//File hf = new File(help)
+		//URL url=null;
+		//url=hf.toURL();
 
 		HelpWindow hw = new HelpWindow("Help Text", help);    
 		swing.tf.requestFocusInWindow()
 		swing.tf.grabFocus();
 
 	} // end of help
+
+
+	// F7 selfedit
+	def selfedit =  
+	{
+		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
+		say "  Menus.groovy has menu="+menu
+		PathFinder pathfinder = new PathFinder();
+
+		boolean located = pathfinder.locate(menu);
+		if (located)
+		{
+			menu = pathfinder.getFullName();
+			def dothis = "open -e "+menu 
+			say "  Menus.groovy will self-edit menu "+menu+" so we <${dothis}>"
+			support.runCommand(dothis);
+		} // end of if
+		  
+		swing.tf.requestFocusInWindow()
+		swing.tf.grabFocus();
+	} // end of selfedit
+
+
+	// F13 todo list
+	def todo =  
+	{	
+		def help = support.getMenuMap().todofilename 
+		say "todo menu is $help"
+
+		HelpWindow hw = new HelpWindow("To Do List", help);    
+		swing.tf.requestFocusInWindow()
+		swing.tf.grabFocus();
+	} // end of todo
+
 
 
 	// define saver closure
@@ -578,7 +638,7 @@ class Menus implements KeyListener
 							tf = textField(id:'tf', foreground:Color.GREEN, columns: 90, border:bb,  font:mono, actionPerformed: { event -> saver()}, minimumSize:[550, 12], opaque:true, background:Color.BLACK)
 							tf.addKeyListener(this);
 							tf.setCaretColor(Color.YELLOW)
-							tf.getCaret().setBlinkRate(1200);
+							tf.getCaret().setBlinkRate(200);
 						} // end of container	
 
 						panel()

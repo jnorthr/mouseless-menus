@@ -122,9 +122,11 @@ The following workaround works fine :
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
 {
-	def static audit = true
+	def static audit = false
 	def support
 	java.util.List<MenuColumnSupport> cs = []
+
+	PathFinder pathfinder;
 
 	def ps = new PanelSupport()
 
@@ -141,8 +143,8 @@ class Menus implements KeyListener
 
 	GridBagConstraints c = new GridBagConstraints();
 	def p1 
-	def footer1 = "F1=Help   F8=Allow   F3=Exit                    F5=Refresh   F9=Recall   F10/F12=Cancel"
-	def footer2 = "                     F15=All Menus   F16=Find   F17=Cmds"
+	def footer1 = "F1=Help   F3=Exit                    F5=Refresh   F7=Selfedit   F8=Allow   F9=Recall   F10/F12=Cancel"
+	def footer2 = "F13=ToDo  F15=All Menus   F16=Find   F17=Cmds"
 	def l1 
 	def l2 
 	def l3 
@@ -415,13 +417,11 @@ class Menus implements KeyListener
 	{
 		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
 		say "  Menus.groovy has menu="+menu
-		PathFinder pathfinder = new PathFinder();
-
 		boolean located = pathfinder.locate(menu);
 		if (located)
 		{
 			menu = pathfinder.getFullName();
-			def dothis = "open -e "+menu 
+			def dothis = pathfinder.editor+menu 
 			say "  Menus.groovy will self-edit menu "+menu+" so we <${dothis}>"
 			support.runCommand(dothis);
 		} // end of if
@@ -687,7 +687,10 @@ class Menus implements KeyListener
 		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         //println "... Menus started"
 		support = new Support()
-   		frametitle = support.getFrameTitle()
+   		frametitle = support.getFrameTitle();
+   		
+   		pathfinder = new PathFinder();
+   		
 /*
    		worker = new SwingWorker()    
    		{  public Object construct() 

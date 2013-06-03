@@ -39,7 +39,6 @@ public class PathFinder
     // give full path name to menu props: the folder, resource and property folders plus the property file name
     def menuPropertiesPath = "";
 
-
     // give full path name to path props
     def pathPropertiesPath = "";
     
@@ -58,6 +57,9 @@ public class PathFinder
 	// holds the loaded map from both property files
 	def menuMap
 	def pathMap
+
+	String cmdprefix="";
+	String editor="";
 	
 	// full hit of system properties
 	Properties systemProperties
@@ -189,7 +191,9 @@ public class PathFinder
 
 		// is the audit flag set in the menu.properties ?	
 		this.audit = menuMap["audit"]
-
+		this.editor = menuMap["editor"]
+		this.cmdprefix = menuMap["cmdprefix"];
+		
 		showAllSystemGetPropertiesParam();
 		
 		def p = new Properties(System.getProperties());

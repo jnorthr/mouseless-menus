@@ -1,5 +1,7 @@
 google:=www.google.co.uk
 F r e d   M e n u:=*MENUTITLE
+pwd:=pwd
+pwd2:=sh -c pwd
 groovy version :=groovy -v
 $GROOVY_HOME/bin/groovy -v:=$GROOVY_HOME/bin/groovy -v
 java -version:=java -version

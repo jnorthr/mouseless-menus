@@ -14,7 +14,7 @@ import org.jnorthr.menus.MenuFile;
 public class MenuColumnSupport
 {
 	// holds decoded menu items filled from static loadMenu method
-	def static audit = true 		// true will print debug text
+	def static audit = false 		// true will print debug text
 	def static menuLines = 0		// how many visible lines appear in the columns
 	def static menuOptions = 0		// how many actual menu options appear in the columns which maybe less than menuLines if titles only
 	def static menuTitle = []

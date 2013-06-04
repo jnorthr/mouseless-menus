@@ -29,7 +29,7 @@ What Font Typeface to Use?:=open http://www.smashingmagazine.com/2010/12/14/what
 Grand Central Station 4 Cloud Bees:=open https://grandcentral.cloudbees.com/#
                      
                      
-// user.home /Users/leanne
+// user.home /Users/jim
 // user.name leanne
 // os.name Mac OS X  os.version 10.5.8
 // java.vm.version 14.1-b02-92 java.version 1.6.0_15

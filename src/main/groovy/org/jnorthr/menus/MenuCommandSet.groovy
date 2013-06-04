@@ -12,7 +12,8 @@ public class CommandSet
     def cmd = "command set" // iMac PPC version      // "cmd /c  "  RedApple  mac os command to see environmental variables
     def txt
     def map =[:]
-    //String propertyfile = './resources/properties/menu.properties'  		// non-OS specific parameters for business issues
+
+	// keeps PathFinder.menuMap
     def config
 
 	def audit = false
@@ -24,14 +25,9 @@ public class CommandSet
 
 		PathFinder resourcePath = new PathFinder(); 
 		config = resourcePath.menuMap;
-		config.each{ck,cv -> say "ck=$ck and cv=$cv"}
+		config.each{ck,cv -> say "PathFinder key=$ck and value=$cv"}
 		say "---------------\n"
-/*		
-		def flag = (new File(propertyfile).exists()) ? true : false;
-		if (flag) say "\n$propertyfile exists" 
-		else say "\n$propertyfile does not exist !!!\n\n"
-       	config = new ConfigSlurper().parse(new File(propertyfile).toURL())	// get non-path related static values
-*/
+
         Properties props = System.getProperties()
 		say "\n\nSystem properties follow:"
 		props.each{k,v -> say "k=$k and v=$v"}
@@ -48,11 +44,15 @@ public class CommandSet
 		} // end of each
         setDate()
 
-		map.put("menu.version","V1.0");
-		//def words=[]
+		//map.put("menu.version","V1.0");
+		map.put("application", config.application)
+        map.put("version",config.version)
+
+
     	def word1
 
 		// logic to ask mac os to provide list of known environmental properties - may not work on ubuntu or windows
+		say "\nnow running <${cmd}>"
         txt = cmd.execute().text
         txt.eachLine
         {
@@ -60,7 +60,7 @@ public class CommandSet
 			if (line.trim().size() > 0)
 			{
 	            def words = line.split(/=/)
-		    	//say "<"+line+"> has "+words.size()+" words";
+		    	say "<"+line+"> has "+words.size()+" words";
 		    	if (words.size()>1)
 		    	{
             		    word1=words[0].toLowerCase()
@@ -71,33 +71,27 @@ public class CommandSet
         } // end of eachLine
 
 
-        txt = "ipconfig".execute().text
+		say "\nnow running ifconfig"
+        txt = "ifconfig".execute().text
         txt.eachLine
         {
           line -> 
 		if (line.trim().size() > 0)
 		{
 			def tokens = line.trim().split()
-			//say tokens[0]+" "+tokens[1]
+			say tokens[0]+" "+tokens[1]
 			if (tokens[0].toLowerCase()=="inet") {map.put(tokens[0],tokens[1])}
 			if (tokens[0].toLowerCase()=="ipv4") {map.put("inet",tokens[tokens.size()-1])}
 		}
 	} // end of eachLine
 
+	say "CommandSet map follows -"
+	map.each{mk,mv ->
+		say "map key:"+mk+"="+mv
+	}
 
     } // end of constructor
 
-    // get handle to config
-    def getConfig()
-    {
-        return config
-    } // end of get
-    
-    // get property map
-    def getMap()
-    {
-        return map
-    } // end of get
 
     // fill map with date and time
     def setDate()
@@ -112,7 +106,9 @@ public class CommandSet
     // get a map entry, if found, then return map.value else return 'not declared'
     def getMap(k)
     {
-	return (this.map[k]==null) ? "not declared" : this.map[k] 
+		say "CommandSet getmap($k)"
+		if (k.equals("blank")) return "";
+		return (this.map[k]==null) ? "not declared" : this.map[k] 
     }
 
 

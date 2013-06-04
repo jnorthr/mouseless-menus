@@ -127,6 +127,13 @@ task(runCommandSet, dependsOn: 'classes', type: JavaExec)
 }
 
 
+task(runHeaderSupport, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.HeaderSupport' 
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+
 task(runValidator, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.support.Validator' 

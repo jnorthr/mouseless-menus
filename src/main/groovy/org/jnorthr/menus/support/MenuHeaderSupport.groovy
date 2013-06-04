@@ -6,19 +6,19 @@ import java.awt.*
 import javax.swing.text.*;
 import org.jnorthr.menus.CommandSet;
 
-
-public class HeaderSupport
+// the onscreen representation of one document pane            
+public class HeaderSupport extends JTextPane
 {
-    JTextPane column;            	// the onscreen representation of the document            
     StyledDocument doc;            	// a storage repository for text
     static SimpleAttributeSet as1;      // text decorations to apply to text within 'doc'
-    static audit = false			// flag to turn audit messages to console
-    static CommandSet cs;
+    static audit = true			// flag to turn audit messages to console
+    CommandSet cs;
 
-    // retrieve column text pane and styles with colors to be used as the menu
+
+    // retrieve  jtp text pane styled with colors to be used as the menu
     public JTextPane getColumn()
     {
-        return column;
+        return  this;
     } // end of getColumn
     
 
@@ -34,7 +34,7 @@ public class HeaderSupport
     // mifilename is name of menu file to load
     public static void loadMenu(columns,menuitems) 
     {  
-	say "loadMenu..."
+		say "loadMenu..."
        	int numberofcolumns = columns.size()	// how many columns this time ?
         def itemflag = [numberofcolumns]
         def itemcount = [numberofcolumns]
@@ -53,148 +53,157 @@ public class HeaderSupport
         } // end of if
 
         // erase each menu item column, set flags true and items/per/column count ot zero
-	numberofcolumns.times
-	{ ix -> 
-		itemflag[ix] = true;
-		itemcount[ix] = percolumn;
-	} // end of each
+		numberofcolumns.times
+		{ ix -> 
+			itemflag[ix] = true;
+			itemcount[ix] = percolumn;
+		} // end of each
 
-        columns.each { it.clearColumnText(it); }
+        columns.each { it.clearColumnText(); }
 
         say("there are ${menuitems.size()} menu items of $percolumn items per column in $numberofcolumns columns")
-	say("   the max entries for this table is ${percolumn * numberofcolumns}")
+		say("   the max entries for this table is ${percolumn * numberofcolumns}")
 
         int thiscolumn = 0
         def val
-	String tx
-	String whole
-	int x = 0
+		String tx
+		String whole
+		int x = 0
 
         // now roll thru the titles and assign them to each of the columns
         menuitems.eachWithIndex
         {   
-		it, ix ->   
+			it, ix ->   
 
-		say "\nmenuitem <$it> and ix=$ix "
-               	thiscolumn = ix / percolumn;    // compute a column number for this menu item to appear in
+			say "\nmenuitem <$it> and ix=$ix "
+            thiscolumn = ix / percolumn;    // compute a column number for this menu item to appear in
 
-		tx = it.key.trim() 
+			tx = it.key.trim() 
 
-		// see if more than one environment var. name is present, i.e. comma is in map value.
-		// like "User :":"user,uid",  from menu.properties; so map key User : points to map value "user,uid"
-		// requiring two values from CommandSet map loaded at boj. Resulting in User : jim 502
+			// see if more than one environment var. name is present, i.e. comma is in map value.
+			// like "User :":"user,uid",  from menu.properties; so map key User : points to map value "user,uid"
+			// requiring two values from CommandSet map loaded at boj. Resulting in User : jim 502
 
-		// only need a single text value as map value is a single key to look up an environmental value
+			// only need a single text value as map value is a single key to look up an environmental value
 	       	if ( it.value.indexOf(",") < 1) 
-		{ 
-			val = " "+cs.getMap(it.value.trim()) 
-		}
-
-		// else there are two (but not more than are coded for) text values to place in header column of menu
-		else  
-		{
-			def tokens = it.value.trim().split(",")
-			val = " "+cs.getMap(tokens[0].trim()) 
-			val += " "+cs.getMap(tokens[1].trim()) 
-		} // end of else
-
-		int pad = 0
-		if ( thiscolumn.equals(1) )
-		{ 
-			if ( val.size() + x < 40) 
 			{ 
-				int p = 40 - ( val.size() + tx.size() ) 
-				pad = (p < 1) ? 0 : p / 2;
+				val = " "+cs.getMap(it.value.trim()) 
+			}
+
+			// else there are two (but not more than are coded for) text values to place in header column of menu
+			else  
+			{
+				def tokens = it.value.trim().split(",")
+				val = " "+cs.getMap(tokens[0].trim()) 
+				val += " "+cs.getMap(tokens[1].trim()) 
+			} // end of else
+
+			int pad = 0
+			if ( thiscolumn.equals(1) )
+			{ 
+				if ( val.size() + x < 40) 
+				{ 
+					int p = 40 - ( val.size() + tx.size() ) 
+					pad = (p < 1) ? 0 : p / 2;
+				} // end of if
 			} // end of if
-		} // end of if
 
-		if ( pad < 1 )
-		{
-			whole = tx
-		}
-		else 
-		{	
-			whole = ""
-			pad.times{ whole += ' '; }
-			whole += tx
-		} // end of else
+			if ( pad < 1 )
+			{
+				whole = tx
+			}
+			else 
+			{	
+				whole = ""
+				pad.times{ whole += ' '; }
+				whole += tx
+			} // end of else
 
-	       	// if this is the first time thru for this column, erase the leading c/r
-		( itemflag[thiscolumn] )  ?  itemflag[thiscolumn] = false  :  columns[thiscolumn].appendColumnText('\n')
-                columns[thiscolumn].appendColumnText(whole+val)    // stuff in column 1
+	    	// if this is the first time thru for this column, erase the leading c/r
+			( itemflag[thiscolumn] )  ?  itemflag[thiscolumn] = false  :  columns[thiscolumn].appendColumnText('\n')
+        	columns[thiscolumn].appendColumnText(whole+val)    // stuff in column 1
 
+        } // end of walking thru each title 
 
-           } // end of walking thru each title 
+	    // find how many blank lines go in final column
+        int j = ( ( thiscolumn + 1 ) * percolumn )            
 
-	   // find how many blank lines go in final column
-           int j = ( ( thiscolumn + 1 ) * percolumn )            
-
-           // add extra blank m/i entries to make last column look nicer on odd m/i count
-           j.times{ columns[numberofcolumns-1].appendColumnText("\n") }
+        // add extra blank m/i entries to make last column look nicer on odd m/i count
+        j.times{ columns[numberofcolumns-1].appendColumnText("\n") }
     
-        } // end of load
+    } // end of loadMenu
 
-
-
-
-    // ============================================
-    // declare text attributes and mono font usage
-    public void setColumn(HeaderSupport su)
-    {
-        def column1 = su.getColumn()
-        column1.setBackground(Color.black);
-        column1.setFocusable(false)
-        column1.setEditable(false);
-        column1.setFont(new Font("Monospaced", Font.PLAIN, 10));
-        column1.setMinimumSize(new Dimension(160,50));
-        column1.setPreferredSize(new Dimension(255,58));
-        column1.setMaximumSize(new Dimension(500,120));
-    } // end of setting attributes 
-
-
-    // one-time setup of a column text pane and styles with colors to be used as the menu
-    public JTextPane getColumnTextPane(StyledDocument document)
-    {
-        JTextPane jtp = new JTextPane(document);
-        jtp.setBorder(null)
-        return jtp;
-    } // end of getText
 
     // class constructor - loads configuration,etc.
-    public HeaderSupport()
+    public HeaderSupport(org.jnorthr.menus.CommandSet comset)
     {
+		// get link to CommandSet
+		cs = comset;
+		
         // use white text    
         as1 = new SimpleAttributeSet()
         StyleConstants.setForeground(as1, Color.white);
+
         //StyleConstants.setBold(as1, true);
         //StyleConstants.setItalic(as1, true);
-        doc = new DefaultStyledDocument()
-        column = getColumnTextPane(doc);
-        clearColumnText(this)
-        setColumn(this)
 
-	cs = new CommandSet();
-	cs.setDate();
+        doc = new DefaultStyledDocument()
+        setStyledDocument (doc);
+        setBackground(Color.black);
+        setFocusable(false)
+        setEditable(false);
+        setFont(new Font("Monospaced", Font.PLAIN, 10));
+        setMinimumSize(new Dimension(220,60));
+        setPreferredSize(new Dimension(255,70));
+        setMaximumSize(new Dimension(500,120));
+        setBorder(null)
     } // end of constructor
 
 
 
     // This is logic to populate the joblog of the menu panel =========================
-        // Clear out current document
-    private void clearColumnText(HeaderSupport su) 
+    // Clear out current document
+    private void clearColumnText() 
     {
-        su.getColumn().setStyledDocument (doc = new DefaultStyledDocument());
+		doc = new DefaultStyledDocument();
+        setStyledDocument (doc);  // su.getColumn()
     } // end of clearColumnText
+
 
     // method to add text to column pane with specific display attributes
     private void appendColumnText(String s) 
     {
-        doc = this.getColumn().getDocument();
+        doc = this.getStyledDocument()             
         try 
         {
             doc.insertString(doc.getLength(), s, as1);
         }
         catch (BadLocationException e) {}
     } // end of appendColumnText
+
+
+    // ============================
+    // test harness for this class
+    public static void main(String[] args)
+    {    
+        println "---> starting"
+
+        org.jnorthr.menus.CommandSet cs = new org.jnorthr.menus.CommandSet()
+		HeaderSupport hs = new HeaderSupport(cs);
+		
+		def pane = hs.getColumn()
+		pane.clearColumnText()
+		pane.appendColumnText("Hi kids")
+		JFrame.setDefaultLookAndFeelDecorated(true);
+		def swing = new SwingBuilder()
+		def frame = swing.frame(title:"HeaderSupport", background:Color.black, pack:true, show:true, 
+			defaultCloseOperation:JFrame.EXIT_ON_CLOSE, preferredSize:[800, 760]) 
+		{
+			widget(pane);
+		}
+
+        println "... end"
+    } // end of main
+
 
 } // end of HeaderSupport.class

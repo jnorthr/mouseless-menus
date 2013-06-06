@@ -4,7 +4,7 @@ import groovy.swing.SwingBuilder
 import javax.swing.*
 import java.awt.*
 import javax.swing.text.*;
-import org.jnorthr.menus.CommandSet;
+import org.jnorthr.menus.support.PropertyHarvester;
 
 // the onscreen representation of one document pane            
 public class HeaderSupport extends JTextPane
@@ -12,7 +12,7 @@ public class HeaderSupport extends JTextPane
     StyledDocument doc;            	// a storage repository for text
     static SimpleAttributeSet as1;      // text decorations to apply to text within 'doc'
     static audit = true			// flag to turn audit messages to console
-    CommandSet cs;
+    PropertyHarvester cs;
 
 
     // retrieve  jtp text pane styled with colors to be used as the menu
@@ -32,9 +32,8 @@ public class HeaderSupport extends JTextPane
     // originally had menu options and commands as part of properties file but now these are found in their own .txt file
     // this method reloads them and divides 1st third into left column, the remainder into the middle and right columns
     // mifilename is name of menu file to load
-    public static void loadMenu(columns,menuitems) 
+    public loadMenu(columns,menuitems) 
     {  
-		say "loadMenu..."
        	int numberofcolumns = columns.size()	// how many columns this time ?
         def itemflag = [numberofcolumns]
         def itemcount = [numberofcolumns]
@@ -45,11 +44,12 @@ public class HeaderSupport extends JTextPane
 
         // there are enough menu items to divide between columns
         int percolumn = menuitems.size() / numberofcolumns
+		say "loadMenu... columns:"+numberofcolumns+" m/i count:"+menuitems.size()+" percolumn:"+percolumn
 
         if (percolumn * numberofcolumns != menuitems.size())     // if not modulo three
         {
         	percolumn+=1;
-               	say "not even number of items per col: $percolumn";
+            say "not even number of items per col: $percolumn";
         } // end of if
 
         // erase each menu item column, set flags true and items/per/column count ot zero
@@ -82,7 +82,7 @@ public class HeaderSupport extends JTextPane
 
 			// see if more than one environment var. name is present, i.e. comma is in map value.
 			// like "User :":"user,uid",  from menu.properties; so map key User : points to map value "user,uid"
-			// requiring two values from CommandSet map loaded at boj. Resulting in User : jim 502
+			// requiring two values from PropertyHarvester map loaded at boj. Resulting in User : jim 502
 
 			// only need a single text value as map value is a single key to look up an environmental value
 	       	if ( it.value.indexOf(",") < 1) 
@@ -135,15 +135,15 @@ public class HeaderSupport extends JTextPane
 
 
     // class constructor - loads configuration,etc.
-    public HeaderSupport(org.jnorthr.menus.CommandSet comset)
+    public HeaderSupport(PropertyHarvester comset)
     {
-		// get link to CommandSet
+		// get link to PropertyHarvester
 		cs = comset;
 		
         // use white text    
         as1 = new SimpleAttributeSet()
         StyleConstants.setForeground(as1, Color.white);
-
+		StyleConstants.setAlignment(as1 , StyleConstants.ALIGN_RIGHT);
         //StyleConstants.setBold(as1, true);
         //StyleConstants.setItalic(as1, true);
 
@@ -153,9 +153,9 @@ public class HeaderSupport extends JTextPane
         setFocusable(false)
         setEditable(false);
         setFont(new Font("Monospaced", Font.PLAIN, 10));
-        setMinimumSize(new Dimension(220,60));
-        setPreferredSize(new Dimension(255,70));
-        setMaximumSize(new Dimension(500,120));
+        setMinimumSize(new Dimension(260,80));
+        setPreferredSize(new Dimension(260,150));
+        setMaximumSize(new Dimension(500,200));
         setBorder(null)
     } // end of constructor
 
@@ -188,18 +188,43 @@ public class HeaderSupport extends JTextPane
     {    
         println "---> starting"
 
-        org.jnorthr.menus.CommandSet cs = new org.jnorthr.menus.CommandSet()
+		PathFinder resourcePath = new PathFinder(); 
+		def config = resourcePath.menuMap;		
+
+        def cs = new PropertyHarvester()
 		HeaderSupport hs = new HeaderSupport(cs);
 		
 		def pane = hs.getColumn()
 		pane.clearColumnText()
 		pane.appendColumnText("Hi kids")
+		
+		java.util.List<HeaderSupport> columns = []
+		columns << pane;
+
+		HeaderSupport hs2 = new HeaderSupport(cs);
+		pane = hs2.getColumn()
+		pane.clearColumnText()
+		pane.appendColumnText("Freddie was here\nand not too soon, either.")
+		columns << pane;
+
+		HeaderSupport hs3 = new HeaderSupport(cs);
+		pane = hs3.getColumn()
+		pane.clearColumnText()
+		pane.appendColumnText("Freddie was here but left early for another show\nand not too soon, either as his whole band had left for the party\nwithout him.")
+		columns << pane;
+
+		hs.loadMenu(columns,config.itemtitles)
+
+		
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		def swing = new SwingBuilder()
 		def frame = swing.frame(title:"HeaderSupport", background:Color.black, pack:true, show:true, 
-			defaultCloseOperation:JFrame.EXIT_ON_CLOSE, preferredSize:[800, 760]) 
+			defaultCloseOperation:JFrame.EXIT_ON_CLOSE, minimumSize:[300, 80], preferredSize:[800, 150]) 
 		{
-			widget(pane);
+				hbox()   //minimumSize:[200, 300])
+				{
+					columns.each{widget(it)}
+				}
 		}
 
         println "... end"

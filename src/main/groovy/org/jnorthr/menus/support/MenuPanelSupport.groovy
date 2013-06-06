@@ -5,6 +5,7 @@ import javax.swing.*
 import java.awt.*
 import groovy.swing.SwingBuilder
 import org.jnorthr.menus.support.PathFinder
+import org.jnorthr.menus.support.PropertyHarvester;
 
 public class PanelSupport
 {
@@ -17,7 +18,10 @@ public class PanelSupport
 	public PanelSupport()
 	{
 		PathFinder resourcePath = new PathFinder(); 
-		def config = resourcePath.menuMap;			
+		def config = resourcePath.menuMap;		
+		def cs = new PropertyHarvester()
+		HeaderSupport hs = new HeaderSupport(cs);
+	
 		swing = new SwingBuilder()
 		panelsupportpanel = swing.panel(background:Color.BLACK,layout:new GridLayout(rows:1,columns:3,hgap:14,vgap:1))		
 
@@ -26,7 +30,7 @@ public class PanelSupport
 		config.panelcolumns.times{columns <<  new HeaderSupport();}
 		say "PanelSupport:"+config.itemtitles
 		
-		HeaderSupport.loadMenu(columns,config.itemtitles)
+		hs.loadMenu(columns,config.itemtitles)
 
 		// create a panel with these HeaderSupport jtextpane's - one per column; ps.getPanel() returns the JPanel with added components
 		panelsupportpanel = loadPanel(columns)

@@ -33,7 +33,7 @@ import org.jnorthr.menus.support.BottomBorder;
 import org.jnorthr.menus.support.MenuColumnSupport;
 import org.jnorthr.menus.support.Support;
 import org.jnorthr.menus.support.PanelSupport;
-import org.jnorthr.menus.CommandSet;
+//import org.jnorthr.menus.CommandSet;
 
 import org.jnorthr.menus.support.PathFinder;
 

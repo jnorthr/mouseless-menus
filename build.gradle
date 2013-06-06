@@ -120,10 +120,11 @@ task(runMenus, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
-task(runCommandSet, dependsOn: 'classes', type: JavaExec) 
+// get all properties needed for the header include date/time
+task(runPropertyHarvester, dependsOn: 'classes', type: JavaExec) 
 {
-	main = 'org.jnorthr.menus.CommandSet'
-	classpath = sourceSets.main.runtimeClasspath
+	main = 'org.jnorthr.menus.support.PropertyHarvester'
+	classpath = sourceSets.main.runtimeClasspath + sourceSets.main.compileClasspath
 }
 
 

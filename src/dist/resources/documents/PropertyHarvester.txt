@@ -1,0 +1,207 @@
+"Date :":"date", - generated
+"Time :":"time", - generated 
+"User :":"user,uid", - command 'set' 
+"PID  : ":"ppid",  - command 'set'
+"${application} ":"version",  - menu.properties
+"System   :":"os.name,os.version", - System properties
+"Hostname : ":"hostname",   - command 'set'
+"Hosttype : ":"hosttype",   - command 'set'
+"Network  :":"inet", - ifconfig
+"User Home : ":"user.home",  - System properties
+"Java Home : ":"java_home", - System properties
+"JVM :":"java.runtime.version",- System properties
+"PWD :":"user.dir" - System properties
+
+//-------------------------------------------------------
+---> starting
+PathFinder key=application and value=Mouseless Menus
+PathFinder key=version and value=v1.1
+PathFinder key=audit and value=false
+PathFinder key=location and value=BL
+PathFinder key=panelcolumns and value=3
+PathFinder key=helpfilename and value=resources/documents/help.html
+PathFinder key=menuitemsfilename and value=resources/menu.txt
+PathFinder key=menuFolder and value=resources/
+PathFinder key=menutitle and value=SYSTEM
+PathFinder key=itemtitles and value=[_____________________________:blank, Date ::date, Time ::time, User ::user,uid, PID  : :ppid, Mouseless Menus :version, System   ::os.name,os.version, Hostname : :hostname, Hosttype : :hosttype, Network  ::inet, __________________________________________:blank2, User Home : :user.home, Java Home : :java_home, JVM ::java.runtime.version, PWD ::user.dir]
+PathFinder key=systemkeys and value=[hostname, classpath, java_home, path, groovy_home, java_home, grails_home, home, pwd, user, uid, ppid, hosttype, classpath]
+PathFinder key=propertykeys and value=[os.name, os.version, java.runtime.version, user.home, user.dir, path, ppid, hosttype]
+PathFinder key=cmd2 and value=sh -c env
+PathFinder key=cmd and value=command set 
+PathFinder key=cmd1 and value=cmd /c  
+PathFinder key=cmdprefix and value=sh -c 
+PathFinder key=editor and value=open -e 
+PathFinder key=todofilename and value=resources/documents/todo.html
+---------------
+
+
+
+System properties follow:
+k=java.runtime.name and v=Java(TM) SE Runtime Environment
+k=sun.boot.library.path and v=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries
+k=java.vm.version and v=20.45-b01-451
+k=awt.nativeDoubleBuffering and v=true
+k=gopherProxySet and v=false
+k=mrj.build and v=10M4406
+k=java.vm.vendor and v=Apple Inc.
+k=java.vendor.url and v=http://www.apple.com/
+k=path.separator and v=:
+k=java.vm.name and v=Java HotSpot(TM) 64-Bit Server VM
+k=file.encoding.pkg and v=sun.io
+k=sun.java.launcher and v=SUN_STANDARD
+k=user.country and v=US
+k=sun.os.patch.level and v=unknown
+k=java.vm.specification.name and v=Java Virtual Machine Specification
+k=user.dir and v=/Volumes/DURACELL/mouseless-menus
+k=java.runtime.version and v=1.6.0_45-b06-451-10M4406
+k=java.awt.graphicsenv and v=apple.awt.CGraphicsEnvironment
+k=java.endorsed.dirs and v=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed
+k=os.arch and v=x86_64
+k=java.io.tmpdir and v=/var/folders/Bv/BvGJ0ck9EPa07-xvLvw5mU+++TM/-Tmp-/
+k=line.separator and v=
+
+k=java.vm.specification.vendor and v=Sun Microsystems Inc.
+k=os.name and v=Mac OS X
+k=sun.jnu.encoding and v=MacRoman
+k=java.library.path and v=.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+k=java.specification.name and v=Java Platform API Specification
+k=java.class.version and v=50.0
+k=sun.management.compiler and v=HotSpot 64-Bit Tiered Compilers
+k=os.version and v=10.6.8
+k=http.nonProxyHosts and v=local|*.local|169.254/16|*.169.254/16
+k=user.home and v=/Users/jim
+k=user.timezone and v=
+k=java.awt.printerjob and v=apple.awt.CPrinterJob
+k=file.encoding and v=MacRoman
+k=java.specification.version and v=1.6
+k=java.class.path and v=/Volumes/DURACELL/mouseless-menus/build/classes/main:/Volumes/DURACELL/mouseless-menus/build/resources/main:/Users/jim/.gradle/caches/artifacts-24/filestore/org.codehaus.groovy/groovy-all/2.1.4/jar/3800f0dc1d43127494ddb9c0db6d115afffa6180/groovy-all-2.1.4.jar:/Users/jim/.gradle/caches/artifacts-24/filestore/org.apache.ivy/ivy/2.2.0/jar/f9d1e83e82fc085093510f7d2e77d81d52bc2081/ivy-2.2.0.jar:/Volumes/DURACELL/mouseless-menus/${workingDir}/resources/images/loading.gif
+k=user.name and v=jim
+k=java.vm.specification.version and v=1.0
+k=sun.java.command and v=org.jnorthr.menus.CommandSet
+k=java.home and v=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+k=sun.arch.data.model and v=64
+k=user.language and v=en
+k=java.specification.vendor and v=Sun Microsystems Inc.
+k=awt.toolkit and v=apple.awt.CToolkit
+k=java.vm.info and v=mixed mode
+k=java.version and v=1.6.0_45
+k=java.ext.dirs and v=/Library/Java/Extensions:/System/Library/Java/Extensions:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/ext
+k=sun.boot.class.path and v=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsfd.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/Resources/Java/JavaRuntimeSupport.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/laf.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/sunrsasign.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar
+k=java.vendor and v=Apple Inc.
+k=file.separator and v=/
+k=java.vendor.url.bug and v=http://bugreport.apple.com/
+k=sun.io.unicode.encoding and v=UnicodeLittle
+k=sun.cpu.endian and v=little
+k=mrj.version and v=1060.1.6.0_45-451
+k=socksNonProxyHosts and v=local|*.local|169.254/16|*.169.254/16
+k=ftp.nonProxyHosts and v=local|*.local|169.254/16|*.169.254/16
+k=sun.cpu.isalist and v=
+
+can we use this on iMac PPC ? :<command set >
+
+now running <command set >
+<APPENGINE_HOME=/Volumes/Data/dev/googleappengine/appengine-java-sdk-1.7.0> has 2 words
+<APP_ICON_17657=/Volumes/DURACELL/mouseless-menus/media/gradle.icns> has 2 words
+<Apple_PubSub_Socket_Render=/tmp/launch-wnD9QG/Render> has 2 words
+<BASH=/bin/sh> has 2 words
+<BASH_ARGC=([0]="1")> has 3 words
+<BASH_ARGV=([0]="set")> has 3 words
+<BASH_LINENO=([0]="0")> has 3 words
+<BASH_SOURCE=([0]="/usr/bin/command")> has 3 words
+<BASH_VERSINFO=([0]="3" [1]="2" [2]="48" [3]="1" [4]="release" [5]="x86_64-apple-darwin10.0")> has 8 words
+<BASH_VERSION='3.2.48(1)-release'> has 2 words
+<CLASSPATH=/Volumes/DURACELL/mouseless-menus/gradle/wrapper/gradle-wrapper.jar> has 2 words
+<COMMAND_MODE=unix2003> has 2 words
+<DERBY_HOME=/Applications/NetBeans/glassfish-3.1.1/javadb> has 2 words
+<DIRSTACK=()> has 2 words
+<DISPLAY=/tmp/launch-uMNCVE/org.x:0> has 2 words
+<EUID=502> has 2 words
+<GAELYK_HOME=/Volumes/Data/dev/gaelyk> has 2 words
+<GAELYK_JAR=/Volumes/Data/dev/gaelyk/gaelyk-1.2.jar> has 2 words
+<GLASSFISH_HOME=/Applications/NetBeans/glassfish-3.1.1> has 2 words
+<GRADLE_HOME=/Volumes/Data/dev/gradle/gradle-1.4> has 2 words
+<GRAILS_HOME=/Volumes/Data/dev/grails/grails-2.1.0> has 2 words
+<GROOVY_HOME=/Volumes/Data/dev/groovy/groovy-2.1.0> has 2 words
+<GROUPS=()> has 2 words
+<HOME=/Users/jim> has 2 words
+<HOSTNAME=RedApple.local> has 2 words
+<HOSTTYPE=x86_64> has 2 words
+<IFS=' 	> has 2 words
+<'> has 1 words
+<JAVA_ARCH=x86_64> has 2 words
+<JAVA_MAIN_CLASS_17667=org.jnorthr.menus.CommandSet> has 2 words
+<LC_CTYPE=UTF-8> has 2 words
+<LOGNAME=jim> has 2 words
+<MACHTYPE=x86_64-apple-darwin10.0> has 2 words
+<OPTERR=1> has 2 words
+<OPTIND=1> has 2 words
+<OSTYPE=darwin10.0> has 2 words
+<PATH=.:/Applications/NetBeans/glassfish-3.1.1/javadb/bin:/Volumes/Data/dev/googleappengine/appengine-java-sdk-1.7.0/bin:/Volumes/Data/dev/groovy/groovy-2.1.0/bin:/Volumes/Data/dev/grails/grails-2.1.0/bin:/Volumes/Data/dev/play/play-1.2.4:/Applications/NetBeans/glassfish-3.1.1/bin:/Volumes/Data/dev/gradle/gradle-1.4/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:                                                /usr/local/git/bin:/usr/X11/bin:/opt/local/bin> has 2 words
+<PLAY_HOME=/Volumes/Data/dev/play/play-1.2.4> has 2 words
+<POSIXLY_CORRECT=y> has 2 words
+<PPID=17667> has 2 words
+<PS4='+ '> has 2 words
+<PWD=/Volumes/DURACELL/mouseless-menus> has 2 words
+<SHELL=/bin/bash> has 2 words
+<SHELLOPTS=braceexpand:hashall:interactive-comments:posix> has 2 words
+<SHLVL=2> has 2 words
+<SSH_AUTH_SOCK=/tmp/launch-ywAvNk/Listeners> has 2 words
+<TERM=vt100> has 2 words
+<TERM_PROGRAM=Apple_Terminal> has 2 words
+<TERM_PROGRAM_VERSION=273.1> has 2 words
+<TMPDIR=/var/folders/Bv/BvGJ0ck9EPa07-xvLvw5mU+++TM/-Tmp-/> has 2 words
+<UID=502> has 2 words
+<USER=jim> has 2 words
+<_=/bin/sh> has 2 words
+<__CF_USER_TEXT_ENCODING=0x1F6:0:0> has 2 words
+<com.apple.java.jvmMode=client> has 2 words
+<com.apple.java.jvmTask=CommandLine.java.java> has 2 words
+
+now running ifconfig
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST>
+inet6 ::1
+inet6 fe80::1%lo0
+inet 127.0.0.1
+gif0: flags=8010<POINTOPOINT,MULTICAST>
+stf0: flags=0<>
+fw0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST>
+lladdr 00:1c:b3:ff:fe:83:23:6a
+media: autoselect
+status: inactive
+en1: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST>
+ether 00:1b:63:c6:cc:fe
+inet6 fe80::21b:63ff:fec6:ccfe%en1
+inet 192.168.1.12
+media: autoselect
+status: active
+en0: flags=8822<BROADCAST,SMART,SIMPLEX,MULTICAST>
+ether 00:19:e3:44:4d:66
+media: autoselect
+status: inactive
+CommandSet map follows -
+map key:os.name=Mac OS X
+map key:os.version=10.6.8
+map key:java.runtime.version=1.6.0_45-b06-451-10M4406
+map key:user.home=/Users/jim
+map key:user.dir=/Volumes/DURACELL/mouseless-menus
+map key:path=.:/Applications/NetBeans/glassfish-3.1.1/javadb/bin:/Volumes/Data/dev/googleappengine/appengine-java-sdk-1.7.0/bin:/Volumes/Data/dev/groovy/groovy-2.1.0/bin:/Volumes/Data/dev/grails/grails-2.1.0/bin:/Volumes/Data/dev/play/play-1.2.4:/Applications/NetBeans/glassfish-3.1.1/bin:/Volumes/Data/dev/gradle/gradle-1.4/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/X11/bin:/opt/local/bin
+map key:ppid=17667
+map key:hosttype=x86_64
+map key:date=Thu 06 Jun 2013
+map key:time=00:29:44 CEST
+map key:application=Mouseless Menus
+map key:version=v1.1
+map key:classpath=/Volumes/DURACELL/mouseless-menus/gradle/wrapper/gradle-wrapper.jar
+map key:grails_home=/Volumes/Data/dev/grails/grails-2.1.0
+map key:groovy_home=/Volumes/Data/dev/groovy/groovy-2.1.0
+map key:home=/Users/jim
+map key:hostname=RedApple.local
+map key:pwd=/Volumes/DURACELL/mouseless-menus
+map key:uid=502
+map key:user=jim
+map key:inet=192.168.1.12
+path=.:/Applications/NetBeans/glassfish-3.1.1/javadb/bin:/Volumes/Data/dev/googleappengine/appengine-java-sdk-1.7.0/bin:/Volumes/Data/dev/groovy/groovy-2.1.0/bin:/Volumes/Data/dev/grails/grails-2.1.0/bin:/Volumes/Data/dev/play/play-1.2.4:/Applications/NetBeans/glassfish-3.1.1/bin:/Volumes/Data/dev/gradle/gradle-1.4/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/X11/bin:/opt/local/bin
+CommandSet getmap(date)
+date=Thu 06 Jun 2013
+... end
+

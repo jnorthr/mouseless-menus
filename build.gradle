@@ -104,7 +104,7 @@ task(runSimple, dependsOn: 'classes', type: JavaExec)
 
 // confirm if  a single file has a menu signature :=*MENUTITLE	
 // using filename as string into the constructor
-task(runFileMenu, dependsOn: 'classes', type: JavaExec) 
+task(runMenuFile, dependsOn: 'classes', type: JavaExec) 
 {
 	main = 'org.jnorthr.menus.MenuFile'  // 'test24'  //
 	classpath = sourceSets.main.runtimeClasspath
@@ -201,15 +201,6 @@ task(runMenuLine, dependsOn: 'classes', type: JavaExec)
 	//args 'jim.txt'
 	//systemProperty 'simple.message', 'Hello '
 }
-
-
-task(runMenuFile, dependsOn: 'classes', type: JavaExec) 
-{
-	main = 'org.jnorthr.menus.MenuFile' 
-	classpath = sourceSets.main.runtimeClasspath
-	//args 'jim.txt'
-}
-
 
 
 

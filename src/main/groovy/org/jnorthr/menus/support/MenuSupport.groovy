@@ -96,7 +96,7 @@ public class Support
 	// class constructor - loads configuration, get system environmental variables; gets hardware window size;
 	public Support()
 	{
-        	pathFinder = new PathFinder();	
+        pathFinder = new PathFinder();	
 		menuMap = pathFinder.menuMap;
 		pathMap  = pathFinder.pathMap;
 
@@ -107,7 +107,7 @@ public class Support
 
 		commandPrefix = pathMap.commandPrefix		// something like 'open ' on mac os
 		
-       		env = System.getenv()
+       	env = System.getenv()
 		getWindowSize()
 		mono = new Font("Monospaced", Font.PLAIN, 10)
 		say("... Support() ready..\nCommand prefix:<$commandPrefix>\nOSN=<$OSN>\npwd=<$pwd>")
@@ -463,11 +463,12 @@ public class Support
 	} // end of resolveCommand
 
 
-	// method to execute immediate command based on number of this menu option; not used since menu options come from main.txt file now
-	//public void runCommand(int option) 
-	//{
-	//	runCommand(config.menus.commands[option])
-	//} // end of runCommand using menu number
+	// method to execute immediate command based on number of this menu option; 
+	// not used since menu options come from main.txt file now
+	// public void runCommand(int option) 
+	// {
+	//		runCommand(config.menus.commands[option])
+	// } // end of runCommand using menu number
 
 	def decode(b)
 	{

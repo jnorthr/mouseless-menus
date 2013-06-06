@@ -14,21 +14,22 @@ public class MenuFile
     boolean audit = false;
 
 	// shows in title of dialog from getTitle(); loaded from *menutitle line
-	private String dialogTitle
+	private String dialogTitle = ""
 
-	// this is the file name just load; typically like ../menudata/menu.txt
-	// filled with canonical name in chkobj if menuFileExists
-	private String menuFileName
+	// this is the file name to load; typically like ../resources/menu.txt
+	// when a BIC of 'go' says load and display another menu, 
+	private String menuFileName=""
 
 	// true if menufile confirmed to exist
-	private boolean menuFileExists          
+	private boolean menuFileExists= false          
 
 	// handle to validator of a single line
     Validator val;
     	
 	// List of lines that would make good menu entries 
 	List<Validator> menuLines = []   	
-    	
+    
+
 	// accessor for dialog title
 	public getTitle()
 	{
@@ -63,9 +64,7 @@ public class MenuFile
 	// no args constructor
 	public MenuFile()
 	{
-		dialogTitle="";
 		menuFileName = "";  // filled with canonical name in chkobj if menuFileExists
-		menuFileExists = false;
 	}	// end of method
 
 
@@ -78,9 +77,11 @@ public class MenuFile
 		if ( menuFileExists )
 		{ 
 			rtvobjnam(fn);
+
 			// now read each line, validate it and store in menuLines
 			loader(fn); 
-		}
+		} // end of if
+		
 	}	// end of method
 
 
@@ -153,6 +154,7 @@ public class MenuFile
 					
 		} // end of else
 		
+
 	}	// end of method
 
 

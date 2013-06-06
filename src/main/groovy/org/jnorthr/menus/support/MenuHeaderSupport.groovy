@@ -25,7 +25,7 @@ public class HeaderSupport extends JTextPane
     // print debug text (maybe)
     public static void say(def text) 
     {
-        if (audit) {println "$text";} 
+        if (audit) {println text;} 
     } // end of say
 
 
@@ -34,6 +34,9 @@ public class HeaderSupport extends JTextPane
     // mifilename is name of menu file to load
     public loadMenu(columns,menuitems) 
     {  
+
+		say "loadMenu..."
+
        	int numberofcolumns = columns.size()	// how many columns this time ?
         def itemflag = [numberofcolumns]
         def itemcount = [numberofcolumns]
@@ -72,8 +75,7 @@ public class HeaderSupport extends JTextPane
 
         // now roll thru the titles and assign them to each of the columns
         menuitems.eachWithIndex
-        {   
-			it, ix ->   
+        {   it, ix ->   
 
 			say "\nmenuitem <$it> and ix=$ix "
             thiscolumn = ix / percolumn;    // compute a column number for this menu item to appear in
@@ -83,6 +85,7 @@ public class HeaderSupport extends JTextPane
 			// see if more than one environment var. name is present, i.e. comma is in map value.
 			// like "User :":"user,uid",  from menu.properties; so map key User : points to map value "user,uid"
 			// requiring two values from PropertyHarvester map loaded at boj. Resulting in User : jim 502
+
 
 			// only need a single text value as map value is a single key to look up an environmental value
 	       	if ( it.value.indexOf(",") < 1) 
@@ -134,6 +137,7 @@ public class HeaderSupport extends JTextPane
     } // end of loadMenu
 
 
+    // ============================================
     // class constructor - loads configuration,etc.
     public HeaderSupport(PropertyHarvester comset)
     {
@@ -160,7 +164,7 @@ public class HeaderSupport extends JTextPane
     } // end of constructor
 
 
-
+    // ============================================
     // This is logic to populate the joblog of the menu panel =========================
     // Clear out current document
     private void clearColumnText() 
@@ -170,6 +174,8 @@ public class HeaderSupport extends JTextPane
     } // end of clearColumnText
 
 
+
+    // ============================================
     // method to add text to column pane with specific display attributes
     private void appendColumnText(String s) 
     {

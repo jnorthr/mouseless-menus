@@ -113,6 +113,7 @@ public class MenuColumnSupport
     		show = []
   			setFrameTitle("$menufilename")
 		} // end of if
+
 	}	// end of cleanup
 
 
@@ -212,10 +213,10 @@ public class MenuColumnSupport
 
     						if ( word2.size() >0 )
     						{	
-							say " - <"+word2+">"
+								say " - <"+word2+">"
     							if (word2.toLowerCase().equals("*menutitle")) {bic = 1;}
     							if (word2.toLowerCase().equals("*red")) {bic = 2;}
-							say " - bic set to $bic";
+								say " - bic set to $bic";
     						} // end of if
     						break;
 
@@ -224,8 +225,10 @@ public class MenuColumnSupport
     				case 1:
     						flag = true
     						bic = 3
-    						word1=words[0].trim(); //say "word0=<$word1>"
+    						word1=words[0].trim(); 
+							//say "word0=<$word1>"
     						break;
+
 				default:
 						say "unknown wc=$wc for line <${aline}>"
 						bic = 99
@@ -257,8 +260,8 @@ public class MenuColumnSupport
 
     					    // *MENUTITLE
     					    case 1: 
-    				   	   	setFrameTitle(word1) // this is a menu title not a command sequence
-    				   	   	break;
+    				   	   		setFrameTitle(word1) // this is a menu title not a command sequence
+    				   	   		break;
 
     				   	   // typical built-in command of zero
     					    default:
@@ -280,6 +283,7 @@ public class MenuColumnSupport
 					say " - there are $menuLines menu lines"
    				} // end of if
 
+
     		} // end of aLine is a menu command
     			
     	} // end of eachLine
@@ -296,85 +300,90 @@ public class MenuColumnSupport
     	// erase each menu item column
 		cs.eachWithIndex{ va, ix -> cs[ix].clearColumnText(cs[ix]) }
 
+
     		// =====================================================================================================
-   		// walk thru each title and place first third of menu items in column 1 and 2 with remainder in column 3
-   		int i = 0;
-   		int k = 0;
-   		def num
-   		int percolumn = 0 
-   		int[] itemcount = [0,0,0]
-   		boolean[] itemflag = [true,true,true]
-   		int ic = itemcount.size()
+   			// walk thru each title and place first third of menu items in column 1 and 2 with remainder in column 3
+   			int i = 0;
+   			int k = 0;
+   			def num
+   			int percolumn = 0 
+   			int[] itemcount = [0,0,0]
+   			boolean[] itemflag = [true,true,true]
+   			int ic = itemcount.size()
 
-   		// with less than 8 menu items, just use a single column
-   		if (menuLines < 8)
-   		{
-   			percolumn = menuLines
-   			itemcount[0] = menuLines
-   		}
-   		else
-   		{
-   			// there are enough menu items to divide between 3 columns
-   			percolumn = menuLines / 3
-   			ic.times{item -> itemcount[item] = percolumn}
-   			if (percolumn * 3 != menuLines) 	// if not modulo three
+   			// with less than 8 menu items, just use a single column
+   			if (menuLines < 8)
    			{
-   				percolumn+=1;
-   				say "even number of items per col: $percolumn";
-   			} // end of if
-   		} // end of else
+   				percolumn = menuLines
+   				itemcount[0] = menuLines
+   			}
+   			else
+   			{
+   				// there are enough menu items to divide between 3 columns
+   				percolumn = menuLines / 3
+   				ic.times{item -> itemcount[item] = percolumn}
+   				if (percolumn * 3 != menuLines) 	// if not modulo three
+   				{	
+   					percolumn+=1;
+   					say "even number of items per col: $percolumn";
+   					} // end of if
+   			} // end of else
+
+   			say("there are ${menuLines} menu items of $percolumn items per column")
+   			int thiscolumn = 0
+   			say "there are ${menuTitle.size()} menuTitles"
 
 
-   		say("there are ${menuLines} menu items of $percolumn items per column")
-   		int thiscolumn = 0
-   		say "there are ${menuTitle.size()} menuTitles"
-
-   		// now roll thru the titles and assign them to each of 3 columns
-   		menuTitle.eachWithIndex
-   		{	it, ix ->
-   			say "menuTitle.each=$it and ${menuCommand[ix]}"
-   			say "menu $it and ix=$ix and bic=${bicNumber[ix-1]}"
+			// -------------------------------------------------------------
+   			// now roll thru the titles and assign them to each of 3 columns
+   			menuTitle.eachWithIndex
+   			{	it, ix ->
+   				say "menuTitle.each=$it and ${menuCommand[ix]}"
+   				say "menu $it and ix=$ix and bic=${bicNumber[ix-1]}"
 	
-			thiscolumn = (ix<1) ? 0  : ix / percolumn;	// compute a column number as either zero, one, two
+				thiscolumn = (ix<1) ? 0  : ix / percolumn;	// compute a column number as either zero, one, two
 
-   			num = "\n"				// give every menu item a leading c/r
-			if (itemflag[thiscolumn]==true) 	// if this is the first time thru for this column, erase the leading c/r
-			{
-				num="";
-			} // end of if
+   				num = "\n"				// give every menu item a leading c/r
+				if (itemflag[thiscolumn]==true) 	// if this is the first time thru for this column, erase the leading c/r
+				{
+					num="";
+				} // end of if
 
-			if (bicNumber[ix]<1)						// (!(menuCommand[i].equals("")))
-			{
-				k+=1
-				if (k<10) num +=" "			// if one digit menu option number then add a leading blank
-				num += "${k}. ${it}"			// logic to add a nice blank to number plus . when formatting
-				menuOptions = k				// remember the maximum option number allowed to be keyed from command line
-			} // end of if
+				if (bicNumber[ix]<1)			// (!(menuCommand[i].equals("")))
+				{
+					k+=1
+					if (k<10) num +=" "			// if one digit menu option number then add a leading blank
+					num += "${k}. ${it}"		// logic to add a nice blank to number plus . when formatting
+					menuOptions = k				// remember the maximum option number allowed to be keyed from command line
+				} // end of if
 
-			if (bicNumber[ix]>1)	
-			{
-				num += "    ${it}"			// logic to add a nice blank to number plus . when formatting
-			} // end of else
-
-
-			if (!(bicNumber[ix-1]==1))
-			{
-			   cs[thiscolumn].appendColumnText(cs[thiscolumn], num, as1)			
-			   itemflag[thiscolumn] = false			// no longer first time thru
-			} // end of if
-
-   		} // end of walking thru each title 
-
-   		int j = ( ( thiscolumn + 1 ) * percolumn ) - menuTitle.size()		// find how many blank lines go in final column
-   		say("i=$i and j=$j and thiscolumn=$thiscolumn and percolumn=$percolumn")
-
-   		// add an extra blank m/i entry to make column 3 look nicer on odd m/i count
-   		if (j > -1) { j.times{ cs[2].appendColumnText(cs[2], "\n") } } 	
-
-    	} // end of load
+				if (bicNumber[ix]>1)	
+				{
+					num += "    ${it}"			// logic to add a nice blank to number plus . when formatting
+				} // end of else
 
 
-    	// ============================================
+				if (!(bicNumber[ix-1]==1))
+				{
+			   		cs[thiscolumn].appendColumnText(cs[thiscolumn], num, as1)			
+			   		itemflag[thiscolumn] = false	// no longer first time thru
+				} // end of if
+
+   			} // end of walking thru each title 
+
+   			int j = ( ( thiscolumn + 1 ) * percolumn ) - menuTitle.size()		// find how many blank lines go in final column
+   			say("i=$i and j=$j and thiscolumn=$thiscolumn and percolumn=$percolumn")
+
+   			// add an extra blank m/i entry to make column 3 look nicer on odd m/i count
+   			if (j > -1) 
+			{ 
+				j.times{ cs[2].appendColumnText(cs[2], "\n") } 
+			} // end of if 	
+
+    } // end of load
+
+
+    // ============================================
 	// declare text attributes and mono font usage
 	public void setColumn(MenuColumnSupport su)
 	{
@@ -396,46 +405,6 @@ public class MenuColumnSupport
 		jtp.setBorder(null)
 		return jtp;
 	} // end of getText
-
-
-	// test harness for this class
-	public static void main(String[] args)
-	{	
-		say "... started"
-		java.util.List<MenuColumnSupport> cs = []
-
-		MenuColumnSupport su1 = new MenuColumnSupport()
-		su1.clearColumnText(su1)
-		cs << su1;
-
-		JFrame frame = new JFrame("TextPane Example");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout( new FlowLayout() )
-		frame.setBackground(Color.black)
-		frame.add(su1.getColumn())
-		frame.setSize(1000, 260);
-		frame.setMinimumSize(new Dimension(1000,260));
-
-		cs << new MenuColumnSupport()
-		cs << new MenuColumnSupport()
-		MenuColumnSupport.loadMenu(cs, "./resources/stylesheets.txt", true)      
-		// ?????????????????????????????????????????????????????
-
-		// report commands found
-		say "... Commands are :"
-		def com = []
-		com = MenuColumnSupport.getCommands()
-		com.each{cmd -> say cmd}
-		//scrollPane = new JScrollPane(su2.getColumn());
-		frame.add(cs[0].getColumn());
-		frame.add(cs[1].getColumn())
-		frame.add(cs[2].getColumn())
-		frame.pack()
-		frame.setVisible(true);
-
-		say "... ended"
-	} // end of main
-
 
 	// class constructor - loads configuration,etc.
 	public MenuColumnSupport()
@@ -461,7 +430,7 @@ public class MenuColumnSupport
 
 
 	// This is logic to populate the joblog of the menu panel =========================
-        // Clear out current document
+    // Clear out current document
 	private void clearColumnText(MenuColumnSupport su) 
 	{
 		su.getColumn().setStyledDocument (doc = new DefaultStyledDocument());
@@ -488,6 +457,45 @@ public class MenuColumnSupport
 		}
 		catch (BadLocationException e) {}
 	} // end of appendColumnText
+
+
+	// ========================================================
+	// test harness for this class
+	public static void main(String[] args)
+	{	
+		say "... started"
+		java.util.List<MenuColumnSupport> cs = []
+
+		MenuColumnSupport su1 = new MenuColumnSupport()
+		su1.clearColumnText(su1)
+		cs << su1;
+
+		JFrame frame = new JFrame("TextPane Example");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout( new FlowLayout() )
+		frame.setBackground(Color.black)
+		frame.add(su1.getColumn())
+		frame.setSize(1000, 260);
+		frame.setMinimumSize(new Dimension(1000,260));
+
+		cs << new MenuColumnSupport()
+		cs << new MenuColumnSupport()
+		MenuColumnSupport.loadMenu(cs, "./resources/stylesheets.txt", true)      
+
+		// report commands found
+		say "... Commands are :"
+		def com = []
+		com = MenuColumnSupport.getCommands()
+		com.each{cmd -> say cmd}
+		//scrollPane = new JScrollPane(su2.getColumn());
+		frame.add(cs[0].getColumn());
+		frame.add(cs[1].getColumn())
+		frame.add(cs[2].getColumn())
+		frame.pack()
+		frame.setVisible(true);
+
+		say "... ended"
+	} // end of main
 
 
 } // end of MenuColumnSupport.class

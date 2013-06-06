@@ -11,7 +11,7 @@ public class HeaderSupport extends JTextPane
 {
     StyledDocument doc;            	// a storage repository for text
     static SimpleAttributeSet as1;      // text decorations to apply to text within 'doc'
-    static audit = true			// flag to turn audit messages to console
+    static audit = false			// flag to turn audit messages to console
     PropertyHarvester cs;
 
 

@@ -13,11 +13,12 @@ public class PropertyHarvester
 	
 	// load System properties
 	Properties props;
-
+	PathFinder resourcePath;
+	
     public PropertyHarvester()
     {
 	    // keeps PathFinder.menuMap
-    	PathFinder resourcePath = new PathFinder(); 
+    	resourcePath = new PathFinder(); 
     	config = resourcePath.menuMap;
     	props = System.getProperties()
     	config.propertykeys.each 

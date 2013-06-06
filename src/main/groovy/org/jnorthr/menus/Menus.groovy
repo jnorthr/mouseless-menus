@@ -218,12 +218,13 @@ class Menus implements KeyListener
 				{
 					say "F15 key pressed"
 
+					String menu = ".menulist"; 
 					def path = "resources"
+
 					org.jnorthr.menus.support.Search sea = new org.jnorthr.menus.support.Search(path);
 					def pr = sea.parseResults("*ALLMENUS");
-					sea.writeResults(path, pr, "Available Menus")				
+					sea.writeResults(path, pr, "Available Menus", menu)				
 
-					String menu = ".menulist"; 
 					MenuColumnSupport.loadMenu(cs,menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 					support.appendText("${pr.size} available menus", support.as4);
@@ -259,7 +260,7 @@ class Menus implements KeyListener
 
 					searchText = (hasText) ? "'"+swing.tf.text.trim()+"'" : "*ALL" ;
 					mf.writeResults(path,re, """Your Search for $searchText""")				
-					String menu = ".menulist"; 
+					String menu = ".searchlist"; 
 					MenuColumnSupport.loadMenu(cs,menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 					

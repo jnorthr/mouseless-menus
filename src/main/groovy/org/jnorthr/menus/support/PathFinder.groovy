@@ -274,7 +274,7 @@ public class PathFinder
         	resourcePathDiscovery = "not found"
             JOptionPane.showMessageDialog(null, "Cannot find ${menupropertiesname} property files\nset MENU_RESOURCES environment var.", 
             "Bad News !", JOptionPane.ERROR_MESSAGE); 
-            //System.exit(1);
+            System.exit(1);
         } // end of if 
 		else
 		{
@@ -298,7 +298,7 @@ public class PathFinder
         {
             JOptionPane.showMessageDialog(null, "Cannot find ${menupropertiesname} property files\nset MENU_RESOURCES environment var.", 
             "Bad News !", JOptionPane.ERROR_MESSAGE); 
-            //System.exit(1);
+            System.exit(1);
         } // end of if 
 		else
 		{

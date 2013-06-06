@@ -36,6 +36,7 @@ public class Search
     Date date = new Date();
     def now = dateFormat.format(date);
 
+	def outputFileName = ".searchlist"
 
     // =========================================
     // class constructor where tx = path to menu folder
@@ -74,7 +75,7 @@ public class Search
 
 	// =========================================
 	// class constructor where tx = path to menu folder and flag to say if or not write results
-	// to write map of menu filenames to output text file
+	// to write map of all menu filenames to output text file
 	public Search(String tx, boolean flag)
 	{			
 		say "Search($tx) = "
@@ -244,6 +245,7 @@ public class Search
 		boolean findAllMenus = (findthis.equals("*ALLMENUS")) ? true : false;
 		boolean findAll = (findthis.equals("*ALL")) ? true : false;
 
+		outputFileName = (findAllMenus) ? ".menulist" : ".searchlist" ;
 
 		// split search term into several words
 		def words = getParseTokens(findthis);
@@ -332,17 +334,26 @@ public class Search
 	// Write menu list to a permanent file whose path identifies the folder location
 	public writeResults(String path, def matchingMenuLines ) 
 	{ 
-		writeResults(path, matchingMenuLines, "Available Menus");
+		writeResults(path, matchingMenuLines, "Available Menus", ".menulist");
 	} // end of method
-	
+
+
+
+    // =========================================
+	// Write menu list to a permanent file whose path identifies the output folder location
+	// with menu title as specified
+	public writeResults(String path, def menus, String tl) 
+	{ 
+		writeResults(path, matchingMenuLines, tl, ".searchlist");
+	} // end of method
+
 	
     // =========================================
 	// Write menu list to a permanent file whose path identifies the folder location
-	// with menu title as specified
-
-	public writeResults(String path, def menus, String tl) 
+	// with menu title as specified and name of outputfile
+	public writeResults(String path, def menus, String tl, String outputFileName) 
 	{ 
-		def tmp = new File(path+"/.menulist.txt")
+		def tmp = new File(path+"/${outputFileName}.txt")
 		say "\n... writing list of menus to "+tmp.getCanonicalFile();
 
 		def reorder=[]

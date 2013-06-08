@@ -35,10 +35,10 @@ public class Support
 	JTextPane jtp;			
 	StyledDocument doc;
 	SimpleAttributeSet as0
-	SimpleAttributeSet as1
-	SimpleAttributeSet as2
-	SimpleAttributeSet as3
-	SimpleAttributeSet as4
+	SimpleAttributeSet as1 // yellow
+	SimpleAttributeSet as2 // red
+	SimpleAttributeSet as3 // green
+	SimpleAttributeSet as4 // white
 	SimpleAttributeSet attr = null
 	//CommandSet comset = new CommandSet()	
 
@@ -687,7 +687,7 @@ public class Support
 
 		// echo terminal command
 		as4 = new SimpleAttributeSet();
-		StyleConstants.setForeground(as4, Color.white);
+		StyleConstants.setForeground(as4, Color.blue);
 
 		return jtp;
 	} // end of getText

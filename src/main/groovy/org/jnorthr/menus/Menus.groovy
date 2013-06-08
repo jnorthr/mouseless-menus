@@ -33,6 +33,7 @@ import org.jnorthr.menus.support.BottomBorder;
 import org.jnorthr.menus.support.MenuColumnSupport;
 import org.jnorthr.menus.support.Support;
 import org.jnorthr.menus.support.PanelSupport;
+//import org.jnorthr.menus.support.ClassLoaderManager;
 //import org.jnorthr.menus.CommandSet;
 
 import org.jnorthr.menus.support.PathFinder;
@@ -126,6 +127,7 @@ class Menus implements KeyListener
 	def support
 	java.util.List<MenuColumnSupport> cs = []
 
+    def classpathEntries = [] // used in F19 to see jars in this loader
 	PathFinder pathfinder;
 
 	def ps = new PanelSupport()
@@ -144,7 +146,7 @@ class Menus implements KeyListener
 	GridBagConstraints c = new GridBagConstraints();
 	def p1 
 	def footer1 = "F1=Help   F3=Exit                    F5=Refresh   F7=Selfedit   F8=Allow   F9=Recall   F10/F12=Cancel"
-	def footer2 = "F13=ToDo  F15=All Menus   F16=Find   F17=Cmds"
+	def footer2 = "F13=ToDo  F15=All Menus   F16=Find   F17=Cmds     F19=Classpath"
 	def l1 
 	def l2 
 	def l3 
@@ -288,6 +290,8 @@ class Menus implements KeyListener
 				{
 					MenuColumnSupport.loadMenu(cs,menu,true)    
 				}	// end of if
+				
+				// F5 - just reload menu normally
 				else
 				{
 					MenuColumnSupport.loadMenu(cs,menu)    // menuitemsfilename)
@@ -303,8 +307,27 @@ class Menus implements KeyListener
 
 			// ============================================		
 			// ask to edit this current menu
-			case KeyEvent.VK_F7: 
-				selfedit(); 
+			case KeyEvent.VK_F7:
+				// use F19 to show classpaths from classloader
+				if (f) 
+				{  
+					printClassPath this.class.classLoader;
+					classpathEntries.each
+					{ e -> 
+						support.appendText(e.toString(), support.as0);
+					} // end of each
+
+					support.resetStack()
+					swing.tf.text=""
+					swing.tf.requestFocusInWindow()
+					swing.tf.grabFocus();
+				}	// end of if
+				
+				// F7 - edit this current menu
+				else
+				{
+					selfedit(); 
+				} // end of else			 
 				break;
 
 			// ============================================		
@@ -353,6 +376,31 @@ class Menus implements KeyListener
 		} // end of switch
 
     } // end of keyPressed method
+
+
+	// nice bit o code to show jars in this class loader
+    public printEntries()
+    {
+        classpathEntries.each{e -> println e; }
+    } // end of method
+    
+	// gather list of jars in this class loader
+    public printClassPath(classLoader) 
+    {
+          classpathEntries += "classLoader.parent: $classLoader"
+          classLoader.getURLs().each 
+          { url->
+             classpathEntries += "- ${url.toString()}"
+          } // end of each
+          if (classLoader.parent) 
+          {
+              printClassPath(classLoader.parent)
+          } // end of if
+          
+    } // end of method
+
+
+
 
 
     // turn on auditlog listing

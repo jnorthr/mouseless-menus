@@ -204,6 +204,11 @@ task(runMenuLine, dependsOn: 'classes', type: JavaExec)
 	//systemProperty 'simple.message', 'Hello '
 }
 
+task(runMenuWrapper, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.MenuWrapper' 
+	classpath = sourceSets.main.runtimeClasspath
+}
 
 
 task(runMenuItemObject, dependsOn: 'classes', type: JavaExec) 
@@ -341,6 +346,8 @@ task srcZip(type: Zip) {
     from jar.outputs.files
     include 'LICENCE', 'README*', 'NOTICE', 'gradlew*', '*.jar'
 }
+
+
 /*
 from projectDir
     from('libs') {

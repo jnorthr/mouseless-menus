@@ -27,7 +27,7 @@ public class MenuFile
     Validator val;
     	
 	// List of lines that would make good menu entries, excludes remarks lines // and *menutitle lines 
-	List<Validator> MenuWrapper() = []   	
+	List<Validator> MenuWrapper = []   	
     
 
 	// accessor for dialog title

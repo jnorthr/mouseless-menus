@@ -16,10 +16,6 @@ public class Validator
     // not a remark/comment and has valid menu signature  :=
     boolean valid = false;
 
-    // color signature  ;   found only if valid and !remarks
-    boolean hasColor = false;
-
-
     // index of semi-colon in string
     int semiIndex = -1;
 
@@ -27,20 +23,29 @@ public class Validator
     int menuSignatureIndex = -1;
 
 
+    // String with text component if found; whats to the left of the :=
+    // commonly used as the name of a menu entry
+    String textComponent = "";
+
+    // String with command component if found; whats to the right of the :=
+    // commonly holds the logic or command to execute when this menu entry is selected
+    String commandComponent = "";
+
+
+    // color signature  ;   found only if valid and !remarks
+    boolean hasColor = false;
+
+	// when hasColor, the following fields are populated ----->
     // String with color component if found
     String colorComponent = "";
 
-    // String with text component if found
-    String textComponent = "";
-
-    // String with command component if found
-    String commandComponent = "";
 
     // integer equivalent of colorComponent
     int colorInteger = 0;
 
     // internally maintained in synch with fontcolor; 
     java.awt.Color textColor = new java.awt.Color(0);	
+
 
     // ===============================================
     // constructor determines validity of string
@@ -65,22 +70,22 @@ public class Validator
 				textComponent = ln;
 	    	} // end of else
 
-	    // divide string into components
-	    if (hasColor)
-	    {
-	        semiIndex      = getSemiIndex(ln)
-		colorComponent = getColorComponent(ln)
-		textComponent  = getNewTextComponent(textComponent);
-		def cm = new ColorManager(colorComponent);
-		colorComponent = cm.getHexCode();
-		colorInteger = cm.getColorCode();
-		textColor = new Color(colorInteger);
-	    } // end of if
+	    	// divide string into components
+		    if (hasColor)
+		    {
+	    	    semiIndex = getSemiIndex(ln)
+				colorComponent = getColorComponent(ln)
+				textComponent  = getNewTextComponent(textComponent);
+				def cm = new ColorManager(colorComponent);
+				colorComponent = cm.getHexCode();
+				colorInteger = cm.getColorCode();
+				textColor = new Color(colorInteger);
+	    	} // end of if
 
-	    colorComponent = colorComponent.trim()
-	    textComponent = textComponent.trim()
-	    commandComponent = commandComponent.trim();
-	} // end of not a remark
+		    colorComponent = colorComponent.trim()
+		    textComponent = textComponent.trim()
+	    	commandComponent = commandComponent.trim();
+		} // end of not a remark
 
     }    // end of class constructor
 

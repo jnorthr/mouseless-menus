@@ -687,7 +687,7 @@ public class Support
 
 		// echo terminal command
 		as4 = new SimpleAttributeSet();
-		StyleConstants.setForeground(as4, Color.blue);
+		StyleConstants.setForeground(as4, Color.orange);
 
 		return jtp;
 	} // end of getText

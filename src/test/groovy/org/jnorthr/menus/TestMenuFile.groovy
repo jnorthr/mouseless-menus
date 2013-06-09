@@ -17,7 +17,7 @@ import java.util.logging.*;
 // tried to get logging to work but ran out of time - needs more research
 public class TestMenuFile
 {
-	private ArrayList<MenuItem> ma; 
+	//private ArrayList<MenuItem> ma; 
 	//private final static Logger LOGGER = Logger.getLogger("TestMenuFile");
 	
 	public TestMenuFile()
@@ -29,7 +29,7 @@ public class TestMenuFile
 	@Before 
 	public void setUp() 
 	{ 
-		ma = new ArrayList<MenuFile>();
+		//ma = new ArrayList<MenuFile>();
 		//LOGGER.info("É started a test of TestMenuFile"); 
 	}
 	

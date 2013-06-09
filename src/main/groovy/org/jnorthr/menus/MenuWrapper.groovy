@@ -18,6 +18,9 @@ public class MenuWrapper
     int displayed = 0;
     boolean fwd = true; // !fwd = walk backwards
 
+	// holds page of lines to display on a single menu pane
+    List<Validator> currentLines = []
+
 	// ===============================================================
 	// class output debug / print internals
 	// print text (maybe)
@@ -86,12 +89,13 @@ public class MenuWrapper
     } // end of method
     
 
-    // uses current as a pointer to front of lines list and howmany tells us the number of lines needed    
+    // uses current as a pointer to front of lines list and howmany tells us the number of lines needed to be returned, if available
+    // will return empty currentLines if no 'next' else returns up to a maximum of 'howmany' lines, though less if end of rows found
     public getNext(int howmany)
     {
 		say "getNext($howmany) ..."
 		
-        List<Validator> currentLines = []  
+        currentLines = []  
 		if ( !hasNext() ) return currentLines
 
         displayed = 0;
@@ -119,6 +123,64 @@ public class MenuWrapper
     } // end of method
    
 
+
+
+
+	// pull off howmany lines from the start of the list
+    public getFirst(int howmany)
+    {
+		say "getFirst($howmany) ..."
+		current = 0;
+        currentLines = []  		
+
+		int ct = getLineCount(); // 0..n lines
+		if (ct < 1) return currentLines; // if no lines
+		
+		// if request is for more lines than available, adjust howmany to what's there
+		if (howmany > ct ) howmany = ct;	
+
+        return getNext(howmany);    
+    } // end of method
+
+	// pull off first 10 lines from the start of the list
+    public getFirst()
+    {
+        return getFirst(10);    
+    } // end of method
+
+
+	// pull off howmany lines from the tail of the list
+    public getLast(int howmany)
+    {
+		say "getLast($howmany) ..."
+        currentLines = []  
+		current = 0;
+
+		int ct = getLineCount(); // 0..n lines
+		if (ct < 1) return currentLines; // if no lines
+		
+		// if request is for more lines than available, adjust howmany to what's there
+		if (ct < howmany) howmany = ct;	
+
+		current = ct;
+        return getPrior(howmany);    
+    } // end of method
+
+	// pull off 10 lines from the tail of the list
+    public getLast()
+    {
+        return getLast(10);    
+    } // end of method
+
+
+
+
+
+
+
+
+
+
     // ==============================================================
     // see if lines can be taken before what's already been shown
     public hasPrior()
@@ -127,7 +189,39 @@ public class MenuWrapper
         return ( current < 1 ) ? false : true;        
     } // end of method
    
+    // uses current as a pointer to front of lines list and howmany tells us the number of lines needed to be returned 
+	// before 'current' line, if available
+    // will return empty currentLines if no 'prior' available else returns up to a maximum of 'howmany' lines, 
+	// though less if end of rows found
+    public getPrior(int howmany)
+    {
+		say "getPrior($howmany) ..."
+		
+        currentLines = []  
+		if ( !hasPrior() ) return currentLines
 
+        displayed = 0;
+        
+        // loop flag
+        boolean flag = true;
+        fwd = false; // what direction are we paging ? backward...
+        
+        while(flag)
+        {
+            displayed  += 1;
+			current -= 1;	
+            say "... current=${current} displayed=$displayed; "
+            currentLines << wrapperLines[current]         
+            if ( current < 1 || displayed >= howmany  )
+            {
+                flag = false;
+                say "... current=${current} < 0 || displayed :$displayed  >=  howmany :${howmany-1} "
+            } // end of if
+                
+        } // end of while
+                
+        return currentLines;    
+    } // end of method
  
     
     // -----------------------------------------------------
@@ -183,6 +277,38 @@ public class MenuWrapper
 		prior = mw.hasPrior();
 		println "\nhasPrior()="+prior
         
+		println "asking for 1 more line even after all rows were ready"
+		next = mw.getPrior(20)
+        mw.showWrapperLines(next);        
+		next = mw.getPrior(10)
+        mw.showWrapperLines(next);        
+
+		println "asking for last 10 lines using default getLast()"
+		next = mw.getLast()
+        mw.showWrapperLines(next);        
+
+		println "asking for last3 lines using getLast(3)"
+		next = mw.getLast(3)
+        mw.showWrapperLines(next);        
+
+		println "asking for last 2 lines using default getLast(2) to see if returned same as above"
+		next = mw.getLast(2)
+        mw.showWrapperLines(next);        
+
+		println "asking for first 10 lines using default getFirst()"
+		next = mw.getFirst()
+        mw.showWrapperLines(next);        
+
+		println "asking for first 2 lines using getFirst(2)"
+		next = mw.getFirst(2)
+        mw.showWrapperLines(next);        
+
+		println "asking for last 3 lines to see if 'current=${mw.current} is positioned ok after getFirst(2)"
+		next = mw.getLast(3)
+        mw.showWrapperLines(next);        
+
+
+
         println "... the end "
         println "--------------------------------------------------"
     } // end of main

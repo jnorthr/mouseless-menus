@@ -1,0 +1,74 @@
+// new script to make another git repository project
+// go to github make a repository called sample
+// you will need an SSH public/private security id set up in your keychain
+// http://blog.blindgaenger.net/generate_github_pages_in_a_submodule.html
+
+// Create a new project repo
+cd /Volumes/Media1/Software
+git clone git@github.com:jnorthr/sample.git
+cd sample
+
+//git init
+touch README
+
+// edit and save some notes about this project
+open -e README
+git add README
+git commit -m "initial commit"
+git remote add origin git@github.com:jnorthr/sample.git
+git push origin master
+// may fail if security is wrong/non-existent
+
+// Create an own branch for the gh-pages
+cd sample
+git symbolic-ref HEAD refs/heads/gh-pages
+rm .git/index
+git clean -fdx
+echo "Hi Kids" >> index.html
+git add .
+git commit -a -m "my first gh-page"
+git push origin gh-pages
+
+// The index.html is empty. But it's necessary to commit something to make the branch live. If not, you'll have problems on the next step.
+
+Check page online
+
+Alright, after pushing your files you're ready to check out the generated site online at 
+http://jnorthr.github.com/sample/
+
+// Add as submodule in master branch
+
+Now we have two branches called master and gh-pages. The next step is to point the reference for the gh-pages branch to a subdir of master. See http://git-scm.com/book/en/Git-Tools-Submodules
+
+
+Our submodule will then appear to be part of our hosted project at github.
+
+git checkout master
+git submodule add -b gh-pages git@github.com:jnorthr/sample.git _site
+git status
+git commit -m "added gh-pages as submodule"
+git push
+
+
+Git status reports a new .gitmodules file, with metadata about the submodules. And the _site directory we just specified. Now we initialize the sub-module and confirm it's version:
+
+git submodule init
+git submodule 
+git status
+cd _site
+echo "Index Page for _site" >> index.html
+git add .
+git commit -m "site generated"
+git push origin gh-pages
+cd ..
+
+// so back at root of project, commit again
+git commit -a -m "build site"
+git push origin master
+
+// Now both branches should be pushed to github and master _site points to the up to date gh-pages as we would normally do. 
+
+1. Github layout
+2. 
+3. settings
+4. enter settings

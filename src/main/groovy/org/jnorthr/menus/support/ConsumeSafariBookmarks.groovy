@@ -1,3 +1,8 @@
+@Grapes([
+    @Grab(group = 'org.ccil.cowan.tagsoup', module = 'tagsoup', version = '1.2')
+    //@GrabConfig( systemClassLoader=true )
+])
+
 package org.jnorthr.menus.support;
 
 // sample xml (html) slurper from

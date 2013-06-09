@@ -36,6 +36,8 @@ dependencies {
     //classpath group: 'org.gradle.api.plugins', name: 'gradle-cf-plugin', version: '0.2.0'
     'org.gradle.api.plugins:gradle-cf-plugin:0.2.0'
     //compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.16'
+    compile group:'org.ccil.cowan.tagsoup', name:'tagsoup', version:'1.2' 
+    runtime group:'org.ccil.cowan.tagsoup', name:'tagsoup', version:'1.2' 
 }
 
 /*
@@ -76,11 +78,11 @@ test
 	testLogging.showStandardStreams = true
 
 	// set heap size for the test JVM(s)
-	minHeapSize = "128m"
+	minHeapSize = "64m"
 	maxHeapSize = "512m"
 
         // set JVM arguments for the test JVM(s)
-	jvmArgs '-XX:MaxPermSize=192m'
+	jvmArgs '-XX:MaxPermSize=128m'
 
 	maxParallelForks = Runtime.runtime.availableProcessors()
 	// does work if you chg the workingDir, so it influences the java file relative path access
@@ -222,6 +224,13 @@ task(runEatFF, dependsOn: 'classes', type: JavaExec)
 	systemProperty 'simple.message', 'Hello '
 }
 
+task(runSafari, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.support.ConsumeSafariBookmarks' 
+	classpath = sourceSets.main.runtimeClasspath
+	//args 'jim.txt'
+	systemProperty 'simple.message', 'Hello '
+}
 
 task(runPathFinder, dependsOn: 'classes', type: JavaExec) 
 {

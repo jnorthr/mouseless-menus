@@ -265,8 +265,8 @@ class Menus implements KeyListener
 					String menu = ".searchlist"; 
 					MenuColumnSupport.loadMenu(cs,menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
-					
-					support.appendText("found ${re.size} menu items for ${searchText}", support.as4);
+					def ms = (re.size > 0) ? re.size.toString() : "no" 
+					support.appendText("found ${ms} menu items for ${searchText}", support.as4);
 					support.resetStack()
 					swing.tf.text=""
 					swing.tf.requestFocusInWindow()

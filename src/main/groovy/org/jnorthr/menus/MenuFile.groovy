@@ -2,7 +2,7 @@
 // if exists, parse out menu title with :=*MENUTITLE and if found set boolean menuFileExists as true
 // if true, can then use accessor methods to gain values
 
-// also keeps all valid non-remark lines in a list
+// also keeps all valid non-remark lines in a list<Validator>
 
 // it's the responsibility of the calling module to provide a menu file name that points to a real file
 package org.jnorthr.menus;
@@ -20,14 +20,14 @@ public class MenuFile
 	// when a BIC of 'go' says load and display another menu, 
 	private String menuFileName=""
 
-	// true if menufile confirmed to exist
-	private boolean menuFileExists= false          
+	// true if menuFileName confirmed to exist
+	private boolean menuFileExists = false          
 
-	// handle to validator of a single line
+	// handle to validator for a single line
     Validator val;
     	
-	// List of lines that would make good menu entries 
-	List<Validator> menuLines = []   	
+	// List of lines that would make good menu entries, excludes remarks lines // and *menutitle lines 
+	List<Validator> MenuWrapper() = []   	
     
 
 	// accessor for dialog title
@@ -36,11 +36,13 @@ public class MenuFile
 		return (menuFileExists) ? dialogTitle : ""	
 	} // end of method
 
-	// accessor for full canonical file name
+
+	// accessor for full canonical file name of this menu
 	public getFullFileName()
 	{
 		return (menuFileExists) ? menuFileName : ""		
 	} // end of method
+
 
 	// accessor to confirm file exists - true or false
 	public isMenuFile()
@@ -48,13 +50,15 @@ public class MenuFile
 		return menuFileExists;	
 	} // end of method
 
- 	// accessor to find number of lines in the menu table
+
+ 	// accessor to find number of valid lines in the menu table
 	public int getMenuLineCount()
 	{
 		return menuLines.size();	
 	} // end of method
 
-	// make a valid menu item text string like:  abc:=./resources/fred.txt
+
+	// make a valid menu item text string like:  abc:=go ./resources/fred.txt
 	public crtMenuEntry()
 	{
 		return (menuFileExists) ? dialogTitle + ":=go " + menuFileName : ""	
@@ -65,10 +69,12 @@ public class MenuFile
 	public MenuFile()
 	{
 		menuFileName = "";  // filled with canonical name in chkobj if menuFileExists
+		dialogTitle = "";
+		menuFileExists = false;
 	}	// end of method
 
 
-	// one args constructor
+	// one args constructor for name of a file, that might be our menu file, as a string
 	public MenuFile(def fn)
 	{
 		this();
@@ -89,7 +95,9 @@ public class MenuFile
     // look up filename if it exists; print message showing results, if audit flag is set 
     public chkobj(def filename)
     {
-        return new File(filename).exists();
+    	def f = new File(filename)
+    	boolean dir = f.isDirectory() ? true : false;
+        return f.exists()  && !dir;
     } // end of method
 
 

@@ -25,8 +25,6 @@ public class MenuColumnSupport
 	def static notCleared = true
 	def static loadCommandText = false
 
-	// keep stack of menu file names - how deep is menu layer that F12 key can use to retrace prior menu choices 
-	static Storage storage
 
 	static PathFinder pathfinder;
 	JTextPane column;			// the onscreen representation of the document			
@@ -39,14 +37,6 @@ public class MenuColumnSupport
 	{
 		return column;
 	} // end of getColumn
-
-
-	// retrieve pointer to array of menus
-	public static getStorage()
-	{
-		return storage;
-	} // end of getCommands
-
 
 	// retrieve array of commands
 	public static getCommands()
@@ -295,7 +285,7 @@ public class MenuColumnSupport
 
 		// try to stack but ignore
     	// if the new menu name is the same as the current menu name 
-    	storage.leftShift(mifilename)
+    	//storage.leftShift(mifilename)
 
     	// erase each menu item column
 		cs.eachWithIndex{ va, ix -> cs[ix].clearColumnText(cs[ix]) }
@@ -423,7 +413,7 @@ public class MenuColumnSupport
 		column = getColumnTextPane(doc);
 		clearColumnText(this)
 		setColumn(this)
-		storage = new Storage()
+
 		pathfinder = new PathFinder();
 	} // end of constructor
 

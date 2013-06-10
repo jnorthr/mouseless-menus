@@ -22,6 +22,13 @@ class Storage
 		stackMenu << mainmenufilename
 	} /// end of constructor
 
+
+	// retrieve pointer to array of menus
+	public getStorage()
+	{
+		return stackMenu;
+	} // end of getCommands
+
 	// test harness for this class
 	public static void main(String[] args)
 	{	

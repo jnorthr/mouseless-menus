@@ -13,6 +13,9 @@ public class MenuWrapper
     // List of lines that would make good menu entries, excludes remarks lines // and *menutitle lines 
     List<Validator> wrapperLines = []  
     
+	// original menu text file was here:
+	MenuFile mf;
+
     // base-zero pointer to starting anchor in this list
     int current = 0;     
     int displayed = 0;
@@ -33,15 +36,14 @@ public class MenuWrapper
     // no args constructor
     public MenuWrapper()
     {
-		def mn = "/Volumes/DURACELL/mouseless-menus/resources/main.txt"
-		new MenuWrapper(mn);        
+		this("./resources/main.txt");
     } // end of method
     
     
     // one args constructor
     public MenuWrapper(menuname)
     {
-        MenuFile mf = new MenuFile(menuname);
+        mf = new MenuFile(menuname);
         say mf
         say "isMenuFile() ? :"+mf.isMenuFile();
         say "getTitle() :"+mf.getTitle();
@@ -171,15 +173,6 @@ public class MenuWrapper
     {
         return getLast(10);    
     } // end of method
-
-
-
-
-
-
-
-
-
 
     // ==============================================================
     // see if lines can be taken before what's already been shown

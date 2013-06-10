@@ -9,12 +9,12 @@ import javax.swing.BorderFactory;
 import javax.swing.border.*
 import javax.swing.border.LineBorder
 import org.jnorthr.menus.support.PathFinder;
-import org.jnorthr.menus.MenuFile;
+import org.jnorthr.menus.MenuWrapper;
  
 public class MenuColumnSupport
 {
 	// holds decoded menu items filled from static loadMenu method
-	def static audit = false 		// true will print debug text
+	def static audit = true 		// true will print debug text
 	def static menuLines = 0		// how many visible lines appear in the columns
 	def static menuOptions = 0		// how many actual menu options appear in the columns which maybe less than menuLines if titles only
 	def static menuTitle = []
@@ -149,13 +149,15 @@ public class MenuColumnSupport
 		if (located) mifilename = pathfinder.getFullName();
 		say "ColumnSupport will now open <${mifilename}>"
 		
-		MenuFile mf = new MenuFile(mifilename);
-		say mf
-		say "isMenuFile() ? :"+mf.isMenuFile();
-		say "getTitle() :"+mf.getTitle();
-		say "crtMenuEntry() :"+mf.crtMenuEntry()
-		say "getFullFileName() :"+mf.getFullFileName();
-		say "getMenuLineCount() :"+mf.getMenuLineCount();		
+		MenuWrapper mw = new MenuWrapper(mifilename);
+		say mw.mf
+		say "isMenuFile() ? :"+mw.mf.isMenuFile();
+		say "getTitle() :"+mw.mf.getTitle();
+		setFrameTitle(mw.mf.getTitle());
+		say "crtMenuEntry() :"+mw.mf.crtMenuEntry()
+		say "getFullFileName() :"+mw.mf.getFullFileName();
+		say "getMenuLineCount() :"+mw.mf.getMenuLineCount();	
+		say "mw.getLineCount() :"+mw.getLineCount();	
 /*
 	ColumnSupport will now open </Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt>
 	menuFileName=/Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt & menuFileExists=true title=<Java, Javascript, CSS Stylesheets, Beans, Menus & ProcessBuilder>
@@ -165,8 +167,7 @@ public class MenuColumnSupport
 	getFullFileName() :/Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt
 	getMenuLineCount() :25
 
-*/		
-		
+*/				
     	notCleared = true	// flag to avoid clearing prior menu if current menu file does not have at least 1 menu item;
     	def f = new File(mifilename)   // get handle for the menu text file
     	def words
@@ -258,10 +259,6 @@ public class MenuColumnSupport
 	    					menuTitle   << word1
     					   	break;
 
-    					    // *MENUTITLE
-    					    case 1: 
-    				   	   		setFrameTitle(word1) // this is a menu title not a command sequence
-    				   	   		break;
 
     				   	   // typical built-in command of zero
     					    default:

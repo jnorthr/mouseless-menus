@@ -125,7 +125,8 @@ The following workaround works fine :
 class Menus implements KeyListener 
 {
 	def static audit = false
-	def support
+	Support support = new Support()
+
 	java.util.List<MenuColumnSupport> cs = []
 
     def classpathEntries = [] // used in F19 to see jars in this loader
@@ -219,6 +220,7 @@ class Menus implements KeyListener
 			// ============================================		
 			// menu exit command
 			case KeyEvent.VK_F3:  // move x coordinate left
+			
 				// if F15 key ?  F3+shift key - used to see all the menus 
 				if (f)
 				{
@@ -726,7 +728,7 @@ class Menus implements KeyListener
 		} // end of frame
 
 		
-		// store handle to frame, then position frame in center of display
+		// store handle to frame, then position frame in display
 		support.setFrame(frame)
 		frame.setTitle(support.getFrameTitle())
 		def loc = support.getMenuMap().location
@@ -744,8 +746,7 @@ class Menus implements KeyListener
 	{ 
 		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         //println "... Menus started"
-		support = new Support()
-   		frametitle = support.getFrameTitle();
+   		frametitle = "System Menu"; //support.getFrameTitle();
    		
    		pathfinder = new PathFinder();
    		
@@ -766,9 +767,12 @@ class Menus implements KeyListener
 
    		// build text pane for joblog text
 		jtp = support.getTextPane()
-		p1 = support.getHeaders() //support.getTitles()
+		//p1 = support.getHeaders() //support.getTitles()
 
-		jtp.setFocusable(false)				// false will dis-allow copy/paste from joblog view but tab key not needed
+		// false will dis-allow copy/paste from joblog view but tab key not needed
+		jtp.setFocusable(false)				
+
+
 	} // end of default constructor
 
 

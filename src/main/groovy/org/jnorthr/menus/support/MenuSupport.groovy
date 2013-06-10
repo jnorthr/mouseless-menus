@@ -584,7 +584,8 @@ public class Support
 
 
 		// This did not work as there was no wait for the process to complete, so need a blocking method
-		// to hold here til it does; also need solution for commands like man which require several keypresses to cpmplete
+		// to hold here til it does; 
+		// also need solution for commands like man which require several keypresses to cpmplete
 		//def cmd = menuMap.menus.commands[option]
 		//def result = cmd.execute()
 		//println result.text
@@ -621,35 +622,6 @@ public class Support
 		jtp.setCaretPosition(j);
 		jtp.setEditable(false)
 	} // end of writeOutput
-
-	// set up frame title
-	public String getFrameTitle()
-	{
-		return getMenuMap().menutitle.trim() + " " + framefixedtitle
-	} // end of label 1
-
-	// set up frame title
-	public String getFrameTitle(String t)
-	{
-		return t.trim() + " " + framefixedtitle
-	} // end of label 1
-
-
-
-
-
-	// added this new method to support the new HeaderSupport class which should build a panel of	
-	// 3 columns of system menu item names
-	// construct a title panel with labels 
-	public JPanel getHeaders()
-	{	
-		def p = new JPanel()
-		p.setBackground(Color.red);
-		p.setOpaque(true)
-		p.add(new JLabel("Hi kids"))
-		return p
-	} // end of 
-
 
 
 	// one-time setup of a text pane and styles with colors to be used as the joblog
@@ -694,7 +666,7 @@ public class Support
 
 
 	// This is logic to populate the joblog panel =========================
-        // Clear out current document
+    // Clear out current document
 	private void clearText() 
 	{
 		jtp.setStyledDocument (doc = new DefaultStyledDocument());
@@ -712,6 +684,7 @@ public class Support
 		catch (BadLocationException e) {}
 	} // end of appendText
 
+
 	private void appendText(String s, boolean f) 
 	{
 		doc = jtp.getDocument();
@@ -722,6 +695,7 @@ public class Support
 		catch (BadLocationException e) {}
 	} // end of appendText
 
+
 	private void appendText(String s) 
 	{
 		doc = jtp.getDocument();
@@ -731,6 +705,8 @@ public class Support
 		}
 		catch (BadLocationException e) {}
 	} // end of appendText
+
+
 
 	// figure out elapsed time of most recent command
 	public static computeNano(def nano1)
@@ -747,15 +723,16 @@ public class Support
 
 	// ====================================================
 	// method to print failure stack trace in a nice formt
-	public boolean displayStackTraceInformation (Throwable ex,
-                                                        boolean displayAll)
-        {
+	public boolean displayStackTraceInformation (Throwable ex,  boolean displayAll)
+    {
         	if (null == ex)
         	{
         		appendText("Null stack trace reference! Bailing...", as0);
         		return false;
         	}
+
         	appendText("The stack according to printStackTrace():\n", as0);
+
         	//ex.printStackTrace();
         	//say ("");
         	StackTraceElement[] stackElements = ex.getStackTrace();

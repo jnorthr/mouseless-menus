@@ -25,7 +25,8 @@ public class MenuColumnSupport
 	def static notCleared = true
 	def static loadCommandText = false
 
-
+	JTextPane jtp;
+	
 	static PathFinder pathfinder;
 	JTextPane column;			// the onscreen representation of the document			
 	StyledDocument doc;			// a storage repository for text
@@ -45,21 +46,7 @@ public class MenuColumnSupport
 	} // end of getCommands
 
 
-	// retrieve menu title for frame
-	public static getFrameTitle()
-	{
-		return frameTitle;
-	} // end of getFrameTitle
-
-
-	// store menu title for frame
-	public static setFrameTitle(def nt)
-	{
-		frameTitle = nt;
-	} // end of setFrameTitle
-
-
-    	// turn on auditlog listing
+    // turn on auditlog listing
 	public static void setAudit() {audit=true}
 
 	
@@ -391,13 +378,6 @@ public class MenuColumnSupport
 	} // end of setting attributes 
 
 
-	// one-time setup of a column text pane and styles with colors to be used as the menu
-	public JTextPane getColumnTextPane(StyledDocument document)
-	{
-		JTextPane jtp = new JTextPane(document);
-		jtp.setBorder(null)
-		return jtp;
-	} // end of getText
 
 	// class constructor - loads configuration,etc.
 	public MenuColumnSupport()
@@ -413,7 +393,9 @@ public class MenuColumnSupport
 		StyleConstants.setBold(asred, true);
 
 		doc = new DefaultStyledDocument()
-		column = getColumnTextPane(doc);
+		jtp = new JTextPane(doc);
+		jtp.setBorder(null)
+		column = jtp;
 		clearColumnText(this)
 		setColumn(this)
 

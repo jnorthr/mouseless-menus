@@ -250,7 +250,7 @@ public class MenuColumnSupport
 
     					    // *MENUTITLE
     					    case 1: 
-    				   	   		setFrameTitle(word1) // this is a menu title not a command sequence
+    				   	   		//setFrameTitle(mf.getTitle()) // this is a menu title not a command sequence
     				   	   		break;
 
     				   	   // typical built-in command of zero
@@ -278,6 +278,9 @@ public class MenuColumnSupport
     			
     	} // end of eachLine
 
+
+		// this is a menu title not a command sequence
+		setFrameTitle(mf.getTitle()) 
 
 
     	// do not disturb current menu if this menu file has no lines with := command identifier

@@ -1,3 +1,7 @@
+/*	
+	Designed to build internal map of all configuration files, system properties
+	for use in the menu headers.
+*/
 package org.jnorthr.menus.support;
 import org.jnorthr.menus.support.PathFinder
 

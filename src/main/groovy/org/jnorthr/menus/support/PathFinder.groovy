@@ -24,7 +24,7 @@ public class PathFinder
 	def os = System.getProperty('os.name')
     def osid = ""; // like 'Mac OS X' becomes 'macosx'
 
-	// here are the two poperty files we need to run this app
+	// here are the two property files we need to run this app
     String menupropertiesname = "resources/properties/menu.properties";
     String pathpropertiesname = "resources/properties/path.properties";
 

@@ -37,6 +37,7 @@ import org.jnorthr.menus.support.PanelSupport;
 //import org.jnorthr.menus.CommandSet;
 
 import org.jnorthr.menus.support.PathFinder;
+import org.jnorthr.menus.support.Storage;
 
 /* to do:
 the # character
@@ -124,13 +125,17 @@ The following workaround works fine :
 class Menus implements KeyListener 
 {
 	def static audit = false
-	def support
+	Support support = new Support()
+
 	java.util.List<MenuColumnSupport> cs = []
 
     def classpathEntries = [] // used in F19 to see jars in this loader
 	PathFinder pathfinder;
 
 	def ps = new PanelSupport()
+
+	// keep stack of menu file names - how deep is menu layer that F12 key can use to retrace prior menu choices 
+	Storage storage = new Storage()
 
 	def static swing
 	def static frame	
@@ -215,6 +220,7 @@ class Menus implements KeyListener
 			// ============================================		
 			// menu exit command
 			case KeyEvent.VK_F3:  // move x coordinate left
+			
 				// if F15 key ?  F3+shift key - used to see all the menus 
 				if (f)
 				{
@@ -227,7 +233,8 @@ class Menus implements KeyListener
 					def pr = sea.parseResults("*ALLMENUS");
 					sea.writeResults(path, pr, "Available Menus", menu)				
 
-					MenuColumnSupport.loadMenu(cs,menu)    
+					MenuColumnSupport.loadMenu(cs,menu)
+					storage.leftShift(menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 					support.appendText("${pr.size} available menus", support.as4);
 					support.resetStack()
@@ -263,7 +270,8 @@ class Menus implements KeyListener
 					searchText = (hasText) ? "'"+swing.tf.text.trim()+"'" : "*ALL" ;
 					mf.writeResults(path,re, """Your Search for $searchText""")				
 					String menu = ".searchlist"; 
-					MenuColumnSupport.loadMenu(cs,menu)    
+					MenuColumnSupport.loadMenu(cs,menu)
+					storage.leftShift(menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 					def ms = (re.size > 0) ? re.size.toString() : "no" 
 					support.appendText("found ${ms} menu items for ${searchText}", support.as4);
@@ -283,7 +291,7 @@ class Menus implements KeyListener
 			// ============================================		
 			// F5 - reload menu commands
 			case KeyEvent.VK_F5:
-				String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
+				String menu = storage.getCurrentMenu(); 
 
 				// use F17 to toggle show/hide of menu items
 				if (f) 
@@ -294,7 +302,8 @@ class Menus implements KeyListener
 				// F5 - just reload menu normally
 				else
 				{
-					MenuColumnSupport.loadMenu(cs,menu)    // menuitemsfilename)
+					MenuColumnSupport.loadMenu(cs,menu) 
+					//storage.leftShift(menu)
 				} // end of else
 
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
@@ -353,16 +362,16 @@ class Menus implements KeyListener
 			case KeyEvent.VK_F10: // mimic F12 for short keyboards
 
 				// geet prior menu name
-				String priormenu = MenuColumnSupport.getStorage().getPriorMenu()
+				String priormenu = storage.getPriorMenu()
 
 				// get current menu name
-				String cm = MenuColumnSupport.getStorage().getCurrentMenu()
+				String cm = storage.getCurrentMenu()
 				
 				// if they are not the same, reload the previous menu file
 				if (!priormenu.equals(cm))
 				{
-					MenuColumnSupport.getStorage().pop()
-					MenuColumnSupport.loadMenu(cs,priormenu)    // menuitemsfilename)
+					storage.pop()
+					MenuColumnSupport.loadMenu(cs,priormenu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 				} // end of if
 
@@ -427,7 +436,7 @@ class Menus implements KeyListener
 	{	
 		def help = support.getMenuMap().helpfilename 
 		def menu2;
-		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
+		String menu = storage.getCurrentMenu(); 
 		int dot = menu.lastIndexOf(".")
 		
 		if (dot < 0)
@@ -464,7 +473,7 @@ class Menus implements KeyListener
 	// F7 selfedit
 	def selfedit =  
 	{
-		String menu = MenuColumnSupport.getStorage().getCurrentMenu(); 
+		String menu = storage.getCurrentMenu(); 
 		say "  Menus.groovy has menu="+menu
 		boolean located = pathfinder.locate(menu);
 		if (located)
@@ -609,7 +618,8 @@ class Menus implements KeyListener
 			if (cmd.substring(0,1)=='¤')			// only known existing menu filenames come back here with ¤ prefix
 			{
 				def fn = cmd.substring(1)
-				MenuColumnSupport.loadMenu( cs, fn)    // menuitemsfilename
+				MenuColumnSupport.loadMenu( cs, fn)    
+				storage.leftShift(fn)
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
 			} // end of if
 			else
@@ -643,10 +653,11 @@ class Menus implements KeyListener
 	// build a swing panel
 	public void getPanel(String fn)
 	{
-		MenuColumnSupport.loadMenu( cs, fn)
-
+		MenuColumnSupport.loadMenu( cs, fn )
+		storage.leftShift(fn)
+		
    		say("There are ${MenuColumnSupport.getMenuItemCount()} menu items")
-		support.appendText("O/S=${support.getOSN()} and ${MenuColumnSupport.getStorage().getCurrentMenu()}");
+		support.appendText("O/S=${support.getOSN()} and ${storage.getCurrentMenu()}");
 		support.appendText(" has ${MenuColumnSupport.getMenuItemCount()} menu choices");
 
  
@@ -717,9 +728,9 @@ class Menus implements KeyListener
 		} // end of frame
 
 		
-		// store handle to frame, then position frame in center of display
+		// store handle to frame, then position frame in display
 		support.setFrame(frame)
-		frame.setTitle(support.getFrameTitle())
+		//frame.setTitle("System Menu");  //support.getFrameTitle())
 		def loc = support.getMenuMap().location
 		support.moveWindow(loc) 			// move this frame to center of display 
 		swing.tf.requestFocusInWindow()
@@ -735,8 +746,7 @@ class Menus implements KeyListener
 	{ 
 		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         //println "... Menus started"
-		support = new Support()
-   		frametitle = support.getFrameTitle();
+   		frametitle = "System Menu"; //support.getFrameTitle();
    		
    		pathfinder = new PathFinder();
    		
@@ -757,9 +767,12 @@ class Menus implements KeyListener
 
    		// build text pane for joblog text
 		jtp = support.getTextPane()
-		p1 = support.getHeaders() //support.getTitles()
+		//p1 = support.getHeaders() //support.getTitles()
 
-		jtp.setFocusable(false)				// false will dis-allow copy/paste from joblog view but tab key not needed
+		// false will dis-allow copy/paste from joblog view but tab key not needed
+		jtp.setFocusable(false)				
+
+
 	} // end of default constructor
 
 

@@ -157,6 +157,21 @@ task(runMenuColumnSupport, dependsOn: 'classes', type: JavaExec)
 	classpath = sourceSets.main.runtimeClasspath
 }
 
+task(runCommandProcessor, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.runtime.CommandProcessor' 
+	classpath = sourceSets.main.runtimeClasspath
+	args 'go  fred'
+	systemProperty 'simple.message', 'Hello '
+}
+
+task(runCommandResponse, dependsOn: 'classes', type: JavaExec) 
+{
+	main = 'org.jnorthr.menus.runtime.CommandResponse' 
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+
 
 task(runSearch, dependsOn: 'classes', type: JavaExec) 
 {

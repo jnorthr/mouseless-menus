@@ -1,3 +1,5 @@
+// thought this might be a nice array wrapper for menu lines
+// allows logic to 'walk' thru an array of menu items, first,last,next,prior pages of items
 package org.jnorthr.menus;
 import org.jnorthr.menus.MenuFile;
 import org.jnorthr.menus.support.Validator;
@@ -10,29 +12,27 @@ public class MenuWrapper
     // handle to validator for a single line
     Validator val;
         
-    // List of lines that would make good menu entries, excludes remarks lines // and *menutitle lines 
+    // List of lines that would make good menu entries, excludes remarks lines 
+    // and *menutitle lines; holds all valid non-remark lines from this menufile 
     List<Validator> wrapperLines = []  
     
 	// original menu text file was here:
 	MenuFile mf;
 
     // base-zero pointer to starting anchor in this list
-    int current = 0;     
+    int current = 0;  
+    
+    // how many lines in current page ?   
     int displayed = 0;
-    boolean fwd = true; // !fwd = walk backwards
+    
+    // !fwd = walk backwards
+    boolean fwd = true; 
 
-	// holds page of lines to display on a single menu pane
+	// holds one page of menu lines to display on a single menu pane; a subset of wrapperLines
     List<Validator> currentLines = []
 
-	// ===============================================================
-	// class output debug / print internals
-	// print text (maybe)
-	public void say(def text) 
-	{
-		if (audit) println "$text" 
-	} // end of say
 
-
+	// -------------------------------
     // no args constructor
     public MenuWrapper()
     {
@@ -63,14 +63,32 @@ public class MenuWrapper
     } // end of method
     
 
-    // how many menu lines
+
+	// ===============================================================
+	// class output debug / print internals
+	// print text (maybe)
+	public void say(def text) 
+	{
+		if (audit) println "$text" 
+	} // end of say
+
+
+	// accessor for dialog title
+	public getTitle()
+	{
+		say "... MenuWrapper reports title as :"+mf.getTitle()
+		return (mf.isMenuFile()) ? mf.getTitle() : ""	
+	} // end of method
+    
+    
+    // how many menu lines ?
     public getLineCount()
     {
         return wrapperLines.size();
     } // end of getMenuLineCount()
     
     
-    // complete dump of lines
+    // complete dump of lines for audit trail purposes
     public showWrapperLines(List<Validator> wrapperLines)
     {
         wrapperLines.each
@@ -127,6 +145,12 @@ public class MenuWrapper
 
 
 
+	// pull off first 10 lines from the start of the list
+    public getFirst()
+    {
+        return getFirst(10);    
+    } // end of method
+
 
 	// pull off howmany lines from the start of the list
     public getFirst(int howmany)
@@ -143,11 +167,13 @@ public class MenuWrapper
 
         return getNext(howmany);    
     } // end of method
-
-	// pull off first 10 lines from the start of the list
-    public getFirst()
+    
+    
+	// -------------------------------------------
+	// pull off 10 lines from the tail of the list
+    public getLast()
     {
-        return getFirst(10);    
+        return getLast(10);    
     } // end of method
 
 
@@ -168,11 +194,6 @@ public class MenuWrapper
         return getPrior(howmany);    
     } // end of method
 
-	// pull off 10 lines from the tail of the list
-    public getLast()
-    {
-        return getLast(10);    
-    } // end of method
 
     // ==============================================================
     // see if lines can be taken before what's already been shown
@@ -181,6 +202,7 @@ public class MenuWrapper
         say "---> hasPrior() current :${current} < 1 ?"; 
         return ( current < 1 ) ? false : true;        
     } // end of method
+   
    
     // uses current as a pointer to front of lines list and howmany tells us the number of lines needed to be returned 
 	// before 'current' line, if available
@@ -215,6 +237,7 @@ public class MenuWrapper
                 
         return currentLines;    
     } // end of method
+ 
  
     
     // -----------------------------------------------------

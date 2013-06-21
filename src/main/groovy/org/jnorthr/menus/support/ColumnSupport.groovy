@@ -25,9 +25,9 @@ public class MenuColumnSupport
 	def static notCleared = true
 	def static loadCommandText = false
 
-	// keep stack of menu file names - how deep is menu layer that F12 key can use to retrace prior menu choices 
-	static Storage storage
-
+	MenuWrapper mw;
+	JTextPane jtp;
+	
 	static PathFinder pathfinder;
 	JTextPane column;			// the onscreen representation of the document			
 	StyledDocument doc;			// a storage repository for text
@@ -40,14 +40,6 @@ public class MenuColumnSupport
 		return column;
 	} // end of getColumn
 
-
-	// retrieve pointer to array of menus
-	public static getStorage()
-	{
-		return storage;
-	} // end of getCommands
-
-
 	// retrieve array of commands
 	public static getCommands()
 	{
@@ -55,21 +47,7 @@ public class MenuColumnSupport
 	} // end of getCommands
 
 
-	// retrieve menu title for frame
-	public static getFrameTitle()
-	{
-		return frameTitle;
-	} // end of getFrameTitle
-
-
-	// store menu title for frame
-	public static setFrameTitle(def nt)
-	{
-		frameTitle = nt;
-	} // end of setFrameTitle
-
-
-    	// turn on auditlog listing
+    // turn on auditlog listing
 	public static void setAudit() {audit=true}
 
 	
@@ -103,7 +81,7 @@ public class MenuColumnSupport
     	// only clear variables if this menu file has at least one := command
     	if (nc)
     	{  
-			say " - cleanup"     
+			say " - cleanup for $menufilename"     
     		notCleared=false
    			menuLines = 0
     		menuOptions = 0
@@ -111,7 +89,7 @@ public class MenuColumnSupport
     		menuTitle = []  	// this text is what appears on the menu panel
    			menuCommand = []	// this is the command to be executed if this option is chosen
     		show = []
-  			setFrameTitle("$menufilename")
+  			//setFrameTitle("unknown")
 		} // end of if
 
 	}	// end of cleanup
@@ -153,11 +131,14 @@ public class MenuColumnSupport
 		say mw.mf
 		say "isMenuFile() ? :"+mw.mf.isMenuFile();
 		say "getTitle() :"+mw.mf.getTitle();
-		setFrameTitle(mw.mf.getTitle());
+		setFrameTitle(mw.getTitle());
 		say "crtMenuEntry() :"+mw.mf.crtMenuEntry()
 		say "getFullFileName() :"+mw.mf.getFullFileName();
 		say "getMenuLineCount() :"+mw.mf.getMenuLineCount();	
 		say "mw.getLineCount() :"+mw.getLineCount();	
+
+
+		
 /*
 	ColumnSupport will now open </Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt>
 	menuFileName=/Volumes/DURACELL/mouseless-menus/resources/stylesheets.txt & menuFileExists=true title=<Java, Javascript, CSS Stylesheets, Beans, Menus & ProcessBuilder>
@@ -286,13 +267,10 @@ public class MenuColumnSupport
     	} // end of eachLine
 
 
-
     	// do not disturb current menu if this menu file has no lines with := command identifier
     	if (notCleared) return		
 
-		// try to stack but ignore
-    	// if the new menu name is the same as the current menu name 
-    	storage.leftShift(mifilename)
+
 
     	// erase each menu item column
 		cs.eachWithIndex{ va, ix -> cs[ix].clearColumnText(cs[ix]) }
@@ -395,13 +373,6 @@ public class MenuColumnSupport
 	} // end of setting attributes 
 
 
-	// one-time setup of a column text pane and styles with colors to be used as the menu
-	public JTextPane getColumnTextPane(StyledDocument document)
-	{
-		JTextPane jtp = new JTextPane(document);
-		jtp.setBorder(null)
-		return jtp;
-	} // end of getText
 
 	// class constructor - loads configuration,etc.
 	public MenuColumnSupport()
@@ -417,10 +388,12 @@ public class MenuColumnSupport
 		StyleConstants.setBold(asred, true);
 
 		doc = new DefaultStyledDocument()
-		column = getColumnTextPane(doc);
+		jtp = new JTextPane(doc);
+		jtp.setBorder(null)
+		column = jtp;
 		clearColumnText(this)
 		setColumn(this)
-		storage = new Storage()
+
 		pathfinder = new PathFinder();
 	} // end of constructor
 

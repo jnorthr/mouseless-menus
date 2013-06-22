@@ -34,21 +34,39 @@ class CommandStorage
     // non-distructive retrieve prior command
     public getPriorCommand()
     {    
-        def value = stack[0];
-        
-        
-        if (stack.size()>1) 
-        {
-            if (lookback > 0) { lookback -= 1;}
-            value = stack[ lookback ];
-        } 
+        def value = stack[ --lookback ];
+
+        if (lookback < 1) 
+        { 
+        	resetStack(); 
+			java.awt.Toolkit.getDefaultToolkit().beep();
+        } // end of if
+
+        say "getPriorCommand() stack.size()=${stack.size()} lookback=$lookback <${value}>" 
+
         return value
     } // end of getPriorCommand
+
+    // non-distructive retrieve next command
+    public getNextCommand()
+    {    
+        if ( lookback > stack.size() - 2 ) 
+        {
+            lookback = -1;
+            java.awt.Toolkit.getDefaultToolkit().beep();
+        } 
+
+    	def value = stack[ ++lookback ];
+        say "getNextCommand() stack.size()=${stack.size()} lookback=$lookback <$value>" 
+
+        return value
+    } // end of getNextCommand
 
 
     // non-distructive retrieve of most recent command
     public getLatestCommand()
     {    
+        resetStack();
         return stack[stack.size() - 1]
     } // end of getLatestCommand
 
@@ -57,13 +75,14 @@ class CommandStorage
     // set lookback pointer to last command in the stack
     public resetStack()
     {
-        lookback = stack.size() - 1;
+        lookback = stack.size();
     } // end of reset
 
 
     // F9&UP arrow lookback thru commands
     public putStack(def entry)
     {
+    	say "putStack($entry)"
         stack << entry;
         resetStack();
     } // end of getStack

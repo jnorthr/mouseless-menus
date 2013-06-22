@@ -38,6 +38,7 @@ import org.jnorthr.menus.support.PanelSupport;
 
 import org.jnorthr.menus.support.PathFinder;
 import org.jnorthr.menus.support.Storage;
+import org.jnorthr.menus.support.CommandStorage;
 
 /* to do:
 the # character
@@ -124,9 +125,10 @@ The following workaround works fine :
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
 {
-	def static audit = false
+	def static audit = true
 	Support support = new Support()
 
+	CommandStorage cmds = new CommandStorage();
 	java.util.List<MenuColumnSupport> cs = []
 
     def classpathEntries = [] // used in F19 to see jars in this loader
@@ -189,7 +191,7 @@ class Menus implements KeyListener
 			// recall prior command - moving backward thru commands from most recent to oldest, 
 			// then wrap after blank line
 			case KeyEvent.VK_UP: 
-				swing.tf.text = support.getStackEntry(true)
+				swing.tf.text = cmds.getPriorCommand();   //support.getStackEntry(true)
 				break;
 
 
@@ -197,7 +199,7 @@ class Menus implements KeyListener
 			// Down Arrow --------------------------------------
 			// recall next command
 			case KeyEvent.VK_DOWN: 
-				swing.tf.text = support.getStackEntry(false)
+				swing.tf.text = cmds.getNextCommand();  //support.getStackEntry(false)
 				break;
 
 
@@ -237,7 +239,7 @@ class Menus implements KeyListener
 					storage.leftShift(menu)    
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 					support.appendText("${pr.size} available menus", support.as4);
-					support.resetStack()
+					cmds.resetStack()
 					swing.tf.text=""
 					swing.tf.requestFocusInWindow()
 					swing.tf.grabFocus();
@@ -275,7 +277,7 @@ class Menus implements KeyListener
 					frame.setTitle(MenuColumnSupport.getFrameTitle())
 					def ms = (re.size > 0) ? re.size.toString() : "no" 
 					support.appendText("found ${ms} menu items for ${searchText}", support.as4);
-					support.resetStack()
+					cmds.resetStack()
 					swing.tf.text=""
 					swing.tf.requestFocusInWindow()
 					swing.tf.grabFocus();
@@ -307,7 +309,7 @@ class Menus implements KeyListener
 				} // end of else
 
 				frame.setTitle(MenuColumnSupport.getFrameTitle())
-				support.resetStack()
+				cmds.resetStack()
 				swing.tf.text=""
 				swing.tf.requestFocusInWindow()
 				swing.tf.grabFocus();
@@ -326,7 +328,7 @@ class Menus implements KeyListener
 						support.appendText(e.toString(), support.as0);
 					} // end of each
 
-					support.resetStack()
+					cmds.resetStack()
 					swing.tf.text=""
 					swing.tf.requestFocusInWindow()
 					swing.tf.grabFocus();
@@ -351,7 +353,7 @@ class Menus implements KeyListener
 			// F9 --------------------------------------
 			// recall prior command
 			case KeyEvent.VK_F9: 
-				swing.tf.text = support.getStackEntry(true)
+				swing.tf.text = cmds.getPriorCommand();  //support.getStackEntry(true)
 				break;
 
 
@@ -376,7 +378,7 @@ class Menus implements KeyListener
 				} // end of if
 
 				// reset pointer to command stack, then re-focus
-				support.resetStack()
+				cmds.resetStack()
 				swing.tf.text=""
 				swing.tf.requestFocusInWindow()
 				swing.tf.grabFocus();
@@ -511,7 +513,7 @@ class Menus implements KeyListener
  		// ignore empty requests
 		if (cmd==null || cmd.size()<1 || cmd.trim().equals("") )
 		{
-			support.resetStack()
+			cmds.resetStack()
 			swing.tf.text=""
 			swing.tf.requestFocusInWindow()
 			swing.tf.grabFocus();
@@ -556,7 +558,7 @@ class Menus implements KeyListener
 			if (f && ( num< 1 || num > MenuColumnSupport.getMenuOptionCount() ) ) 
 			{
 				support.appendText("* No such choice: $num", support.as2);
-				support.resetStack()
+				cmds.resetStack()
 				swing.tf.text=""
 				swing.tf.requestFocusInWindow()
 				swing.tf.grabFocus();
@@ -574,7 +576,7 @@ class Menus implements KeyListener
 		if (cmd==null || cmd.size()<1 || cmd.trim().equals("") )
 		{
 			support.appendText("* No command for choice: ${num+1}", support.as2);
-			support.resetStack()
+			cmds.resetStack()
 			swing.tf.text=""
 			swing.tf.requestFocusInWindow()
 			swing.tf.grabFocus();
@@ -590,10 +592,10 @@ class Menus implements KeyListener
 
 		// crude attempt to translate environmental variables with $ prefix
 		cmd = support.findEnv(cmd)	
-		//say("env returned $cmd")
+		say("env returned $cmd")
 
 		// remember this command				
-		support.putStack(cmd)	
+		cmds.putStack(cmd)	
 
 		def tokens = cmd.tokenize()
 		def c = tokens[0].trim().toLowerCase()

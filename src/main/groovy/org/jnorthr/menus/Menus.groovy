@@ -40,87 +40,6 @@ import org.jnorthr.menus.support.PathFinder;
 import org.jnorthr.menus.support.Storage;
 import org.jnorthr.menus.support.CommandStorage;
 
-/* to do:
-the # character
-1. change title to include date/time/user/system name/pwd - done
-2. include icons to setup initial position to a cornor of the screen - properties does this
-3. make jextfield have an underline rather than a box - done
-4. allow function keys - done
-5. to run builtin commands, write a temp. script that's callable - not required; use 'command' prefix on mac os - what about xp ? see processbuilder.groovy
-6. multi-column menu choices - done
-7. non-numeric option kills menu - done
-8. change caret to block - tough
-9. use scroll pane jtextarea to display results - done using styled JTextPane; also cut&copy works but need to tab back to command line
-10. try using command echo $GROOVY_HOME  to decode environmental variables - needs more work if > 1 $values
-11. make text in jtextpane courier and green text and blue border - done
-12. Run modal commands from options line - done
-13. SBMJOB - maybe & at end of command does same ?
-14. call qcmd & go menuname - go is done
-15. F9 recall previous command - almost: does not do all commands like http:// or GO command
-16. Reposition textpane to start of most recent command - see setCaret in Support - still off by number of cr/lf.s ? Only shows at bottom of jtp
-17. decode ls -al hexcodes on display
-18. include F key usage in panel - done
-19. report no such option - done
-20. use return  code to color code the text - done
-21. find index of error=2 - done
-22. save as ./resources/logfile.txt
-23. as general purpose tool, use File>Open, File>New and File>Save to preserve text files, notes, logs 
-24. cannot balance top/bottom panels when expanded to full screen mode - done: used gridbagconstraints or horizontal split screen
-25. finish timer - needs more logic to refresh menu title lines - done : may need placement on screen - done 
-26. use main.txt in place of properties to build menu structure and refresh via F5 key - done
-27. cannot change titles and refresh - may work now that titles are actually in the swing tree ?
-28. cd .. from command line fails to change pwd, look into building environmental process
-29. some commands like man ifconfig fail to return as the utility is waiting for an additional 'enter' keypress
-30. allow www or http:// to signal an html URL for setPage or use 'open' command on mac but looses focus on textfield cos window switch to safari
-31. remove loadMenus() from this source & use from MenuColumnSupport.() - done
-32. allow debug text to go to jtp
-33. allow https: - done
-34. try 'go' menu as external command, does it exist? no=if not dot add .txt=does it exist? 
-    no=did it say ./resources folder? no=try in ./resources folder - done
-35. make frame title come from main.txt file - done
-
-36. command line fails on ls -al *.groovy   - why ? because *.java is a shell expansion feature---> to get a list of files in a dir, try:
-	assert new File('D:/Groovy/Scripts').list().toList() ==['Script.bat', 'File1.txt', 'File2.txt', 'Directory1', 'Directory2']
-<or>
-list= []
-new File('D:\\Groovy\\Scripts').eachFileMatch(~/File.*?\.txt/){ list<< it.name }
-    //a regular expression, or any caseable expression
-assert list == ['File1.txt', 'File2.txt']
-
-37. picking an option higher than possible after an F5 menu reload does not set max properly - fixed
-38. if additional command line options follow a menu number choice, allow those extra parms to flow thru
-39. can menu help text translate the various parms such as $JAVA_HOME into the current values on the current system, not a static system ?
-40. menu title not refreshed when changing menu text file - fixed
-41. menuItems count wrong when changing menu text file - fixed
-42. finish logic to allow titles in menus without assigning a menu number to them
-43. provide menu context -sensitive help system, if a menu xxx.txt has xxx.html as help else if not present use main.html 
-44. url in *.html page will not find correct images
-45. do not load menu file unless it has at least one  := and default title name = menu file name if missing - done
-46. allow {} as command text for several command's or groovy shell call like : {cd /home/jim; play run} which should run 2 commands: command cd /home/jim then command play run
-47. cannot update the time in header panel - tough - must rebuild headersupport each time !
-48. finish menuitem class and integrate it
-49. function key to toggle show of command text - done
-50. show available menus from ./resources at boj - done
-51. F12 when already on main does not need refresh
-
-//	lookAndFeel("metal")		
-If you want to get a resource file, such as an icon, use:
-InputStream in = MyClass.class.getResourceAsStream("MyIcon.gif");
-
-p=['sh','-c','ls -l | sort'].execute()
-println p.text
-
-if it's winblows, I'd give up hope, of doing any meaningful command piping. But it does work
-
-groovy> p=['cmd','/c','dir|sort'].execute()
-groovy> println p.text
-groovy> go
-
-The following workaround works fine :
- - Clear the text area with 'setText(null)'
- - reinsert content with 'insert' method from 0 position
-
-*/
 
 // class wrapper uses keystroke listener logic
 class Menus implements KeyListener 
@@ -192,6 +111,8 @@ class Menus implements KeyListener
 			// then wrap after blank line
 			case KeyEvent.VK_UP: 
 				swing.tf.text = cmds.getPriorCommand();   //support.getStackEntry(true)
+				swing.tf.requestFocusInWindow()
+				swing.tf.grabFocus();
 				break;
 
 
@@ -200,6 +121,9 @@ class Menus implements KeyListener
 			// recall next command
 			case KeyEvent.VK_DOWN: 
 				swing.tf.text = cmds.getNextCommand();  //support.getStackEntry(false)
+				swing.tf.requestFocusInWindow()
+				swing.tf.grabFocus();
+				swing.tf.setCaretPosition(0);
 				break;
 
 

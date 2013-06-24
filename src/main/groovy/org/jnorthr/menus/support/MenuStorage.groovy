@@ -111,7 +111,28 @@ class Storage
 		s.pop()				// should not erase main.txt (the first stack entry)
 		println "PriorMenu=${s.getPriorMenu()}"
 		println "CurrentMenu=${s.getCurrentMenu()}"
-		//println "stack at ${s.get()}\n"
+		println "stack at ${s.get()}\n\nnow add github"
+		
+		s << "github";
+		println "PriorMenu=${s.getPriorMenu()}"
+		println "CurrentMenu=${s.getCurrentMenu()}"
+
+		println "\n now add ubuntu.txt"
+		s << "ubuntu.txt";
+		println "PriorMenu=${s.getPriorMenu()}"
+		println "CurrentMenu=${s.getCurrentMenu()}"
+
+		println "\n now s.pop()"
+		def x1 = s.pop()				// popped bill
+		println "\nx1 now "+x1;
+		println "PriorMenu=${s.getPriorMenu()}"
+		println "CurrentMenu=${s.getCurrentMenu()}"
+
+		println "\ns.pop() again"
+		x1 = s.pop();			// popped bill
+		println "\nx1 now "+x1;
+		println "PriorMenu=${s.getPriorMenu()}"
+		println "CurrentMenu=${s.getCurrentMenu()}"
 	}
 
 	// non-distructive retrieve prior menu file name
@@ -165,7 +186,7 @@ class Storage
 		// don't add same menu twice
 		if (stackMenu[stackMenu.size()-1] != va)
 		{
-			stackMenu << va;
+			stackMenu.push(va);
 		} // end of if
 		else
 		{
